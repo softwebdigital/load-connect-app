@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:load_connect/core/repository/create_load_controller.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
+import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
+import 'package:provider/provider.dart';
 
-class OtherLoadInfoScreen extends GetView<CreateLoadController> {
+class OtherLoadInfoScreen extends StatelessWidget {
   const OtherLoadInfoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
+    final createLoadProvider = Provider.of<CreateLoadProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -83,12 +86,13 @@ class OtherLoadInfoScreen extends GetView<CreateLoadController> {
             ),
             SizeMargin.size(height: 24.0),
             CustomRaisedButton(
-              isDisabled: isDisabled,
+              isDisabled: false,
               text: "Continue",
               onPressed: () {
-                Navigator.of(context).popUntil(
-                  (_) => Get.currentRoute == Routes.home,
-                );
+                // Navigator.of(context).popUntil(
+                //   (_) => Get.currentRoute == Routes.home,
+                // );
+                createLoadProvider.createLoad(context);
               },
             ),
             SizeMargin.size(height: 24.0),
@@ -116,9 +120,9 @@ class OtherLoadInfoScreen extends GetView<CreateLoadController> {
     consoleLog(result);
   }
 
-  bool get isDisabled {
-    final name = controller.receiverName.value.text;
-    final phone = controller.receiverPhone.value.text;
-    return name.isEmpty || phone.isEmpty;
-  }
+  // bool get isDisabled {
+  //   final name = controller.receiverName.value.text;
+  //   final phone = controller.receiverPhone.value.text;
+  //   return name.isEmpty || phone.isEmpty;
+  // }
 }

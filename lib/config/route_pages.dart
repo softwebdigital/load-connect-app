@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:load_connect/core/repository/create_load_controller.dart';
-import 'package:load_connect/core/repository/forgot_password_controller.dart';
+import 'package:load_connect/view/providers/auth/login_provider.dart';
+import 'package:load_connect/view/providers/auth/register_provider.dart';
+import 'package:load_connect/view/providers/user/change_password_provider.dart';
+import 'package:load_connect/view/providers/user/create_load_provider.dart';
+import 'package:load_connect/view/screens/load/create_load/create_load_screen.dart';
+import 'package:provider/provider.dart';
 import '../shared/routes.dart';
 import '../view/all_screens.dart';
 
@@ -31,11 +35,17 @@ class RoutePages {
   static final List<GetPage> routes = [
     GetPage(
       name: Routes.login,
-      page: () => const LoginScreen(),
+      page: () => ChangeNotifierProvider(
+        create: (context) => LoginProvider(),
+        child: const LoginScreen(),
+      ),
     ),
     GetPage(
       name: Routes.signup,
-      page: () => const SignupScreen(),
+      page: () => ChangeNotifierProvider(
+        create: (context) => RegisterProvider(),
+        child: const SignupScreen(),
+      ),
     ),
     GetPage(
       name: Routes.registrationOtp,
@@ -44,20 +54,10 @@ class RoutePages {
     GetPage(
       name: Routes.forgotPassword,
       page: () => const ForgotPasswordScreen(),
-      binding: BindingsBuilder(
-        () => Get.lazyPut(
-          () => ForgotPasswordController(),
-        ),
-      ),
     ),
     GetPage(
       name: Routes.resetPassword,
       page: () => const ResetPasswordScreen(),
-      binding: BindingsBuilder(
-        () => Get.lazyPut(
-          () => ForgotPasswordController(),
-        ),
-      ),
     ),
     GetPage(
       name: Routes.home,
@@ -76,37 +76,45 @@ class RoutePages {
       page: () => const LoadDetailsScreen(),
     ),
     GetPage(
-      name: Routes.selectLoadLocation,
-      page: () => const SelectLoadLocationScreen(),
-      binding: BindingsBuilder(
-        () => Get.lazyPut(
-          () => CreateLoadController(),
-        ),
+      name: Routes.createLoad,
+      page: () => ChangeNotifierProvider(
+        create: (context) => CreateLoadProvider(),
+        child: const CreateLoadScreen(),
       ),
+      children: [
+        GetPage(
+          name: Routes.selectLoadLocation,
+          page: () => const SelectLoadLocationScreen(),
+        ),
+        GetPage(
+          name: Routes.addLoadDetails,
+          page: () => const AddLoadDetailsScreen(),
+        ),
+        GetPage(
+          name: Routes.addLoadImages,
+          page: () => const AddLoadImagesScreen(),
+        ),
+        GetPage(
+          name: Routes.loadReceiverInfo,
+          page: () => const LoadReceiverInfoScreen(),
+        ),
+        GetPage(
+          name: Routes.otherLoadInfo,
+          page: () => const OtherLoadInfoScreen(),
+        ),
+      ]
     ),
-    GetPage(
-      name: Routes.addLoadDetails,
-      page: () => const AddLoadDetailsScreen(),
-    ),
-    GetPage(
-      name: Routes.addLoadImages,
-      page: () => const AddLoadImagesScreen(),
-    ),
-    GetPage(
-      name: Routes.loadReceiverInfo,
-      page: () => const LoadReceiverInfoScreen(),
-    ),
-    GetPage(
-      name: Routes.otherLoadInfo,
-      page: () => const OtherLoadInfoScreen(),
-    ),
+
     GetPage(
       name: Routes.kyc,
       page: () => const KycScreen(),
     ),
     GetPage(
       name: Routes.updatePassword,
-      page: () => UpdatePasswordScreen(),
+      page: () => ChangeNotifierProvider(
+        child: UpdatePasswordScreen(),
+        create: (context) => ChangePasswordProvider()
+      ),
     ),
     GetPage(
       name: Routes.deactivateAccount,

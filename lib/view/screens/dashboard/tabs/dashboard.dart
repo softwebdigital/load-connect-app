@@ -39,7 +39,7 @@ class DashboardTab extends StatelessWidget {
                     image: "assets/images/create-load.png",
                     title: "Create Load Now",
                     onTap: () {
-                      Get.toNamed(Routes.selectLoadLocation);
+                      Get.toNamed(Routes.createLoad);
                     },
                   ),
                 ),

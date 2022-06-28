@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:load_connect/core/models/address_result.dart';
-import 'package:load_connect/core/repository/create_load_controller.dart';
+import 'package:load_connect/backend/models/entities/address_result.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
+import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
+import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
-class SelectLoadLocationScreen extends GetView<CreateLoadController> {
+class SelectLoadLocationScreen extends StatelessWidget {
   const SelectLoadLocationScreen({Key? key}) : super(key: key);
   // final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
+    final createLoadProvider = Provider.of<CreateLoadProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -61,7 +64,6 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
           children: [
             CustomTextField(
               label: "Pickup location",
-              controller: controller.pickUpLocation,
               onTap: () async {
                 final loc = await Get.toNamed(
                   Routes.findPlace,
@@ -73,9 +75,9 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
                   consoleLog(
                     [loc.address, loc.name, loc.latitude, loc.longitude],
                   );
-                  controller.pickUpLocation.text = loc.address;
-                  controller.pickUpAddress.value = loc;
-                  // consoleLog(loc.latitude);
+                  createLoadProvider.pickupAddress = loc.address;
+                  createLoadProvider.pickupLat = loc.latitude;
+                  createLoadProvider.pickupLng = loc.longitude;
                 }
               },
               suffixIcon: IconButton(
@@ -84,7 +86,9 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
                     Routes.openMaps,
                   );
                   if (loc is AddressResult) {
-                    consoleLog(loc.address);
+                    createLoadProvider.pickupAddress = loc.address;
+                    createLoadProvider.pickupLat = loc.latitude;
+                    createLoadProvider.pickupLng = loc.longitude;
                   }
                 },
                 icon: const Icon(
@@ -97,7 +101,7 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
             SizeMargin.size(height: 8.0),
             InkWell(
               onTap: () {
-                controller.swapLocations();
+                createLoadProvider.swapLocation();
               },
               child: const CircleAvatar(
                 backgroundColor: AppColor.darkGreen,
@@ -109,7 +113,6 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
             ),
             SizeMargin.size(height: 8.0),
             CustomTextField(
-              controller: controller.destinationLocation,
               label: "Destination",
               onTap: () async {
                 final loc = await Get.toNamed(
@@ -122,9 +125,9 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
                   consoleLog(
                     [loc.address, loc.name, loc.latitude, loc.longitude],
                   );
-                  controller.destinationLocation.text = loc.address;
-                  controller.destinationAddress.value = loc;
-                  // consoleLog(loc.latitude);
+                  createLoadProvider.destinationAddress = loc.address;
+                  createLoadProvider.destinationLat = loc.latitude;
+                  createLoadProvider.destinationLng = loc.longitude;
                 }
               },
               readOnly: true,
@@ -135,7 +138,8 @@ class SelectLoadLocationScreen extends GetView<CreateLoadController> {
               onPressed: () {
                 // controller.pickUpLocation.text = "kkkk";
                 // controller.destinationLocation.text = "oppp";
-                Get.toNamed(Routes.addLoadDetails);
+                // Get.toNamed(Routes.addLoadDetails);
+                createLoadProvider.next();
               },
             ),
             SizeMargin.size(height: 24.0),

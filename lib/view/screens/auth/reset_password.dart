@@ -4,12 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
-import '../../../core/repository/forgot_password_controller.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
+import 'package:load_connect/view/providers/auth/reset_password_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 
-class ResetPasswordScreen extends GetView<ForgotPasswordController> {
+class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({Key? key}) : super(key: key);
 
   @override
@@ -31,84 +32,84 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
         ),
         title: const Text("Reset Password"),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.w),
-        child: Obx(() {
-          return Column(
-            children: [
-              const Text(
-                "Enter a new password",
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizeMargin.size(height: 24.h),
-              CustomTextField(
-                label: 'Password',
-                hideText: controller.hideText,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    controller.hideText = !controller.hideText;
-                  },
-                  icon: Icon(
-                    controller.hideText
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: AppColor.black100,
-                  ),
-                ),
-              ),
-              SizeMargin.size(height: 24.h),
-              CustomTextField(
-                label: 'Re-enter Password',
-                hideText: controller.hideText,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    controller.hideText = !controller.hideText;
-                  },
-                  icon: Icon(
-                    controller.hideText
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: AppColor.black100,
-                  ),
-                ),
-              ),
-              SizeMargin.size(height: 24.h),
-              CustomRaisedButton(
-                text: "Continue",
-                isBusy: controller.isBusy,
-                onPressed: () {
-                  // Future.delayed(const Duration(seconds: 3), () {});
-                },
-              ),
-              SizeMargin.size(height: 32.h),
-              RichText(
-                text: TextSpan(
-                  text: "Remember your password?",
-                  children: [
-                    TextSpan(
-                      text: " Login",
-                      style: const TextStyle(
-                        color: AppColor.darkGreen,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Get.offAllNamed(Routes.login);
-                        },
-                    ),
-                  ],
+      body: ChangeNotifierProvider(
+        create: (context) => ResetPasswordProvider(token: "token", userId: "userId"),
+        builder: (context, child) {
+
+          final resetPasswordProvider = Provider.of<ResetPasswordProvider>(context);
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              children: [
+                const Text(
+                  "Enter a new password",
                   style: TextStyle(
-                    fontSize: 16.sp,
-                    color: AppColor.black100,
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizeMargin.size(height: 24.h),
+                CustomTextField(
+                  label: 'Password',
+                  hideText: !resetPasswordProvider.passwordIsVisible,
+                  suffixIcon: IconButton(
+                    onPressed: () => resetPasswordProvider.togglePasswordVisibility(),
+                    icon: Icon(
+                      !resetPasswordProvider.passwordIsVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: AppColor.black100,
+                    ),
                   ),
                 ),
-              )
-            ],
+                SizeMargin.size(height: 24.h),
+                CustomTextField(
+                  label: 'Re-enter Password',
+                  hideText: !resetPasswordProvider.confirmPasswordIsVisible,
+                  suffixIcon: IconButton(
+                    onPressed: () => resetPasswordProvider.toggleConfirmPasswordVisibility(),
+                    icon: Icon(
+                      !resetPasswordProvider.confirmPasswordIsVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: AppColor.black100,
+                    ),
+                  ),
+                ),
+                SizeMargin.size(height: 24.h),
+                CustomRaisedButton(
+                  text: "Continue",
+                  isBusy: false,
+                  onPressed: () => resetPasswordProvider.resetPassword(context),
+                ),
+                SizeMargin.size(height: 32.h),
+                RichText(
+                  text: TextSpan(
+                    text: "Remember your password?",
+                    children: [
+                      TextSpan(
+                        text: " Login",
+                        style: const TextStyle(
+                          color: AppColor.darkGreen,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Get.offAllNamed(Routes.login);
+                          },
+                      ),
+                    ],
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColor.black100,
+                    ),
+                  ),
+                )
+              ],
+            ),
           );
-        }),
+        },
       ),
     );
   }

@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:load_connect/core/models/address_result.dart';
-import 'package:load_connect/core/models/prediction_result.dart';
-import 'package:load_connect/core/repository/util_repo.dart';
+import 'package:load_connect/backend/models/entities/address_result.dart';
+import 'package:load_connect/backend/models/entities/prediction_result.dart';
+import 'package:load_connect/backend/repositories/util_repo.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
-import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:unicons/unicons.dart';
 

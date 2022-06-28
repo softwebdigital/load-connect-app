@@ -1,11 +1,13 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/config/locator.dart';
-import 'package:load_connect/core/repository/auth_repo.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/styles.dart';
+import 'package:load_connect/view/providers/user/user_profile_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'config/route_pages.dart';
 
@@ -16,7 +18,12 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await setupServiceLocator();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    child: const MyApp(),
+    providers: [
+      ChangeNotifierProvider(create: (context) => UserProfileProvider())
+    ]
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +32,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final authRepo = Get.find<AuthRepo>();
+    final botToastBuilder = BotToastInit();
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
@@ -33,7 +40,6 @@ class MyApp extends StatelessWidget {
         builder: () {
           return GetMaterialApp(
             title: 'Load Connect',
-
             theme: ThemeData(
               fontFamily: 'CircularStd',
               elevatedButtonTheme: ElevatedButtonThemeData(
@@ -52,11 +58,12 @@ class MyApp extends StatelessWidget {
               return MediaQuery(
                 //Setting font does not change with system font size
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: widget!,
+                child: botToastBuilder(context, widget!),
               );
             },
-            initialRoute: RoutePages.init(isLoggedIn: authRepo.isLoggedIn),
+            initialRoute: RoutePages.init(isLoggedIn: false),
             getPages: RoutePages.routes,
+            navigatorObservers: [BotToastNavigatorObserver()],
           );
         });
   }

@@ -11,6 +11,7 @@ class Routes {
   static const String updatePassword = "/update-password";
   static const String deactivateAccount = "/deactivate-account";
   static const String blockedList = "/blocked-list";
+  static const String createLoad = "/create-load";
   static const String selectLoadLocation = "/select-load-location";
   static const String addLoadDetails = "/add-load-details";
   static const String loadDetails = "/load-details";

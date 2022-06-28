@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:load_connect/core/repository/user_repo.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/screens/settings/edit_profile.dart';
 import 'package:load_connect/view/screens/settings/notification_setting_screen.dart';
 import 'package:load_connect/view/screens/settings/recent_trucks.dart';
@@ -13,23 +13,16 @@ import 'package:load_connect/view/screens/settings/tools_screen.dart';
 import 'package:load_connect/view/screens/widgets/notification_icon.dart';
 import 'package:load_connect/view/utils/app_dialog.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/custom_icons_icons.dart';
 import '../../others/about_screen.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({Key? key}) : super(key: key);
 
-/*
- * CachedNetworkImage(
-        imageUrl: "http://via.placeholder.com/350x150",
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-     ),
- */
   @override
   Widget build(BuildContext context) {
-    final userRepo = Get.find<UserRepo>();
-    // final _isSearching = useState(false);
+    final profileProvider = Provider.of<UserProfileProvider>(context);
     return NestedScrollView(
       // padding: const EdgeInsets.all(16.0),
       scrollBehavior: const ScrollBehavior().copyWith(overscroll: false),
@@ -53,15 +46,15 @@ class SettingsTab extends StatelessWidget {
             children: [
               CircleAvatar(
                 // child: Text("BR"),
-                backgroundImage: userRepo.user.photoUrl == null
+                backgroundImage: profileProvider.user.profilePhotoUrl!.isEmpty
                     ? const AssetImage("assets/images/icon.png")
                         as ImageProvider<Object>
-                    : NetworkImage(userRepo.user.photoUrl!),
+                    : NetworkImage(profileProvider.user.profilePhotoUrl!),
                 radius: 48.0,
               ),
               SizeMargin.size(height: 16.0),
               Text(
-                userRepo.user.fullName,
+                "${profileProvider.user.firstName!} ${profileProvider.user.lastName!}",
                 style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w700,
@@ -69,7 +62,7 @@ class SettingsTab extends StatelessWidget {
               ),
               SizeMargin.size(height: 2.0),
               Text(
-                userRepo.user.email ?? "",
+                profileProvider.user.email ?? "",
                 style: const TextStyle(color: AppColor.lightgrey),
               )
             ],

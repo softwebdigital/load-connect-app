@@ -4,18 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
+import 'package:load_connect/view/providers/user/change_password_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 
-class UpdatePasswordScreen extends HookWidget {
+class UpdatePasswordScreen extends StatelessWidget {
   UpdatePasswordScreen({Key? key}) : super(key: key);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final isBusy = useState(false);
-    final hidden1 = useState(true);
-    final hidden2 = useState(true);
-    final hidden3 = useState(true);
+    final changePasswordProvider = Provider.of<ChangePasswordProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -45,7 +44,7 @@ class UpdatePasswordScreen extends HookWidget {
               child: Column(
                 children: [
                   CustomTextFormField(
-                    hideText: hidden1.value,
+                    // hideText: "Current password",
                     label: "Current Password",
                     validator: (val) {
                       if (val.isNull || val!.isEmpty) {
@@ -54,15 +53,14 @@ class UpdatePasswordScreen extends HookWidget {
                       return null;
                     },
                     suffixIcon: IconButton(
-                      onPressed: () {
-                        hidden1.value = !hidden1.value;
-                      },
-                      icon: _getIcon(hidden1.value),
+                      onPressed: () => changePasswordProvider.toggleOldPasswordVisibility(),
+                      icon: _getIcon(changePasswordProvider.oldPasswordIsVisible),
                     ),
+                    onSaved: (value) => changePasswordProvider.setOldPassword = value!,
                   ),
                   SizeMargin.size(height: 20.0.h),
                   CustomTextFormField(
-                    hideText: hidden2.value,
+                    // hideText: hidden2.value,
                     label: "New Password",
                     validator: (val) {
                       if (val.isNull || val!.isEmpty) {
@@ -71,15 +69,14 @@ class UpdatePasswordScreen extends HookWidget {
                       return null;
                     },
                     suffixIcon: IconButton(
-                      onPressed: () {
-                        hidden2.value = !hidden2.value;
-                      },
-                      icon: _getIcon(hidden2.value),
+                      onPressed: () => changePasswordProvider.togglePasswordVisibility(),
+                      icon: _getIcon(changePasswordProvider.passwordIsVisible),
                     ),
+                    onSaved: (value) => changePasswordProvider.setPassword = value!,
                   ),
                   SizeMargin.size(height: 20.0.h),
                   CustomTextFormField(
-                    hideText: hidden3.value,
+                    // hideText: hidden3.value,
                     label: "Re-enter New Password",
                     validator: (val) {
                       if (val.isNull || val!.isEmpty) {
@@ -88,22 +85,17 @@ class UpdatePasswordScreen extends HookWidget {
                       return null;
                     },
                     suffixIcon: IconButton(
-                      onPressed: () {
-                        hidden3.value = !hidden3.value;
-                      },
-                      icon: _getIcon(hidden3.value),
+                      onPressed: () => changePasswordProvider.toggleConfirmPasswordVisibility(),
+                      icon: _getIcon(changePasswordProvider.confirmPasswordIsVisible),
                     ),
+                    onSaved: (value) => changePasswordProvider.setConfirmPassword = value!,
                   ),
                   SizeMargin.size(height: 24.h),
                   CustomRaisedButton(
                     text: "Save Changes",
-                    isBusy: isBusy.value,
+                    isBusy: false,
                     onPressed: () {
-                      isBusy.value = true;
-                      Future.delayed(const Duration(seconds: 3), () {
-                        isBusy.value = false;
-                        snackBar(context, "Update failed, try again");
-                      });
+                      changePasswordProvider.changePassword(context);
                     },
                   ),
                 ],

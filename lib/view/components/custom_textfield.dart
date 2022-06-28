@@ -95,6 +95,7 @@ class CustomTextFormField extends StatelessWidget {
       cursorColor: AppColor.black100,
       validator: validator,
       onSaved: onSaved,
+      onChanged: onSaved,
       initialValue: initialValue,
       inputFormatters: inputFormatters,
       onTap: onTap,

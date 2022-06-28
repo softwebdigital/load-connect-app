@@ -3,14 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
+import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/screens/settings/notification_setting_screen.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<UserProfileProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: const Text("Notification"), actions: [
         IconButton(
@@ -31,10 +34,13 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
       ]),
-      body: ListView.builder(
-          itemCount: 3,
+      body: profileProvider.isLoading ? Center(
+        child: CircularProgressIndicator.adaptive()
+      ) : profileProvider.isLoaded ? ListView.builder(
+          itemCount: profileProvider.profile!.notifications!.length,
           padding: EdgeInsets.symmetric(vertical: 20.0.h, horizontal: 16.0.w),
           itemBuilder: (_, index) {
+            final notification = profileProvider.profile!.notifications![index];
             return Container(
               margin: const EdgeInsets.only(bottom: 16.0),
               padding: const EdgeInsets.symmetric(
@@ -67,18 +73,18 @@ class NotificationScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Notification Title",
-                          style: TextStyle(
+                        Text(
+                          notification.data!.title!,
+                          style: const TextStyle(
                             color: AppColor.deepGreen,
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,
                           ),
                         ),
                         SizeMargin.size(height: 6.0),
-                        const Text(
-                          "Placerat odio nisl sit pharetra felis donec feugiat. Facilisis vel id suspendisse lorem sed proin vitae. Et in amet a nibh. Lorem amet.",
-                          style: TextStyle(
+                        Text(
+                          "${notification.data!.body}",
+                          style: const TextStyle(
                             color: AppColor.blackgrey,
                           ),
                         ),
@@ -96,7 +102,8 @@ class NotificationScreen extends StatelessWidget {
                 ],
               ),
             );
-          }),
+          }
+        ) : Container(),
     );
   }
 }

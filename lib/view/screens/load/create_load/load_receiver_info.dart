@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:load_connect/core/repository/create_load_controller.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
+import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
+import 'package:provider/provider.dart';
 
-class LoadReceiverInfoScreen extends GetView<CreateLoadController> {
+class LoadReceiverInfoScreen extends StatelessWidget {
   const LoadReceiverInfoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-
+    final createLoadProvider = Provider.of<CreateLoadProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(
         height: 12.0,
@@ -56,19 +57,24 @@ class LoadReceiverInfoScreen extends GetView<CreateLoadController> {
           children: [
             CustomTextField(
               label: "Receiver's name",
-              controller: controller.receiverName,
+              onChanged: (String name) {
+                createLoadProvider.receiverName = name;
+              },
             ),
             SizeMargin.size(height: 20.0),
             CustomTextField(
-              controller: controller.receiverPhone,
+              onChanged: (String phone) {
+                createLoadProvider.setReceiverPhoneNumber = phone;
+              },
               label: "Receiver's phone number",
             ),
             SizeMargin.size(height: 24.0),
             CustomRaisedButton(
-              isDisabled: isDisabled,
+              isDisabled: createLoadProvider.receiverName.isEmpty || createLoadProvider.receiverPhoneNumber.isEmpty,
               text: "Continue",
               onPressed: () {
-                Get.toNamed(Routes.otherLoadInfo);
+                // Get.toNamed(Routes.otherLoadInfo);
+                createLoadProvider.next();
               },
             ),
             SizeMargin.size(height: 24.0),
@@ -84,10 +90,10 @@ class LoadReceiverInfoScreen extends GetView<CreateLoadController> {
     );
   }
 
-  bool get isDisabled {
-    // controller.receiverName.notifyListeners();
-    final name = controller.receiverName.value.text;
-    final phone = controller.receiverPhone.value.text;
-    return name.isEmpty || phone.isEmpty;
-  }
+  // bool get isDisabled {
+  //   // controller.receiverName.notifyListeners();
+  //   final name = createLoadProvider;
+  //   final phone = controller.receiverPhone.value.text;
+  //   return name.isEmpty || phone.isEmpty;
+  // }
 }
