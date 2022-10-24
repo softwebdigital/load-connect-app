@@ -10,7 +10,7 @@ class GenerateTokenRequest {
     userId = json['user_id'];
     type = json['type'];
   }
-  int? userId;
+  String? userId;
   String? type;
 
   Map<String, dynamic> toJson() {

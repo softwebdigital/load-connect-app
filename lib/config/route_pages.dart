@@ -71,10 +71,10 @@ class RoutePages {
       name: Routes.openMaps,
       page: () => const SelectPlaceOnMap(),
     ),
-    GetPage(
-      name: Routes.loadDetails,
-      page: () => const LoadDetailsScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.loadDetails,
+    //   page: () => LoadDetailsScreen(),
+    // ),
     GetPage(
       name: Routes.createLoad,
       page: () => ChangeNotifierProvider(
@@ -88,7 +88,7 @@ class RoutePages {
         ),
         GetPage(
           name: Routes.addLoadDetails,
-          page: () => const AddLoadDetailsScreen(),
+          page: () => AddLoadDetailsScreen(),
         ),
         GetPage(
           name: Routes.addLoadImages,

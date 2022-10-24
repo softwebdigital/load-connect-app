@@ -23,7 +23,7 @@ class MileageCalculatorScreen extends StatelessWidget {
             const CustomTextField(
               label: "Pickup location",
               // controller: controller.pickUpLocation,
-
+              value: "",
               readOnly: true,
             ),
             SizeMargin.size(height: 8.0),

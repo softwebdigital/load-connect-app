@@ -12,7 +12,8 @@ class VehicleTypeModel {
   VehicleTypeModel({
       this.id, 
       this.name, 
-      this.icon, 
+      this.description,
+      this.icon,
       this.estimatedCapacityPerKilometrePrice, 
       this.createdAt, 
       this.updatedAt, 
@@ -21,6 +22,7 @@ class VehicleTypeModel {
   VehicleTypeModel.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
+    description = json['description'];
     icon = json['icon'];
     estimatedCapacityPerKilometrePrice = json['estimated_capacity_per_kilometre_price'];
     createdAt = json['created_at'];
@@ -34,6 +36,7 @@ class VehicleTypeModel {
   }
   int? id;
   String? name;
+  String? description;
   String? icon;
   int? estimatedCapacityPerKilometrePrice;
   String? createdAt;
@@ -44,6 +47,7 @@ class VehicleTypeModel {
     final map = <String, dynamic>{};
     map['id'] = id;
     map['name'] = name;
+    map['description'] = description;
     map['icon'] = icon;
     map['estimated_capacity_per_kilometre_price'] = estimatedCapacityPerKilometrePrice;
     map['created_at'] = createdAt;

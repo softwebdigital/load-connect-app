@@ -1,159 +1,100 @@
-/// first_name : "me"
-/// last_name : "you"
-/// email : "menyou@mailinator.com"
-/// phone_number : "08088888888"
-/// user_type : "dispatch"
-/// updated_at : "2022-06-23T14:54:39.000000Z"
-/// created_at : "2022-06-23T14:54:39.000000Z"
-/// id : 4
-/// profile_photo_url : "https://ui-avatars.com/api/?name=&color=7F9CF5&background=EBF4FF"
-/// more : null
-/// uid : "eyJpdiI6IjBhYUFaRjRzNEV1ZXIwVHNXcFFiV1E9PSIsInZhbHVlIjoiTStvWG04VUdXSHhRajllbzhsZEsvdz09IiwibWFjIjoiMjJhNWM4ZmI3ZDkwN2ViOTFmYTMzZTJjYWI0ZjI4OTQxYjYyNzVkMjU0NDc3ZWVlNjM2ZTFhMjZmOGMxMzRhZiIsInRhZyI6IiJ9"
-/// full_ratings : 0
-/// roles : [{"id":3,"name":"rider","guard_name":"web","created_at":"2022-05-16T22:57:42.000000Z","updated_at":"2022-05-16T22:57:42.000000Z","pivot":{"model_id":4,"role_id":3,"model_type":"App\\Models\\User"}}]
+/// id : "53eae027-61d7-4782-b535-0f71947f5639"
+/// first_name : "Miracle"
+/// last_name : "Gabriel"
+/// email : "sixpathdev@gmail.com"
+/// phone : "08141894420"
+/// profile_photo : null
+/// otp : "936625"
+/// account_verified : 0
+/// account_deactivated : 0
+/// account_type : null
+/// business_name : null
+/// cac_number : null
+/// business_email : null
+/// email_verified_at : null
+/// created_at : "2022-09-27T12:51:54.000000Z"
+/// updated_at : "2022-09-27T15:36:52.000000Z"
 
 class UserModel {
   UserModel({
+      this.id, 
       this.firstName, 
       this.lastName, 
       this.email, 
-      this.phoneNumber, 
-      this.userType, 
-      this.updatedAt, 
+      this.phone, 
+      this.profilePhoto, 
+      this.otp, 
+      this.accountVerified, 
+      this.accountDeactivated, 
+      this.accountType, 
+      this.businessName, 
+      this.cacNumber, 
+      this.businessEmail, 
+      this.stateOfResidence,
+      this.residentialAddress,
+      this.emailVerifiedAt,
       this.createdAt, 
-      this.id, 
-      this.profilePhotoUrl, 
-      this.more, 
-      this.uid, 
-      this.fullRatings, 
-      this.roles,});
+      this.updatedAt,});
 
   UserModel.fromJson(dynamic json) {
+    id = json['id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     email = json['email'];
-    phoneNumber = json['phone_number'];
-    userType = json['user_type'];
-    updatedAt = json['updated_at'];
+    phone = json['phone'];
+    profilePhoto = json['profile_photo'];
+    otp = json['otp'];
+    accountVerified = json['account_verified'];
+    accountDeactivated = json['account_deactivated'];
+    accountType = json['account_type'];
+    businessName = json['business_name'];
+    cacNumber = json['cac_number'];
+    businessEmail = json['business_email'];
+    stateOfResidence = json['state_of_residence'];
+    residentialAddress = json['residential_address'];
+    emailVerifiedAt = json['email_verified_at'];
     createdAt = json['created_at'];
-    id = json['id'];
-    profilePhotoUrl = json['profile_photo_url'];
-    more = json['more'];
-    uid = json['uid'];
-    fullRatings = json['full_ratings'];
-    if (json['roles'] != null) {
-      roles = [];
-      json['roles'].forEach((v) {
-        roles?.add(Roles.fromJson(v));
-      });
-    }
+    updatedAt = json['updated_at'];
   }
+  String? id;
   String? firstName;
   String? lastName;
   String? email;
-  String? phoneNumber;
-  String? userType;
-  String? updatedAt;
+  String? phone;
+  dynamic profilePhoto;
+  num? otp;
+  num? accountVerified;
+  num? accountDeactivated;
+  dynamic accountType;
+  dynamic businessName;
+  dynamic cacNumber;
+  dynamic businessEmail;
+  dynamic residentialAddress;
+  dynamic stateOfResidence;
+  dynamic emailVerifiedAt;
   String? createdAt;
-  int? id;
-  String? profilePhotoUrl;
-  dynamic more;
-  String? uid;
-  int? fullRatings;
-  List<Roles>? roles;
+  String? updatedAt;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['id'] = id;
     map['first_name'] = firstName;
     map['last_name'] = lastName;
     map['email'] = email;
-    map['phone_number'] = phoneNumber;
-    map['user_type'] = userType;
-    map['updated_at'] = updatedAt;
-    map['created_at'] = createdAt;
-    map['id'] = id;
-    map['profile_photo_url'] = profilePhotoUrl;
-    map['more'] = more;
-    map['uid'] = uid;
-    map['full_ratings'] = fullRatings;
-    if (roles != null) {
-      map['roles'] = roles?.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
-
-}
-
-/// id : 3
-/// name : "rider"
-/// guard_name : "web"
-/// created_at : "2022-05-16T22:57:42.000000Z"
-/// updated_at : "2022-05-16T22:57:42.000000Z"
-/// pivot : {"model_id":4,"role_id":3,"model_type":"App\\Models\\User"}
-
-class Roles {
-  Roles({
-      this.id, 
-      this.name, 
-      this.guardName, 
-      this.createdAt, 
-      this.updatedAt, 
-      this.pivot,});
-
-  Roles.fromJson(dynamic json) {
-    id = json['id'];
-    name = json['name'];
-    guardName = json['guard_name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    pivot = json['pivot'] != null ? Pivot.fromJson(json['pivot']) : null;
-  }
-  int? id;
-  String? name;
-  String? guardName;
-  String? createdAt;
-  String? updatedAt;
-  Pivot? pivot;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = id;
-    map['name'] = name;
-    map['guard_name'] = guardName;
+    map['phone'] = phone;
+    map['profile_photo'] = profilePhoto;
+    map['otp'] = otp;
+    map['account_verified'] = accountVerified;
+    map['account_deactivated'] = accountDeactivated;
+    map['account_type'] = accountType;
+    map['business_name'] = businessName;
+    map['cac_number'] = cacNumber;
+    map['business_email'] = businessEmail;
+    map['state_of_residence'] = stateOfResidence;
+    map['residential_address'] = residentialAddress;
+    map['email_verified_at'] = emailVerifiedAt;
     map['created_at'] = createdAt;
     map['updated_at'] = updatedAt;
-    if (pivot != null) {
-      map['pivot'] = pivot?.toJson();
-    }
-    return map;
-  }
-
-}
-
-/// model_id : 4
-/// role_id : 3
-/// model_type : "App\\Models\\User"
-
-class Pivot {
-  Pivot({
-      this.modelId, 
-      this.roleId, 
-      this.modelType,});
-
-  Pivot.fromJson(dynamic json) {
-    modelId = json['model_id'];
-    roleId = json['role_id'];
-    modelType = json['model_type'];
-  }
-  int? modelId;
-  int? roleId;
-  String? modelType;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['model_id'] = modelId;
-    map['role_id'] = roleId;
-    map['model_type'] = modelType;
     return map;
   }
 

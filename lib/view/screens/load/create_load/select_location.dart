@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:load_connect/backend/models/entities/address_result.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
 import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
@@ -78,6 +78,8 @@ class SelectLoadLocationScreen extends StatelessWidget {
                   createLoadProvider.pickupAddress = loc.address;
                   createLoadProvider.pickupLat = loc.latitude;
                   createLoadProvider.pickupLng = loc.longitude;
+
+                  createLoadProvider.notifyListeners();
                 }
               },
               suffixIcon: IconButton(
@@ -89,6 +91,7 @@ class SelectLoadLocationScreen extends StatelessWidget {
                     createLoadProvider.pickupAddress = loc.address;
                     createLoadProvider.pickupLat = loc.latitude;
                     createLoadProvider.pickupLng = loc.longitude;
+                    createLoadProvider.notifyListeners();
                   }
                 },
                 icon: const Icon(
@@ -97,6 +100,7 @@ class SelectLoadLocationScreen extends StatelessWidget {
                 ),
               ),
               readOnly: true,
+              value: createLoadProvider.pickupAddress,
             ),
             SizeMargin.size(height: 8.0),
             InkWell(
@@ -128,9 +132,11 @@ class SelectLoadLocationScreen extends StatelessWidget {
                   createLoadProvider.destinationAddress = loc.address;
                   createLoadProvider.destinationLat = loc.latitude;
                   createLoadProvider.destinationLng = loc.longitude;
+                  createLoadProvider.notifyListeners();
                 }
               },
               readOnly: true,
+              value: createLoadProvider.destinationAddress,
             ),
             SizeMargin.size(height: 24.0),
             CustomRaisedButton(

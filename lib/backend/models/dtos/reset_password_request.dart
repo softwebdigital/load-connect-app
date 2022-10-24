@@ -4,23 +4,20 @@
 
 class ResetPasswordRequest {
   ResetPasswordRequest({
-      this.token, 
-      this.userId, 
-      this.password,});
+      this.password,
+      this.confirmPassword,});
 
   ResetPasswordRequest.fromJson(dynamic json) {
-    token = json['token'];
-    userId = json['user_id'];
     password = json['password'];
+    confirmPassword = json['password_confirmation'];
   }
-  String? token;
-  int? userId;
+
   String? password;
+  String? confirmPassword;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['token'] = token;
-    map['user_id'] = userId;
+    map['password_confirmation'] = confirmPassword;
     map['password'] = password;
     return map;
   }

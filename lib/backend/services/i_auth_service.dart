@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 import 'package:load_connect/backend/models/core/service_response.dart';
 import 'package:load_connect/backend/models/dtos/create_account_request.dart';
 import 'package:load_connect/backend/models/dtos/forgot_password_request.dart';
@@ -14,6 +15,9 @@ abstract class IAuthService {
   Future<ServiceResponse<UserModel>> createAccount(CreateAccountRequest request);
   Future<ServiceResponse<String>> generateToken(GenerateTokenRequest request);
   Future<ServiceResponse<UserModel>> verifyToken(VerifyTokenRequest request);
-  Future<ServiceResponse<UserModel>> forgotPassword(ForgotPasswordRequest request);
+  Future<ServiceResponse<String>> verifyForgetPassword(VerifyTokenRequest request);
+  Future<ServiceResponse<String>> forgotPassword(ForgotPasswordRequest request);
   Future<ServiceResponse<String>> resetPassword(ResetPasswordRequest request);
+  Future<ServiceResponse<String>> completeProfile(FormData request);
+  Future<ServiceResponse<String>> resendRegistrationEmail(String email);
 }

@@ -13,7 +13,7 @@ class ApiResponse {
   ApiResponse.fromJson(dynamic json) {
     // code = json['code'];
     message = json['message'];
-    status = json['status'];
+    status = json['status'] == "success";
     data = json['data'];
   }
   // late int code;

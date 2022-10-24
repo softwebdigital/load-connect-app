@@ -10,8 +10,8 @@ class ChangePasswordRequest {
 
   ChangePasswordRequest.fromJson(dynamic json) {
     currentPassword = json['current_password'];
-    newPassword = json['new_password'];
-    newConfirmPassword = json['new_confirm_password'];
+    newPassword = json['password'];
+    newConfirmPassword = json['password_confirmation'];
   }
   String? currentPassword;
   String? newPassword;
@@ -20,8 +20,8 @@ class ChangePasswordRequest {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['current_password'] = currentPassword;
-    map['new_password'] = newPassword;
-    map['new_confirm_password'] = newConfirmPassword;
+    map['password'] = newPassword;
+    map['password_confirmation'] = newConfirmPassword;
     return map;
   }
 

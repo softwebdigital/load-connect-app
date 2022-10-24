@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
-import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
 import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:provider/provider.dart';
 
 class LoadReceiverInfoScreen extends StatelessWidget {
@@ -60,6 +58,7 @@ class LoadReceiverInfoScreen extends StatelessWidget {
               onChanged: (String name) {
                 createLoadProvider.receiverName = name;
               },
+              value: createLoadProvider.receiverName,
             ),
             SizeMargin.size(height: 20.0),
             CustomTextField(
@@ -67,10 +66,12 @@ class LoadReceiverInfoScreen extends StatelessWidget {
                 createLoadProvider.setReceiverPhoneNumber = phone;
               },
               label: "Receiver's phone number",
+              value: createLoadProvider.receiverPhoneNumber,
+              keyboardType: TextInputType.number,
             ),
             SizeMargin.size(height: 24.0),
             CustomRaisedButton(
-              isDisabled: createLoadProvider.receiverName.isEmpty || createLoadProvider.receiverPhoneNumber.isEmpty,
+              isDisabled: false,
               text: "Continue",
               onPressed: () {
                 // Get.toNamed(Routes.otherLoadInfo);

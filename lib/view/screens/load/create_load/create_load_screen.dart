@@ -18,7 +18,7 @@ class CreateLoadScreen extends StatelessWidget {
           createLoadProvider.back();
           return false;
         } else {
-          createLoadProvider.next();
+          // createLoadProvider.next();
           return true;
         }
       },
@@ -30,7 +30,7 @@ class CreateLoadScreen extends StatelessWidget {
             }
 
             if (createLoadProvider.currentScreen == addLoadDetailScreen) {
-              return const AddLoadDetailsScreen();
+              return AddLoadDetailsScreen();
             }
 
             if (createLoadProvider.currentScreen == addLoadImageScreen) {

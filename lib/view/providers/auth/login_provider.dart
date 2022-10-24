@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/backend/models/dtos/generate_token_request.dart';
 import 'package:load_connect/backend/models/dtos/login_request.dart';
-import 'package:load_connect/backend/services/i_auth_service.dart';
 import 'package:load_connect/backend/services/core/i_local_storage.dart';
+import 'package:load_connect/backend/services/i_auth_service.dart';
 import 'package:load_connect/shared/constants.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/view/interaction/toast_alert.dart';
@@ -61,6 +61,7 @@ class LoginProvider extends BaseProvider {
               "${Routes.registrationOtp}?user_id=${res.data!.user!.id}",
             );
           } else {
+            print("UserToken: ${res.data!.token!}");
             Get.find<ILocalStorageService>().setItem(userDataBox, userTokenKey, res.data!.token);
             Get.find<ILocalStorageService>().setItem(appDataBox, loggedInBeforeKey, true);
             Provider.of<UserProfileProvider>(context, listen: false).setUser = res.data!.user!;

@@ -9,6 +9,7 @@ class LoginResponse {
       this.user,});
 
   LoginResponse.fromJson(dynamic json) {
+    print("ToJson ::: $json");
     token = json['token'];
     user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
   }

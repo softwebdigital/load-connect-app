@@ -7,6 +7,8 @@ import 'package:load_connect/backend/models/entities/user_model.dart';
 import 'package:load_connect/backend/services/i_user_service.dart';
 import 'package:load_connect/view/interaction/toast_alert.dart';
 import 'package:load_connect/view/providers/base_provider.dart';
+import 'package:load_connect/view/providers/user/user_profile_provider.dart';
+import 'package:provider/provider.dart';
 
 class UpdateProfileProvider extends BaseProvider {
 
@@ -29,17 +31,28 @@ class UpdateProfileProvider extends BaseProvider {
       } else if (address.isEmpty) {
         ToastAlert.showErrorAlert("Please provide your address of residence");
       } else {
+        // await Get.find<IAuthService>().completeProfile(dio.FormData.fromMap({
+        //   'state': state,
+        //   'address': address
+        // })).then((value) {
+        //   print("CompleteProfileMessage: ${value.message}");
+        // });
+        final user = Provider.of<UserProfileProvider>(context, listen: false).user;
         ToastAlert.showLoadingAlert("");
         final request = EditProfileRequest(
           firstName: firstName,
           lastName: lastName,
           address: address,
-          state: state
+          state: state,
+          email: user.email,
+          phone: user.phone
         );
         final res = await Get.find<IUserService>().editProfile(request);
         ToastAlert.closeAlert();
         if (res.status == true) {
-          ToastAlert.showAlert(res.message);
+          ToastAlert.showAlert("Profile updated successfully");
+          Provider.of<UserProfileProvider>(context, listen: false).initialize();
+          Get.back();
         } else {
           ToastAlert.showErrorAlert(res.message);
         }
@@ -50,10 +63,9 @@ class UpdateProfileProvider extends BaseProvider {
   }
 
   UpdateProfileProvider(this.user) {
+    print("User: ${user.toJson()}");
     firstName = user.firstName!;
     lastName = user.lastName!;
-    state = user.more == null ? "" : user.more['state'];
-    address = user.more == null ? "" : user.more['address'];
   }
 
 }

@@ -1,14 +1,19 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:load_connect/backend/models/entities/order_model.dart';
+import 'package:load_connect/backend/models/entities/user_load.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/utils/custom_icons_icons.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:timelines/timelines.dart';
 import 'package:unicons/unicons.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 class LoadDetailsScreen extends StatefulWidget {
-  const LoadDetailsScreen({Key? key}) : super(key: key);
+  const LoadDetailsScreen({Key? key, required this.load}) : super(key: key);
+
+  final UserLoad load;
 
   @override
   State<LoadDetailsScreen> createState() => _LoadDetailsScreenState();
@@ -19,6 +24,9 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
+    final createdAt = DateTime.parse(widget.load.createdAt!);
+    final pickupDate = DateTime.parse(widget.load.pickupDate!);
+    final pickupDeadline = DateTime.parse(widget.load.pickupDeadlineDate!);
     return Scaffold(
       appBar: CustomAppBar(
         title: const Text(
@@ -68,7 +76,7 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                       ),
                     ],
                   ),
-                  _DeliveryProcesses(processes: processes),
+                  _DeliveryProcesses(processes: getProcess(widget.load)),
                 ],
               ),
             ),
@@ -103,102 +111,104 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                   ),
                   _itemTile(
                     "Load Weight",
-                    "523.2 Kilograms",
+                    "${widget.load.loadWeight} Kilograms",
                     "25 Pounds",
                   ),
                   _itemTile(
                     "Load Description",
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet eros, morbi nisl, viverra eget amet, enim pellentesque feugiat.",
+                    "${widget.load.description}",
                   ),
                   _itemTile(
                     "Truck Category",
-                    "Mini Truck",
+                    "${widget.load.truckCategory}",
                   ),
-                  SizeMargin.size(height: 24.0),
-
                   /// [carousel should be here]
 
-                  const Text(
-                    "Load Images",
-                    style: TextStyle(
-                      color: AppColor.lightgrey,
-                    ),
-                  ),
 
-                  SizeMargin.size(height: 4.0),
-                  CarouselSlider(
-                    items: imageSliders,
-                    options: CarouselOptions(
-                      viewportFraction: 1.0,
-                      // enlargeCenterPage: true,
-                      height: 200,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                    ),
-                    carouselController: _controller,
-                  ),
-
-                  SizeMargin.size(height: 12.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _controller.previousPage();
-                        },
-                        child: const CircleAvatar(
-                          radius: 18.0,
-                          backgroundColor: AppColor.darkGreen,
-                          child: Icon(
-                            Icons.chevron_left,
-                            color: AppColor.white100,
-                            size: 30.0,
-                          ),
+                  if ((widget.load.loadimages ?? []).isNotEmpty)
+                    ...[
+                      SizeMargin.size(height: 24.0),
+                      const Text(
+                        "Load Images",
+                        style: TextStyle(
+                          color: AppColor.lightgrey,
                         ),
                       ),
+
+                      SizeMargin.size(height: 4.0),
+                      CarouselSlider(
+                        items: imageSliders(widget.load.loadimages ?? []),
+                        options: CarouselOptions(
+                          viewportFraction: 1.0,
+                          // enlargeCenterPage: true,
+                          height: 200,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
+                        ),
+                        carouselController: _controller,
+                      ),
+                      SizeMargin.size(height: 12.0),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imgList.asMap().entries.map((entry) {
-                          return GestureDetector(
-                            onTap: () => _controller.animateToPage(entry.key),
-                            child: Container(
-                              width: 10.0,
-                              height: 10.0,
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: (Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : AppColor.darkGreen)
-                                    .withOpacity(
-                                  _current == entry.key ? 0.9 : 0.2,
-                                ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _controller.previousPage();
+                            },
+                            child: const CircleAvatar(
+                              radius: 18.0,
+                              backgroundColor: AppColor.darkGreen,
+                              child: Icon(
+                                Icons.chevron_left,
+                                color: AppColor.white100,
+                                size: 30.0,
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _controller.nextPage();
-                        },
-                        child: const CircleAvatar(
-                          radius: 18.0,
-                          backgroundColor: AppColor.darkGreen,
-                          child: Icon(
-                            Icons.chevron_right,
-                            color: AppColor.white100,
-                            size: 30.0,
                           ),
-                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: (widget.load.loadimages ?? []).map((entry) {
+                              return GestureDetector(
+                                onTap: () => _controller.animateToPage((widget.load.loadimages ?? []).indexOf(entry)),
+                                child: Container(
+                                  width: 10.0,
+                                  height: 10.0,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 4.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (Theme.of(context).brightness ==
+                                        Brightness.dark
+                                        ? Colors.white
+                                        : AppColor.darkGreen)
+                                        .withOpacity(
+                                      _current == (widget.load.loadimages ?? []).indexOf(entry) ? 0.9 : 0.2,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _controller.nextPage();
+                            },
+                            child: const CircleAvatar(
+                              radius: 18.0,
+                              backgroundColor: AppColor.darkGreen,
+                              child: Icon(
+                                Icons.chevron_right,
+                                color: AppColor.white100,
+                                size: 30.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
-                  ),
 
                   /// [carousel should be here]
                 ],
@@ -238,8 +248,8 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                         fontWeight: FontWeight.w500),
                   ),
                   SizeMargin.size(height: 4.0),
-                  const Text(
-                    "Jessica Jones",
+                  Text(
+                    "${widget.load.receiverName}",
                     style: TextStyle(
                         color: AppColor.blackgrey,
                         fontSize: 16.0,
@@ -257,9 +267,9 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "01234567890",
-                        style: TextStyle(
+                      Text(
+                        "${widget.load.receiverPhone}",
+                        style: const TextStyle(
                             color: AppColor.blackgrey,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w500),
@@ -322,15 +332,15 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                   ),
                   _itemTile(
                     "Pickup date",
-                    "January 25, 2022",
+                    pickupDate.format('D, M j, H:i'),
                   ),
                   _itemTile(
                     "Deadline for load pickup",
-                    "12/11/2021",
+                    pickupDeadline.format('D, M j, H:i'),
                   ),
                   _itemTile(
                     "Date created",
-                    "08/11/2021",
+                    createdAt.format('D, M j, H:i'),
                   ),
                 ],
               ),
@@ -440,33 +450,37 @@ class _DeliveryProcesses extends StatelessWidget {
   }
 }
 
-final processes = [
-  const _DeliveryProcess(
-    "Load Request",
-    "Driver",
-    "No driver has accepted yet",
-  ),
-  const _DeliveryProcess(
-    "Negotiating",
-    "Estimated Fee",
-    "₦2,500.00",
-  ),
-  const _DeliveryProcess(
-    "Ready for pickup",
-    "Pickup Location",
-    "Commercial Ave Sabo yaba, Lagos",
-  ),
-  const _DeliveryProcess(
-    "Out for delivery",
-    "Destination",
-    "Admirity Way, Lekki phase 1, Lagos",
-  ),
-  const _DeliveryProcess(
-    "Delivered",
-    "",
-    "",
-  ),
-];
+
+getProcess(UserLoad load) {
+  return [
+    const _DeliveryProcess(
+      "Load Request",
+      "Driver",
+      "No driver has accepted yet",
+    ),
+    _DeliveryProcess(
+      "Negotiating",
+      "Estimated Fee",
+      "₦${load.loadValue}",
+    ),
+    _DeliveryProcess(
+      "Ready for pickup",
+      "Pickup Location",
+      "${load.pickupLocation}",
+    ),
+    _DeliveryProcess(
+      "Out for delivery",
+      "Destination",
+      "${load.destination}",
+    ),
+    const _DeliveryProcess(
+      "Delivered",
+      "",
+      "",
+    ),
+  ];
+}
+// final
 
 class _DeliveryProcess {
   const _DeliveryProcess(
@@ -549,14 +563,14 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
-final List<Widget> imageSliders = imgList
+List<Widget> imageSliders(List<Loadimages> images) => images
     .map((item) => Container(
           margin: const EdgeInsets.all(5.0),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             child: Stack(
               children: <Widget>[
-                Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                Image.network(item.url ?? imgList[0], fit: BoxFit.cover, width: 1000.0),
               ],
             ),
           ),

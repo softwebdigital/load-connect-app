@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
+import 'package:load_connect/view/providers/user/update_profile_picture_provider.dart';
 import 'package:load_connect/view/providers/user/update_profile_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
@@ -37,10 +38,14 @@ class EditProfileScreen extends StatelessWidget {
         ),
         title: const Text("Edit Profile"),
       ),
-      body: ChangeNotifierProvider(
-        create: (context) => UpdateProfileProvider(user),
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => UpdateProfileProvider(user),),
+          ChangeNotifierProvider(create: (context) => UpdateProfilePictureProvider(),),
+        ],
         builder: (context, child) {
           final updateProfileProvider = Provider.of<UpdateProfileProvider>(context);
+          final updateProfilePictureProvider = Provider.of<UpdateProfilePictureProvider>(context);
 
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
@@ -52,16 +57,16 @@ class EditProfileScreen extends StatelessWidget {
                 Center(
                   child: CircleAvatar(
                     // child: Text("BR"),
-                    backgroundImage: user.profilePhotoUrl!.isEmpty
+                    backgroundImage: user.profilePhoto == null
                         ? const AssetImage("assets/images/icon.png")
-                        : CachedNetworkImageProvider(user.profilePhotoUrl ?? "") as ImageProvider,
+                        : CachedNetworkImageProvider(user.profilePhoto!) as ImageProvider,
                     // backgroundImage: AssetImage("assets/images/icon.png"),
                     radius: 48.0,
                   ),
                 ),
                 SizeMargin.size(height: 16.0.h),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => updateProfilePictureProvider.pickImage(context),
                   child: const Text("Upload picture"),
                 ),
                 const Divider(),
@@ -96,7 +101,7 @@ class EditProfileScreen extends StatelessWidget {
                       SizeMargin.size(height: 20.0.h),
                       CustomTextFormField(
                         label: "Phone Number",
-                        initialValue: user.phoneNumber,
+                        initialValue: user.phone,
                         readOnly: true,
                         validator: (val) {
                           if (val.isNull || val!.isEmpty) {
@@ -126,7 +131,7 @@ class EditProfileScreen extends StatelessWidget {
                       SizeMargin.size(height: 20.0.h),
                       CustomTextFormField(
                         label: "State of Residence",
-                        initialValue: "",
+                        initialValue: user.stateOfResidence ?? "",
                         onSaved: (val) => updateProfileProvider.state = val!,
                         validator: (val) {
                           if (val.isNull || val!.isEmpty) {
@@ -138,7 +143,7 @@ class EditProfileScreen extends StatelessWidget {
                       SizeMargin.size(height: 20.0.h),
                       CustomTextFormField(
                         label: "Address",
-                        initialValue: "",
+                        initialValue: user.residentialAddress ?? "",
                         onSaved: (val) => updateProfileProvider.address = val!,
                         validator: (val) {
                           if (val.isNull || val!.isEmpty) {

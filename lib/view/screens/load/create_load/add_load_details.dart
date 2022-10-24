@@ -1,22 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:load_connect/backend/models/entities/vehicle_type_model.dart';
 import 'package:load_connect/shared/colors.dart';
-import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_radio_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
 import 'package:load_connect/view/providers/user/create_load_provider.dart';
+import 'package:load_connect/view/providers/utilities/vehicle_type_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:load_connect/view/utils/regex_input_formatter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:provider/provider.dart';
 
 class AddLoadDetailsScreen extends StatelessWidget {
-  const AddLoadDetailsScreen({Key? key}) : super(key: key);
+  AddLoadDetailsScreen({Key? key}) : super(key: key);
   // final TextEditingController _controller = TextEditingController();
+
+
+  List<VehicleTypeModel> truckCategories = [
+    VehicleTypeModel(
+      name: "Mini Truck",
+      icon: "assets/images/mini-truck.png", id: 1,
+      description: "For items smaller than a crate of drinks for example"
+    ),
+    VehicleTypeModel(
+      name: "Pickup Truck",
+      icon: "assets/images/delivery-truck.png", id: 2,
+      description: "For items smaller than a petrol generator for example"
+    ),
+    VehicleTypeModel(
+        name: "Normal Truck",
+        icon: "assets/images/truck.png", id: 3,
+        description: "For items smaller than a petrol generator for example"
+    ),
+    VehicleTypeModel(
+        name: "Large Truck",
+        icon: "assets/images/delivery-truck-2.png", id: 4,
+        description: "For items smaller than a petrol generator for example"
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +84,7 @@ class AddLoadDetailsScreen extends StatelessWidget {
         child: Column(
           children: [
             CustomTextField(
+              value: createLoadProvider.loadName,
               label: "Load Name",
               onChanged: (String name) {
                 createLoadProvider.loadName = name;
@@ -72,6 +97,7 @@ class AddLoadDetailsScreen extends StatelessWidget {
               minLines: 3,
               maxLines: 5,
               maxLength: 128,
+              value: createLoadProvider.loadDescription,
             ),
             // SizeMargin.size(height: 20.0),
             // CustomTextFormField(
@@ -81,8 +107,25 @@ class AddLoadDetailsScreen extends StatelessWidget {
             //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             // ),
             SizeMargin.size(height: 20.0),
-            CustomTextFormField(
-              onSaved: (value) {},
+            CustomTextField(
+              value: createLoadProvider.loadValue,
+              onChanged: (String value) {
+                createLoadProvider.loadValue = value;
+              },
+              label: "Load value(₦)",
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                RegExInputFormatter.withRegex(
+                  "^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$",
+                )
+              ],
+            ),
+            SizeMargin.size(height: 20.0),
+            CustomTextField(
+              value: createLoadProvider.loadWeight,
+              onChanged: (String weight) {
+                createLoadProvider.loadWeight = weight;
+              },
               label: "Load Weight(kg)",
               keyboardType: TextInputType.number,
               inputFormatters: [
@@ -104,7 +147,7 @@ class AddLoadDetailsScreen extends StatelessWidget {
                 ),
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Text(
                       "Truck Category",
@@ -112,25 +155,64 @@ class AddLoadDetailsScreen extends StatelessWidget {
                           fontSize: 12.0, color: AppColor.lightgrey),
                     ),
                     // SizeMargin.size(height: 16.0),
-                    ..._truckCategories
-                        .map((truckCategory) => Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: CustomRadioButton<String>(
-                        leading: Image.asset(
-                          truckCategory['image']!,
-                          width: 30.0,
-                        ),
-                        title: truckCategory['title']!,
-                        subtitle: truckCategory['subtitle']!,
-                        value: truckCategory['value']!,
-                        groupValue: createLoadProvider.vehicleTypeId,
-                        onChanged: (val) {
-                          createLoadProvider.vehicleTypeId =
-                              val ?? 'mini-truck';
-                        },
-                      ),
-                    ))
-                        .toList(),
+                    // ChangeNotifierProvider(
+                    //   create: (context) => VehicleTypeProvider(),
+                    //   builder: (context, child) {
+                    //     return Consumer<VehicleTypeProvider>(
+                    //       builder: (context, provider, child) {
+                    //         // provider.initialize();
+                    //         if (provider.isLoading) {
+                    //           return Text("Loading...");
+                    //         }
+                    //
+                    //         if (provider.isError) {
+                    //           return Text("${provider.message}");
+                    //         }
+                    //
+                    //         return Column(
+                    //           children: [
+                    //             ...truckCategories.map((truckCategory) => Padding(
+                    //               padding: const EdgeInsets.only(top: 16.0),
+                    //               child: CustomRadioButton<String>(
+                    //                 // leading: Image.asset(
+                    //                 //   truckCategory.icon!,
+                    //                 //   width: 30.0,
+                    //                 // ),
+                    //                 title: truckCategory.name!,
+                    //                 subtitle: "no description",
+                    //                 value: truckCategory.id!.toString(),
+                    //                 groupValue: createLoadProvider.vehicleTypeId,
+                    //                 onChanged: (val) {
+                    //                   createLoadProvider.setVehicleTypeId = val.toString();
+                    //                 },
+                    //               ),
+                    //             )).toList(),
+                    //           ],
+                    //         );
+                    //       },
+                    //     );
+                    //   },
+                    // ),
+                    Column(
+                      children: [
+                        ...truckCategories.map((truckCategory) => Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: CustomRadioButton<String>(
+                            leading: Image.asset(
+                              truckCategory.icon!,
+                              width: 30.0,
+                            ),
+                            title: truckCategory.name!,
+                            subtitle: truckCategory.description,
+                            value: truckCategory.name!.toString(),
+                            groupValue: createLoadProvider.vehicleTypeId,
+                            onChanged: (val) {
+                              createLoadProvider.setVehicleTypeId = val.toString();
+                            },
+                          ),
+                        )).toList(),
+                      ],
+                    )
                   ]),
             ),
             SizeMargin.size(height: 20.0),

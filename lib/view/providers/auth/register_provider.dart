@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/backend/models/dtos/create_account_request.dart';
 import 'package:load_connect/backend/models/dtos/generate_token_request.dart';
-import 'package:load_connect/backend/models/dtos/login_request.dart';
-import 'package:load_connect/backend/services/i_auth_service.dart';
 import 'package:load_connect/backend/services/core/i_local_storage.dart';
+import 'package:load_connect/backend/services/i_auth_service.dart';
 import 'package:load_connect/shared/constants.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/view/interaction/toast_alert.dart';
@@ -80,28 +79,29 @@ class RegisterProvider extends BaseProvider {
         final res = await Get.find<IAuthService>().createAccount(CreateAccountRequest(
           email: _email,
           password: _password,
-          phoneNumber: _phoneNumber,
+          phone: _phoneNumber,
           lastName: _lastName,
           firstName: _firstName,
-          userType: usertype
+          // userType: usertype
         ));
         ToastAlert.closeAlert();
         if (res.status == true) {
           // res.data!.
           Get.find<ILocalStorageService>().setItem(appDataBox, loggedInBeforeKey, true);
-          final generateTokenRequest = GenerateTokenRequest(
-            type: "register",
-            userId: res.data!.id
-          );
-          await Get.find<IAuthService>().generateToken(generateTokenRequest);
+          // final generateTokenRequest = GenerateTokenRequest(
+          //   type: "register",
+          //   userId: res.data!.id
+          // );
+          // await Get.find<IAuthService>().generateToken(generateTokenRequest);
+
           ToastAlert.showAlert("Registration successful");
-          Get.offAllNamed(
-            "${Routes.registrationOtp}?user_id=${res.data!.id}",
+          Get.toNamed(
+            "${Routes.registrationOtp}?user_id=${res.data!.id}&type=register&email=$email&name=$firstName",
           );
         } else {
           if (res.message.contains('unverified')) {
             ToastAlert.showErrorAlert("Account not verified");
-            Get.offNamed(
+            Get.toNamed(
               "${Routes.registrationOtp}?user_id=${res.data!.id}",
             );
           } else {

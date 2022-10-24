@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:load_connect/shared/colors.dart';
-import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
 import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:provider/provider.dart';
 
 class AddLoadImagesScreen extends StatelessWidget {
@@ -82,11 +80,7 @@ class AddLoadImagesScreen extends StatelessWidget {
                         image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
                       ),
                       child: GestureDetector(
-                        onTap: () {
-                          // controller.removeImage(
-                          //   controller.pickedImages.indexOf(image),
-                          // );
-                        },
+                        onTap: () => createLoadProvider.removeImage(image),
                         child: const CircleAvatar(
                           backgroundColor: Color(0XFFFFF9E6),
                           child: Icon(
@@ -104,9 +98,7 @@ class AddLoadImagesScreen extends StatelessWidget {
               height: createLoadProvider.images.isEmpty ? 50.0 : 24.0,
             ),
             TextButton.icon(
-              onPressed: () {
-                // controller.selectImages();
-              },
+              onPressed: () => createLoadProvider.pickLoadImages(),
               icon: const Icon(
                 Icons.upload_rounded,
               ),

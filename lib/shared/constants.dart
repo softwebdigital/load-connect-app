@@ -8,8 +8,8 @@ class AppData {
 
 
 const userDataBox = 'user-data-box';
+const userIdKey = 'user-id-key';
 const userTokenKey = 'user-token-key';
-
 
 const appDataBox = 'app-data-box';
 const loggedInBeforeKey = 'logged-in-before-key';
@@ -20,3 +20,12 @@ const String addLoadDetailScreen = Routes.addLoadDetails;
 const String addLoadImageScreen = Routes.addLoadImages;
 const String addLoadReceiverInfoScreen = Routes.loadReceiverInfo;
 const String addOtherLoadInfoScreen = Routes.otherLoadInfo;
+
+
+/// Load Status
+const pendingLoadStatus = 'pending';
+
+
+const requireTokenHeader = {
+  "requireToken": true
+};

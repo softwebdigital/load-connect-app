@@ -15,6 +15,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ToastAlert.closeAlert();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -33,7 +34,7 @@ class ResetPasswordScreen extends StatelessWidget {
         title: const Text("Reset Password"),
       ),
       body: ChangeNotifierProvider(
-        create: (context) => ResetPasswordProvider(token: "token", userId: "userId"),
+        create: (context) => ResetPasswordProvider(),
         builder: (context, child) {
 
           final resetPasswordProvider = Provider.of<ResetPasswordProvider>(context);
@@ -50,6 +51,17 @@ class ResetPasswordScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizeMargin.size(height: 24.h),
+                // CustomTextField(
+                //   label: 'OTP',
+                //   hideText: false,
+                //   value: resetPasswordProvider.token,
+                //   onChanged: (String token) {
+                //     resetPasswordProvider.token = token;
+                //   },
+                //   maxLength: 6,
+                //   keyboardType: TextInputType.number,
+                // ),
+                // SizeMargin.size(height: 24.h),
                 CustomTextField(
                   label: 'Password',
                   hideText: !resetPasswordProvider.passwordIsVisible,
@@ -62,6 +74,8 @@ class ResetPasswordScreen extends StatelessWidget {
                       color: AppColor.black100,
                     ),
                   ),
+                  value: resetPasswordProvider.password,
+                  onChanged: (String password) => resetPasswordProvider.setPassword = password,
                 ),
                 SizeMargin.size(height: 24.h),
                 CustomTextField(
@@ -76,6 +90,8 @@ class ResetPasswordScreen extends StatelessWidget {
                       color: AppColor.black100,
                     ),
                   ),
+                  value: resetPasswordProvider.confirmPassword,
+                  onChanged: (String password) => resetPasswordProvider.setConfirmPassword = password,
                 ),
                 SizeMargin.size(height: 24.h),
                 CustomRaisedButton(

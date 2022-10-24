@@ -10,33 +10,34 @@ class CreateAccountRequest {
       this.firstName, 
       this.lastName, 
       this.email, 
-      this.phoneNumber, 
+      this.phone,
       this.password, 
-      this.userType,});
+      // this.userType,
+  });
 
   CreateAccountRequest.fromJson(dynamic json) {
     firstName = json['first_name'];
     lastName = json['last_name'];
     email = json['email'];
-    phoneNumber = json['phone_number'];
+    phone = json['phone'];
     password = json['password'];
-    userType = json['user_type'];
+    // userType = json['user_type'];
   }
   String? firstName;
   String? lastName;
   String? email;
-  String? phoneNumber;
+  String? phone;
   String? password;
-  String? userType;
+  // String? userType;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['first_name'] = firstName;
     map['last_name'] = lastName;
     map['email'] = email;
-    map['phone_number'] = phoneNumber;
+    map['phone'] = phone;
     map['password'] = password;
-    map['user_type'] = userType;
+    // map['user_type'] = userType;
     return map;
   }
 

@@ -37,10 +37,10 @@ class NotificationScreen extends StatelessWidget {
       body: profileProvider.isLoading ? Center(
         child: CircularProgressIndicator.adaptive()
       ) : profileProvider.isLoaded ? ListView.builder(
-          itemCount: profileProvider.profile!.notifications!.length,
+          itemCount: [].length,
           padding: EdgeInsets.symmetric(vertical: 20.0.h, horizontal: 16.0.w),
           itemBuilder: (_, index) {
-            final notification = profileProvider.profile!.notifications![index];
+            final notification = [][index];
             return Container(
               margin: const EdgeInsets.only(bottom: 16.0),
               padding: const EdgeInsets.symmetric(

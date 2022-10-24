@@ -9,7 +9,7 @@ class LoginRequest {
       this.firebaseToken,});
 
   LoginRequest.fromJson(dynamic json) {
-    email = json['user_id'];
+    email = json['login'];
     password = json['password'];
     firebaseToken = json['firebase_token'];
   }
@@ -19,7 +19,7 @@ class LoginRequest {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['user_id'] = email;
+    map['login'] = email;
     map['password'] = password;
     map['firebase_token'] = firebaseToken;
     return map;

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,7 @@ import 'package:load_connect/view/providers/auth/verify_account_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:provider/provider.dart';
 
+
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({Key? key}) : super(key: key);
 
@@ -22,16 +24,35 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   dynamic _userID;
+  dynamic _type;
+  dynamic _name;
+  dynamic _email;
 
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  void init() {
     consoleLog(Get.parameters);
     final params = Get.parameters;
     print("Params: $params");
     if (params.containsKey("user_id")) {
       _userID = params['user_id'];
       consoleLog(_userID);
+    }
+    if (params.containsKey("type")) {
+      _type = params['type'];
+      consoleLog(_type);
+    }
+    if (params.containsKey("email")) {
+      _email = params['email'];
+      consoleLog(_type);
+    }
+    if (params.containsKey("name")) {
+      _name = params['name'];
+      consoleLog(_type);
     }
   }
 
@@ -40,29 +61,39 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
+  TextEditingController otpController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    ToastAlert.closeAlert();
+
     return ChangeNotifierProvider(
-      create: (context) => VerifyAccountProvider(_userID),
+      create: (context) => VerifyAccountProvider(_email, _type),
       builder: (context, child) {
-        final verifyProvider = Provider.of<VerifyAccountProvider>(context);
+        print("From here ::: ");
+        final verifyProvider = Provider.of<VerifyAccountProvider>(context, listen: false);
         return Scaffold(
             appBar: AppBar(
-              title: const Text("Complete Registration"),
+              title: Text(verifyProvider.type == "register" ? "Confirm Email" : "Verify"),
             ),
-            body: SingleChildScrollView(
+            body: Padding(
               padding: EdgeInsets.all(16.w),
               child: Column(
                 children: [
-                  const Text(
-                    "Enter the OTP sent to your email",
+                  SizedBox(height: 111.h),
+                  Text("Hi $_name 👋🏼", style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: "CircularStd"
+                  ),),
+                  SizeMargin.size(height: 25.h),
+                  Text(
+                    "We have sent an OTP to your email ($_email) to confirm your registration",
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 16.0.sp,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizeMargin.size(height: 24.h),
+                  SizeMargin.size(height: 25.h),
                   CustomTextField(
                     label: 'OTP',
                     keyboardType: TextInputType.number,
@@ -70,49 +101,29 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     maxLength: 6,
-                    onChanged: (String value) => verifyProvider.setOtp = value,
+                    controller: otpController,
+                    onChanged: (p0) {
+                      verifyProvider.setOtp = p0;
+                    },
                   ),
                   // SizeMargin.size(height: 8.h),
-                  SizeMargin.size(height: 12.h),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Already verified? ",
-                        children: [
-                          TextSpan(
-                            text: " Login",
-                            style: const TextStyle(
-                              color: AppColor.darkGreen,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // _authRepo.clearLastPage();
-                                Get.offAndToNamed(Routes.login);
-                              },
-                          ),
-                        ],
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: AppColor.black100,
-                          fontFamily: '',
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizeMargin.size(height: 24.h),
+                  SizeMargin.size(height: 25.h),
+
                   CustomRaisedButton(
                     text: "Continue",
                     isBusy: false,
                     onPressed: () => verifyProvider.verifyAccount(context),
                   ),
                   SizeMargin.size(height: 32.h),
-                  const Text(
-                    "01:30",
-                    style: TextStyle(
-                      color: AppColor.lightgrey,
-                    ),
+                  Consumer<VerifyAccountProvider>(
+                    builder: (context, value, child) {
+                      return Text(
+                        "${(value.seconds/60).floor()}:${(value.seconds % 60).toInt()}",
+                        style: const TextStyle(
+                          color: AppColor.lightgrey,
+                        ),
+                      );
+                    },
                   ),
                   SizeMargin.size(height: 8.h),
                   RichText(
@@ -134,10 +145,37 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         fontFamily: '',
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
-            ));
+            ),
+          persistentFooterButtons: [
+            Center(
+              child: RichText(
+                text: TextSpan(
+                  text: "Not my email? ",
+                  children: [
+                    TextSpan(
+                      text: " Change Email",
+                      style: const TextStyle(
+                        color: AppColor.darkGreen,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () => Get.back(),
+                    ),
+                  ],
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColor.black100,
+                    fontFamily: '',
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 41.h)
+          ],
+          resizeToAvoidBottomInset: false,
+        );
       },
     );
   }

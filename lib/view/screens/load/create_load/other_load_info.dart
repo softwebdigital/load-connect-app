@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
-import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
 import 'package:load_connect/view/hooks/load_hooks.dart';
 import 'package:load_connect/view/providers/user/create_load_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:provider/provider.dart';
 
 class OtherLoadInfoScreen extends StatelessWidget {
@@ -60,29 +58,39 @@ class OtherLoadInfoScreen extends StatelessWidget {
             CustomTextField(
               label: "Pickup Date",
               suffixIcon: IconButton(
-                onPressed: () {
-                  _showCalender(context);
+                onPressed: () async {
+                  final res = await _showCalender(context);
+                  if (res != null) {
+                    createLoadProvider.setPickupDate = res;
+                  }
                 },
                 icon: const Icon(
                   Icons.event_note,
                   color: AppColor.primaryColor,
                 ),
               ),
+              value: createLoadProvider.pickUpDate,
+              readOnly: true,
               // controller: controller.receiverName,
             ),
             SizeMargin.size(height: 20.0),
             CustomTextField(
               // controller: controller.receiverPhone,
+              value: createLoadProvider.pickUpDateDeadline,
               label: "Deadline for Load Pickup",
               suffixIcon: IconButton(
-                onPressed: () {
-                  _showCalender(context);
+                onPressed: () async {
+                  final res = await _showCalender(context);
+                  if (res != null) {
+                    createLoadProvider.setPickupDateDeadline = res;
+                  }
                 },
                 icon: const Icon(
                   Icons.event_note,
                   color: AppColor.primaryColor,
                 ),
               ),
+              readOnly: true,
             ),
             SizeMargin.size(height: 24.0),
             CustomRaisedButton(
@@ -108,7 +116,7 @@ class OtherLoadInfoScreen extends StatelessWidget {
     );
   }
 
-  void _showCalender(BuildContext ctx) async {
+  Future _showCalender(BuildContext ctx) async {
     final dateNow = DateTime.now();
     final result = await showDatePicker(
       context: ctx,
@@ -118,6 +126,7 @@ class OtherLoadInfoScreen extends StatelessWidget {
       initialDate: dateNow,
     );
     consoleLog(result);
+    return result.toString();
   }
 
   // bool get isDisabled {

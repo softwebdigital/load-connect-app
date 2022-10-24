@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/view/screens/widgets/notification_icon.dart';
 import 'package:load_connect/view/utils/helper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:unicons/unicons.dart';
 
 class DashboardTab extends StatelessWidget {
@@ -49,7 +49,7 @@ class DashboardTab extends StatelessWidget {
                     image: "assets/images/schedule-load.png",
                     title: "Schedule Load",
                     onTap: () {
-                      Get.toNamed(Routes.selectLoadLocation);
+                      Get.toNamed(Routes.createLoad);
                     },
                     color: AppColor.white100,
                   ),
@@ -66,8 +66,6 @@ class DashboardTab extends StatelessWidget {
                 ),
               ),
             ),
-            _recentRoute(),
-            _recentRoute(),
             _recentRoute(),
             // SizeMargin.size(width: 14.0),
           ],

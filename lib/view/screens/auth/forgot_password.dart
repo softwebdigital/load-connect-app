@@ -7,6 +7,7 @@ import 'package:load_connect/shared/routes.dart';
 // import 'package:flutter_hooks/screen)ur.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
+import 'package:load_connect/view/interaction/toast_alert.dart';
 import 'package:load_connect/view/providers/auth/forgot_password_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ToastAlert.closeAlert();
     return Scaffold(
       appBar: AppBar(
         // automaticallyImplyLeading: false,
@@ -62,8 +64,10 @@ class _EnterPhoneOrEmail extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         SizeMargin.size(height: 24.h),
-        const CustomTextField(
+        CustomTextField(
           label: 'Email / Phone Number',
+          value: forgotPasswordProvider.email,
+          onChanged: (String email) => forgotPasswordProvider.setEmail = email,
         ),
         SizeMargin.size(height: 24.h),
         CustomRaisedButton(

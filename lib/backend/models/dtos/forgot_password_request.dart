@@ -5,13 +5,13 @@ class ForgotPasswordRequest {
       this.email,});
 
   ForgotPasswordRequest.fromJson(dynamic json) {
-    email = json['email'];
+    email = json['login'];
   }
   String? email;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['email'] = email;
+    map['login'] = email;
     return map;
   }
 

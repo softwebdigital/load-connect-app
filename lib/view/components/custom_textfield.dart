@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
     required this.label,
+    this.value = "",
     this.suffixIcon,
     this.hideText = false,
     this.controller,
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
   }) : super(key: key);
   final String label;
+  final String value;
   final Widget? suffixIcon;
   final bool hideText;
   final TextEditingController? controller;
@@ -37,9 +39,11 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Value: ${value}");
+    final _ctr = TextEditingController(text: value);
     return TextField(
       obscureText: hideText,
-      controller: controller,
+      controller: _ctr,
       decoration: _inputDecoration(
         label: label,
         suffixIcon: suffixIcon,
@@ -139,5 +143,6 @@ InputDecoration _inputDecoration({
       ),
       suffixIcon: suffixIcon,
       prefix: prefixIcon,
+      counter: Container()
       // floatingLabelBehavior: FloatingLabelBehavior.auto
     );

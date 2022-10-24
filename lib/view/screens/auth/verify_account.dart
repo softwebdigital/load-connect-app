@@ -1,3 +1,4 @@
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,8 +12,8 @@ import 'package:load_connect/view/providers/auth/login_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class VerifyAccountScreen extends StatelessWidget {
+  const VerifyAccountScreen({Key? key}) : super(key: key);
 
 
 

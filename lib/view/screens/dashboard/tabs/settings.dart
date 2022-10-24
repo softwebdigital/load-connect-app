@@ -46,10 +46,9 @@ class SettingsTab extends StatelessWidget {
             children: [
               CircleAvatar(
                 // child: Text("BR"),
-                backgroundImage: profileProvider.user.profilePhotoUrl!.isEmpty
-                    ? const AssetImage("assets/images/icon.png")
-                        as ImageProvider<Object>
-                    : NetworkImage(profileProvider.user.profilePhotoUrl!),
+                backgroundImage: profileProvider.user.profilePhoto == null
+                    ? const AssetImage("assets/images/icon.png") as ImageProvider<Object>
+                    : NetworkImage(profileProvider.user.profilePhoto!),
                 radius: 48.0,
               ),
               SizeMargin.size(height: 16.0),

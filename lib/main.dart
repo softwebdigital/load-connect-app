@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:load_connect/config/locator.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/styles.dart';
+import 'package:load_connect/view/providers/user/load_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
+import 'package:load_connect/view/providers/utilities/vehicle_type_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'config/route_pages.dart';
@@ -21,7 +23,9 @@ void main() async {
   runApp(MultiProvider(
     child: const MyApp(),
     providers: [
-      ChangeNotifierProvider(create: (context) => UserProfileProvider())
+      ChangeNotifierProvider(create: (context) => UserProfileProvider()),
+      ChangeNotifierProvider(create: (context) => VehicleTypeProvider()),
+      ChangeNotifierProvider(create: (context) => LoadProvider()),
     ]
   ));
 }
@@ -34,37 +38,38 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final botToastBuilder = BotToastInit();
     return ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: () {
-          return GetMaterialApp(
-            title: 'Load Connect',
-            theme: ThemeData(
-              fontFamily: 'CircularStd',
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: elevatedButtonStyle,
-              ),
-              scaffoldBackgroundColor: Colors.white,
-              textButtonTheme: TextButtonThemeData(
-                style: textButtonStyle,
-              ),
-              appBarTheme: appBarTheme,
-              primarySwatch: AppColor.primaryColor,
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: () {
+        return GetMaterialApp(
+          title: 'Load Connect',
+          theme: ThemeData(
+            fontFamily: 'CircularStd',
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: elevatedButtonStyle,
             ),
-            // builder: ,
-            builder: (context, widget) {
-              ScreenUtil.setContext(context);
-              return MediaQuery(
-                //Setting font does not change with system font size
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: botToastBuilder(context, widget!),
-              );
-            },
-            initialRoute: RoutePages.init(isLoggedIn: false),
-            getPages: RoutePages.routes,
-            navigatorObservers: [BotToastNavigatorObserver()],
-          );
-        });
+            scaffoldBackgroundColor: Colors.white,
+            textButtonTheme: TextButtonThemeData(
+              style: textButtonStyle,
+            ),
+            appBarTheme: appBarTheme,
+            primarySwatch: AppColor.primaryColor,
+          ),
+          // builder: ,
+          builder: (context, widget) {
+            ScreenUtil.setContext(context);
+            return MediaQuery(
+              //Setting font does not change with system font size
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: botToastBuilder(context, widget!),
+            );
+          },
+          initialRoute: RoutePages.init(isLoggedIn: false),
+          getPages: RoutePages.routes,
+          navigatorObservers: [BotToastNavigatorObserver()],
+        );
+      }
+    );
   }
 }

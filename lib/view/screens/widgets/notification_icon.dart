@@ -29,7 +29,8 @@ class NotificationIconWidget extends StatelessWidget {
             top: 16.0,
             left: 16.0,
             child: CircleAvatar(
-              backgroundColor: profileProvider.profile!.unreadNotifications!.isNotEmpty ? AppColor.yellow : Colors.transparent,
+              backgroundColor: AppColor.yellow,
+              // backgroundColor: profileProvider.profile!.unreadNotifications!.isNotEmpty ? AppColor.yellow : Colors.transparent,
               radius: 3.0,
             ),
           ) : const SizedBox()

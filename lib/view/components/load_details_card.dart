@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:load_connect/backend/models/entities/order_model.dart';
+import 'package:load_connect/backend/models/entities/user_load.dart';
 import 'package:load_connect/shared/colors.dart';
-import 'package:load_connect/shared/routes.dart';
+import 'package:load_connect/shared/constants.dart';
+import 'package:load_connect/view/screens/load/load_details.dart';
 import 'package:load_connect/view/utils/app_dialog.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:unicons/unicons.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 class LoadDetailsCard extends StatelessWidget {
-  const LoadDetailsCard({Key? key, this.isDetails = true}) : super(key: key);
+  const LoadDetailsCard({Key? key, this.isDetails = true, required this.load}) : super(key: key);
   final bool isDetails;
+  final UserLoad load;
 
   @override
   Widget build(BuildContext context) {
+    final createdAt = DateTime.parse(load.createdAt!);
     return InkWell(
       onTap: () {
         if (isDetails) {
-          Get.toNamed(Routes.loadDetails);
+          Get.to(LoadDetailsScreen(load: load,));
         } else {
           AppDialog.mainDialog(
             title: "Send Load Pickup Invitation?",
@@ -51,9 +57,9 @@ class LoadDetailsCard extends StatelessWidget {
                       ),
                     ),
                     SizeMargin.size(height: 2.0),
-                    const Text(
-                      "Commercial Ave Sabo yaba, Lagos",
-                      style: TextStyle(
+                    Text(
+                      load.pickupLocation ?? "No Pickup",
+                      style: const TextStyle(
                         // color: AppColor.lightgrey,
                         fontWeight: FontWeight.w600,
                       ),
@@ -67,9 +73,10 @@ class LoadDetailsCard extends StatelessWidget {
                       ),
                     ),
                     SizeMargin.size(height: 2.0),
-                    const Text(
-                      "Admirity Way, Lekki phase 1, Lagos",
-                      style: TextStyle(
+                    Text(
+                      load.destination ?? "No Destination",
+                      // load.more!.destinationAddress!,
+                      style: const TextStyle(
                         // color: AppColor.lightgrey,
                         fontWeight: FontWeight.w600,
                       ),
@@ -81,9 +88,9 @@ class LoadDetailsCard extends StatelessWidget {
                         _InfoTile(
                           title: "Weight",
                           content: RichText(
-                            text: const TextSpan(
-                              text: "523.3",
-                              children: [
+                            text: TextSpan(
+                              text: load.loadWeight ?? "0",
+                              children: const [
                                 TextSpan(
                                   text: " Kg",
                                   style: TextStyle(
@@ -98,21 +105,21 @@ class LoadDetailsCard extends StatelessWidget {
                           ),
                         ),
                         SizeMargin.size(width: 24.w),
-                        const _InfoTile(
+                        _InfoTile(
                           title: "Capacity",
                           content: Text(
-                            "Full Truck Load",
-                            style: TextStyle(
+                            load.truckCapacity ?? "Capacity",
+                            style: const TextStyle(
                               color: Color(0XFF333333),
                             ),
                           ),
                         ),
                         SizeMargin.size(width: 24.w),
-                        const _InfoTile(
+                        _InfoTile(
                           title: "Pick Date",
                           content: Text(
-                            "January 25",
-                            style: TextStyle(
+                            createdAt.format('F, j'),
+                            style: const TextStyle(
                               color: Color(0XFF333333),
                             ),
                           ),
@@ -124,11 +131,11 @@ class LoadDetailsCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const _InfoTile(
+                        _InfoTile(
                           title: "Category",
                           content: Text(
-                            "Mini Truck",
-                            style: TextStyle(
+                            "${load.truckCategory}",
+                            style: const TextStyle(
                               color: Color(0XFF333333),
                             ),
                           ),
@@ -137,8 +144,9 @@ class LoadDetailsCard extends StatelessWidget {
                         _InfoTile(
                           title: "Distance",
                           content: RichText(
-                            text: const TextSpan(
-                              text: "53",
+                            text: TextSpan(
+                              text: load.receiverName ?? "Distance",
+                              // text: load.more!.distance!.toString(),
                               children: [
                                 TextSpan(
                                   text: " Km",
@@ -159,7 +167,7 @@ class LoadDetailsCard extends StatelessWidget {
                           content: DefaultTextStyle(
                             style: const TextStyle(),
                             child: Text(
-                              "${currency}200,000",
+                              "${currency}${(load.loadValue)}",
                               style: TextStyle(
                                 color: AppColor.primaryColor,
                                 fontWeight: FontWeight.w700,
@@ -177,7 +185,7 @@ class LoadDetailsCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("John Doe"),
+                            Text(load.receiverName!),
                             SizeMargin.size(height: 4.0.h),
                             Text(
                               "Just now",
@@ -212,23 +220,26 @@ class LoadDetailsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  color: AppColor.yellow,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20.0),
-                    bottomRight: Radius.circular(20.0),
-                  ),
-                ),
-                child: const Text(
-                  "Waiting for an offer...",
-                  style: TextStyle(
-                    color: AppColor.lightgrey,
-                  ),
-                ),
-              )
+              if (load.status == pendingLoadStatus)
+                ...[
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      color: AppColor.yellow,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: const Text(
+                      "Waiting for an offer...",
+                      style: TextStyle(
+                        color: AppColor.lightgrey,
+                      ),
+                    ),
+                  )
+                ],
             ],
           ),
         ),

@@ -1,22 +1,22 @@
-/// user_id : 2
-/// token : "249612"
+/// email : 2
+/// otp : "249612"
 
 class VerifyTokenRequest {
   VerifyTokenRequest({
-      this.userId, 
-      this.token,});
+      this.email,
+      this.otp,});
 
   VerifyTokenRequest.fromJson(dynamic json) {
-    userId = json['user_id'];
-    token = json['token'];
+    email = json['email'];
+    otp = json['otp'];
   }
-  int? userId;
-  String? token;
+  String? email;
+  String? otp;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['user_id'] = userId;
-    map['token'] = token;
+    map['email'] = email;
+    map['otp'] = otp;
     return map;
   }
 
