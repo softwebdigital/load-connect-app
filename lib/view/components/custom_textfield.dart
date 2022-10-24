@@ -8,33 +8,52 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
     required this.label,
+    this.value = "",
     this.suffixIcon,
     this.hideText = false,
     this.controller,
     this.onTap,
+    this.onChanged,
     this.readOnly = false,
+    this.keyboardType,
+    this.inputFormatters,
     this.minLines,
     this.maxLines = 1,
     this.maxLength,
+    this.prefixIcon,
   }) : super(key: key);
   final String label;
+  final String value;
   final Widget? suffixIcon;
   final bool hideText;
   final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
   final GestureTapCallback? onTap;
   final bool readOnly;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
+  final void Function(String)? onChanged;
+  final Widget? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
+    print("Value: ${value}");
+    final _ctr = TextEditingController(text: value);
     return TextField(
       obscureText: hideText,
-      controller: controller,
-      decoration: _inputDecoration(label: label, suffixIcon: suffixIcon),
+      controller: _ctr,
+      decoration: _inputDecoration(
+        label: label,
+        suffixIcon: suffixIcon,
+        prefixIcon: prefixIcon,
+      ),
       cursorColor: AppColor.black100,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       onTap: onTap,
+      onChanged: onChanged,
       readOnly: readOnly,
       minLines: minLines,
       maxLines: maxLines,
@@ -80,6 +99,7 @@ class CustomTextFormField extends StatelessWidget {
       cursorColor: AppColor.black100,
       validator: validator,
       onSaved: onSaved,
+      onChanged: onSaved,
       initialValue: initialValue,
       inputFormatters: inputFormatters,
       onTap: onTap,
@@ -88,33 +108,41 @@ class CustomTextFormField extends StatelessWidget {
   }
 }
 
-InputDecoration _inputDecoration({required String label, Widget? suffixIcon}) =>
+InputDecoration _inputDecoration({
+  required String label,
+  Widget? suffixIcon,
+  Widget? prefixIcon,
+}) =>
     InputDecoration(
-      filled: true,
-      fillColor: AppColor.white200,
-      label: Text(
-        label,
-        style: const TextStyle(color: AppColor.lightgrey),
-      ),
-      enabledBorder: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide.none,
-      ),
-      errorBorder: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide.none,
-      ),
-      border: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide.none,
-      ),
-      labelStyle: const TextStyle(
-        color: AppColor.black100,
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 12.0,
-        horizontal: 15.0,
-      ),
-      suffixIcon: suffixIcon,
+        filled: true,
+        fillColor: AppColor.white200,
+        label: Text(
+          label,
+          style: const TextStyle(
+            color: Color(0XFF808080),
+          ),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+        border: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+        labelStyle: const TextStyle(
+          color: AppColor.black100,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 12.0,
+          horizontal: 15.0,
+        ),
+        suffixIcon: suffixIcon,
+        prefix: prefixIcon,
+        counter: Container()
       // floatingLabelBehavior: FloatingLabelBehavior.auto
     );

@@ -39,7 +39,6 @@ dependencies:
   get_storage: ^2.0.3
   flutter_screenutil: ^5.3.1
   intl: ^0.17.0
-  http: ^0.13.4
   unicons: ^2.0.2
   syncfusion_flutter_sliders: ^19.4.54
   percent_indicator: ^4.0.0
@@ -53,6 +52,7 @@ dependencies:
   bot_toast:
   pretty_dio_logger: ^1.1.1
   date_time_format: ^2.0.1
+  dio: ^4.0.6
 
 dev_dependencies:
   flutter_test:
