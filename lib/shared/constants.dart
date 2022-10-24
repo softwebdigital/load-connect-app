@@ -11,3 +11,7 @@ const userTokenKey = 'user-token-key';
 
 const appDataBox = 'app-data-box';
 const loggedInBeforeKey = 'logged-in-before-key';
+
+const requireTokenHeader = {
+  "requireToken": true
+};
