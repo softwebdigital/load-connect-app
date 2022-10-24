@@ -1,12 +1,12 @@
 
 
-import 'package:load_connect/backend/models/core/service_response.dart';
-import 'package:load_connect/backend/models/entities/closest_vehicle_response.dart';
-import 'package:load_connect/backend/models/entities/system_config_model.dart';
-import 'package:load_connect/backend/models/entities/vehicle_type_model.dart';
-import 'package:load_connect/backend/repositories/api/core/api_service.dart';
-import 'package:load_connect/backend/repositories/api/core/endpoints.dart';
-import 'package:load_connect/backend/services/i_util_service.dart';
+import 'package:load_connect_driver/backend/models/core/service_response.dart';
+import 'package:load_connect_driver/backend/models/entities/closest_vehicle_response.dart';
+import 'package:load_connect_driver/backend/models/entities/system_config_model.dart';
+import 'package:load_connect_driver/backend/models/entities/vehicle_type_model.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/api_service.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/endpoints.dart';
+import 'package:load_connect_driver/backend/services/i_util_service.dart';
 
 class ApiUtilService implements IUtilService {
 

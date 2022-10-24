@@ -1,18 +1,18 @@
 import 'package:dio/src/form_data.dart';
-import 'package:load_connect/backend/models/core/api_response.dart';
-import 'package:load_connect/backend/models/core/service_response.dart';
-import 'package:load_connect/backend/models/dtos/create_account_request.dart';
-import 'package:load_connect/backend/models/dtos/forgot_password_request.dart';
-import 'package:load_connect/backend/models/dtos/generate_token_request.dart';
-import 'package:load_connect/backend/models/dtos/login_request.dart';
-import 'package:load_connect/backend/models/dtos/login_response.dart';
-import 'package:load_connect/backend/models/dtos/reset_password_request.dart';
-import 'package:load_connect/backend/models/dtos/verify_token_request.dart';
-import 'package:load_connect/backend/models/entities/user_model.dart';
-import 'package:load_connect/backend/repositories/api/core/api_service.dart';
-import 'package:load_connect/backend/repositories/api/core/endpoints.dart';
-import 'package:load_connect/backend/services/i_auth_service.dart';
-import 'package:load_connect/shared/constants.dart';
+import 'package:load_connect_driver/backend/models/core/api_response.dart';
+import 'package:load_connect_driver/backend/models/core/service_response.dart';
+import 'package:load_connect_driver/backend/models/dtos/create_account_request.dart';
+import 'package:load_connect_driver/backend/models/dtos/forgot_password_request.dart';
+import 'package:load_connect_driver/backend/models/dtos/generate_token_request.dart';
+import 'package:load_connect_driver/backend/models/dtos/login_request.dart';
+import 'package:load_connect_driver/backend/models/dtos/login_response.dart';
+import 'package:load_connect_driver/backend/models/dtos/reset_password_request.dart';
+import 'package:load_connect_driver/backend/models/dtos/verify_token_request.dart';
+import 'package:load_connect_driver/backend/models/entities/user_model.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/api_service.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/endpoints.dart';
+import 'package:load_connect_driver/backend/services/i_auth_service.dart';
+import 'package:load_connect_driver/shared/constants.dart';
 
 class ApiAuthService implements IAuthService {
 

@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:load_connect/backend/models/core/api_response.dart';
-import 'package:load_connect/backend/services/core/i_local_storage.dart';
-import 'package:load_connect/shared/constants.dart';
+import 'package:load_connect_driver/backend/models/core/api_response.dart';
+import 'package:load_connect_driver/backend/services/core/i_local_storage.dart';
+import 'package:load_connect_driver/shared/constants.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class ApiService {

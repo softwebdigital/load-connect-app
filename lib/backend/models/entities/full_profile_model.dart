@@ -1,6 +1,6 @@
-import 'package:load_connect/backend/models/entities/notification_model.dart';
-import 'package:load_connect/backend/models/entities/order_model.dart';
-import 'package:load_connect/backend/models/entities/wallet_model.dart';
+import 'package:load_connect_driver/backend/models/entities/notification_model.dart';
+import 'package:load_connect_driver/backend/models/entities/order_model.dart';
+import 'package:load_connect_driver/backend/models/entities/wallet_model.dart';
 
 /// user : {"id":4,"first_name":"me","last_name":"you","email":"menyou@mailinator.com","phone_number":"08088888888","email_verified_at":"2022-06-24T01:35:12.000000Z","is_admin":0,"is_active":1,"firebase_token":null,"user_type":"dispatch","current_team_id":null,"profile_photo_path":null,"created_at":"2022-06-23T14:54:39.000000Z","updated_at":"2022-06-24T01:35:12.000000Z","profile_photo_url":"https://ui-avatars.com/api/?name=&color=7F9CF5&background=EBF4FF","more":null,"uid":"eyJpdiI6IlU2ZjlySXd6dnQxQnNGSUZNUWF1Rmc9PSIsInZhbHVlIjoiS2xPY29TaHRIdFZQQkpxVlp1Zk93UT09IiwibWFjIjoiNmY0MDIyMjViZGI0OGExNjRjNDk2MDQ5ZmRmZGI3ZjllMTQ2YTYyN2UxMzgzMTFjYzJiOGRjMzc5NWIzZDdmYiIsInRhZyI6IiJ9","full_ratings":0,"wallet":{"id":3,"user_id":4,"amount":0,"created_at":"2022-06-23T14:54:39.000000Z","updated_at":"2022-06-23T14:54:39.000000Z"},"driver_ratings":[],"transactions":[],"vehicles":[],"payouts":[],"rides":[]}
 /// total_transaction : 0

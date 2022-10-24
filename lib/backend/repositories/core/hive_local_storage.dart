@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:load_connect/backend/services/core/i_local_storage.dart';
-import 'package:load_connect/shared/constants.dart';
+import 'package:load_connect_driver/backend/services/core/i_local_storage.dart';
+import 'package:load_connect_driver/shared/constants.dart';
 import 'package:path_provider/path_provider.dart' as pat;
 
 class HiveLocalStorageService implements ILocalStorageService {

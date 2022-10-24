@@ -1,4 +1,4 @@
-import 'package:load_connect/backend/models/entities/driver_model.dart';
+import 'package:load_connect_driver/backend/models/entities/driver_model.dart';
 
 /// id : 1
 /// user_id : 3

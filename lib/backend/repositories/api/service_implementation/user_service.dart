@@ -1,14 +1,14 @@
 
 
-import 'package:load_connect/backend/models/core/service_response.dart';
-import 'package:load_connect/backend/models/dtos/change_password_request.dart';
-import 'package:load_connect/backend/models/dtos/edit_profile_request.dart';
-import 'package:load_connect/backend/models/entities/full_profile_model.dart';
-import 'package:load_connect/backend/models/entities/user_model.dart';
-import 'package:load_connect/backend/repositories/api/core/api_service.dart';
-import 'package:load_connect/backend/repositories/api/core/endpoints.dart';
-import 'package:load_connect/backend/services/i_user_service.dart';
-import 'package:load_connect/shared/constants.dart';
+import 'package:load_connect_driver/backend/models/core/service_response.dart';
+import 'package:load_connect_driver/backend/models/dtos/change_password_request.dart';
+import 'package:load_connect_driver/backend/models/dtos/edit_profile_request.dart';
+import 'package:load_connect_driver/backend/models/entities/full_profile_model.dart';
+import 'package:load_connect_driver/backend/models/entities/user_model.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/api_service.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/endpoints.dart';
+import 'package:load_connect_driver/backend/services/i_user_service.dart';
+import 'package:load_connect_driver/shared/constants.dart';
 
 class UserService implements IUserService {
 

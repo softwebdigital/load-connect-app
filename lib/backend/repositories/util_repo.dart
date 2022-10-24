@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:load_connect/backend/models/dtos/http_result.dart';
-import 'package:load_connect/backend/models/entities/address_result.dart';
-import 'package:load_connect/backend/models/entities/prediction_result.dart';
-import 'package:load_connect/shared/constants.dart';
+import 'package:load_connect_driver/backend/models/dtos/http_result.dart';
+import 'package:load_connect_driver/backend/models/entities/address_result.dart';
+import 'package:load_connect_driver/backend/models/entities/prediction_result.dart';
+import 'package:load_connect_driver/shared/constants.dart';
 
 class UtilRepo extends GetxService {
   Future<UtilRepo> init() async {

@@ -1,4 +1,4 @@
-import 'package:load_connect/backend/models/entities/vehicle_model.dart';
+import 'package:load_connect_driver/backend/models/entities/vehicle_model.dart';
 
 /// id : 1
 /// name : "Sample Truck"

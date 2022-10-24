@@ -1,11 +1,11 @@
 
 
 import 'package:dio/src/form_data.dart';
-import 'package:load_connect/backend/models/core/service_response.dart';
-import 'package:load_connect/backend/models/entities/user_load.dart';
-import 'package:load_connect/backend/repositories/api/core/api_service.dart';
-import 'package:load_connect/backend/repositories/api/core/endpoints.dart';
-import 'package:load_connect/backend/services/i_load_service.dart';
+import 'package:load_connect_driver/backend/models/core/service_response.dart';
+import 'package:load_connect_driver/backend/models/entities/user_load.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/api_service.dart';
+import 'package:load_connect_driver/backend/repositories/api/core/endpoints.dart';
+import 'package:load_connect_driver/backend/services/i_load_service.dart';
 
 class ApiLoadService implements ILoadService {
 
