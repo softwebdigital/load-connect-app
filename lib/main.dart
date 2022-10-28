@@ -5,8 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/config/locator.dart';
 import 'package:load_connect/shared/colors.dart';
+import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/shared/styles.dart';
 import 'package:load_connect/view/providers/user/load_provider.dart';
+import 'package:load_connect/view/providers/user/notification_settings_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/providers/utilities/vehicle_type_provider.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +28,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => UserProfileProvider()),
       ChangeNotifierProvider(create: (context) => VehicleTypeProvider()),
       ChangeNotifierProvider(create: (context) => LoadProvider()),
+      ChangeNotifierProvider(create: (context) => NotificationSettingsProvider()),
     ]
   ));
 }
@@ -60,12 +63,11 @@ class MyApp extends StatelessWidget {
           builder: (context, widget) {
             ScreenUtil.setContext(context);
             return MediaQuery(
-              //Setting font does not change with system font size
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
               child: botToastBuilder(context, widget!),
             );
           },
-          initialRoute: RoutePages.init(isLoggedIn: false),
+          initialRoute: Routes.intro,
           getPages: RoutePages.routes,
           navigatorObservers: [BotToastNavigatorObserver()],
         );

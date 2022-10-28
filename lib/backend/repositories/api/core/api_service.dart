@@ -203,7 +203,7 @@ class TokenInterceptor extends Interceptor {
         //   final error = DioError(requestOptions: options, error: "Unauthenticated");
         //   super.onError(error, handler);
         // }
-        options.headers['Authorization'] = "$token";
+        options.headers['Token'] = "$token";
       }
     }
     // return options;

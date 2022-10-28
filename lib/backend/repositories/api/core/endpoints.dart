@@ -18,6 +18,8 @@ const activateAccountEndpoint = "${baseUrl}user/activate";
 const deActivateAccountEndpoint = "${baseUrl}user/deactivate";
 const changePasswordEndpoint = "${baseUrl}user/update-password";
 const updateProfileEndpoint = "${baseUrl}user/update-profile";
+const updateProfilePictureEndpoint = "${baseUrl}user/update-photo";
+const userNotificationSettingsEndpoint = "${baseUrl}user/notification-settings";
 
 const createLoadEndpoint = "${baseUrl}loads";
 const getSenderLoadEndpoint = "${baseUrl}loads";

@@ -3,7 +3,9 @@
 import 'package:load_connect/backend/models/core/service_response.dart';
 import 'package:load_connect/backend/models/dtos/change_password_request.dart';
 import 'package:load_connect/backend/models/dtos/edit_profile_request.dart';
+import 'package:load_connect/backend/models/dtos/notification_settings_request.dart';
 import 'package:load_connect/backend/models/entities/full_profile_model.dart';
+import 'package:load_connect/backend/models/entities/notification_settings_model.dart';
 import 'package:load_connect/backend/models/entities/user_model.dart';
 import 'package:load_connect/backend/repositories/api/core/api_service.dart';
 import 'package:load_connect/backend/repositories/api/core/endpoints.dart';
@@ -90,6 +92,59 @@ class UserService implements IUserService {
 
     } catch (error) {
       return ServiceResponse(data: null, message: "Error: $error", status: false);
+    }
+  }
+
+  @override
+  Future<ServiceResponse<String>> updateProfilePicture(data) async {
+    try {
+      // final apiService = ApiService.createInstance();
+      final res = await apiService.makePostRequest(updateProfilePictureEndpoint, data, {
+        ...requireTokenHeader
+      }, useFormData: false);
+      print("Response: ${res.toJson()}");
+      return ServiceResponse(
+        status: res.status,
+        message: res.message,
+        data: res.message
+      );
+
+    } catch (error) {
+      return ServiceResponse(data: null, message: "Error: $error", status: false);
+    }
+  }
+
+  @override
+  Future<ServiceResponse<NotificationSettingsModel>> getNotificationSettings() async {
+    try {
+      final res = await apiService.makeGetRequest(userNotificationSettingsEndpoint, {
+        ...requireTokenHeader
+      });
+      print("Response: ${res.toJson()}");
+      return ServiceResponse(
+        status: res.status,
+        message: res.message,
+        data: NotificationSettingsModel.fromJson(res.data)
+      );
+    } catch (error) {
+      return ServiceResponse(data: null, message: "Error $error", status: false);
+    }
+  }
+
+  @override
+  Future<ServiceResponse<NotificationSettingsModel>> updateNotificationSettings(NotificationSettingsRequest request) async {
+    try {
+      final res = await apiService.makePostRequest(userNotificationSettingsEndpoint, request.toJson(), {
+        ...requireTokenHeader
+      }, useFormData: true);
+      print("Response: ${res.toJson()}");
+      return ServiceResponse(
+        status: res.status,
+        message: res.message,
+        data: NotificationSettingsModel.fromJson(res.data)
+      );
+    } catch (error) {
+      return ServiceResponse(data: null, message: "Error $error", status: false);
     }
   }
 

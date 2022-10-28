@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:load_connect/backend/services/i_auth_service.dart';
+import 'package:load_connect/backend/services/i_user_service.dart';
 import 'package:load_connect/view/interaction/toast_alert.dart';
 import 'package:load_connect/view/providers/base_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
@@ -31,10 +32,10 @@ class UpdateProfilePictureProvider extends BaseProvider {
     try {
       ToastAlert.showLoadingAlert("message");
       final request = dio.FormData.fromMap({
-        'passport': await dio.MultipartFile.fromFile(profilePicture.path, filename: profilePicture.path)
+        'photo': await dio.MultipartFile.fromFile(profilePicture.path, filename: profilePicture.path)
       });
 
-      final res = await Get.find<IAuthService>().completeProfile(request);
+      final res = await Get.find<IUserService>().updateProfilePicture(request);
       ToastAlert.closeAlert();
       if (res.status == true) {
         ToastAlert.showAlert("Profile picture updated successfully");

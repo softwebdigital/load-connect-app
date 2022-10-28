@@ -1,17 +1,22 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:load_connect/backend/services/core/i_local_storage.dart';
+import 'package:load_connect/shared/constants.dart';
 import 'package:load_connect/view/providers/auth/login_provider.dart';
 import 'package:load_connect/view/providers/auth/register_provider.dart';
 import 'package:load_connect/view/providers/user/change_password_provider.dart';
 import 'package:load_connect/view/providers/user/create_load_provider.dart';
+import 'package:load_connect/view/screens/intro_screen.dart';
 import 'package:load_connect/view/screens/load/create_load/create_load_screen.dart';
 import 'package:provider/provider.dart';
 import '../shared/routes.dart';
 import '../view/all_screens.dart';
 
 class RoutePages {
-  static String init({bool isLoggedIn = false}) {
+  static Future<String> init() async {
+
     final lastPage = GetStorage().read<Map<String, dynamic>?>("last_page");
+    final isLoggedIn = await Get.find<ILocalStorageService>().getItem(userDataBox, userTokenKey);
     if (lastPage != null) {
       return getLastPage(lastPage);
     } else if (isLoggedIn) {
@@ -19,6 +24,7 @@ class RoutePages {
     } else {
       return Routes.login;
     }
+
   }
 
   static String getLastPage(Map<String, dynamic> savedPage) {
@@ -33,6 +39,10 @@ class RoutePages {
   }
 
   static final List<GetPage> routes = [
+    GetPage(
+      name: Routes.intro,
+      page: () => const IntroScreen(),
+    ),
     GetPage(
       name: Routes.login,
       page: () => ChangeNotifierProvider(

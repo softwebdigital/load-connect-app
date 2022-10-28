@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
+import 'package:load_connect/view/providers/user/notification_settings_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 
 class NotificationSettingScreen extends StatelessWidget {
   const NotificationSettingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final notificationSettingsProvider = Provider.of<NotificationSettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -44,8 +47,10 @@ class NotificationSettingScreen extends StatelessWidget {
                 ),
               ),
               trailing: Switch(
-                value: false,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.allNotification,
+                onChanged: (val) {
+                  notificationSettingsProvider.setAllNotification();
+                },
               ),
             ),
             const Divider(),
@@ -61,40 +66,60 @@ class NotificationSettingScreen extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: const Text("Offer Recieved"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.offerReceived,
+                onChanged: (val) {
+                  notificationSettingsProvider.offerReceived = !notificationSettingsProvider.offerReceived;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text("Offer Accepted"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.offerAccepted,
+                onChanged: (val) {
+                  notificationSettingsProvider.offerAccepted = !notificationSettingsProvider.offerAccepted;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text("Load Picked Up"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.loadPickedUp,
+                onChanged: (val) {
+                  notificationSettingsProvider.loadPickedUp = !notificationSettingsProvider.loadPickedUp;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text("Load Delivered"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.loadDelivered,
+                onChanged: (val) {
+                  notificationSettingsProvider.loadDelivered = !notificationSettingsProvider.loadDelivered;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text("Delivery Errors"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.deliveryError,
+                onChanged: (val) {
+                  notificationSettingsProvider.deliveryError = !notificationSettingsProvider.deliveryError;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             const Divider(),
@@ -110,16 +135,24 @@ class NotificationSettingScreen extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: const Text("All Messages"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.allMessages,
+                onChanged: (val) {
+                  notificationSettingsProvider.allMessages = !notificationSettingsProvider.allMessages;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text("From Active Loads only"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.fromActiveLoadsOnly,
+                onChanged: (val) {
+                  notificationSettingsProvider.fromActiveLoadsOnly = !notificationSettingsProvider.fromActiveLoadsOnly;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
             const Divider(),
@@ -135,8 +168,12 @@ class NotificationSettingScreen extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: const Text("From Load Connect"),
               trailing: Switch(
-                value: true,
-                onChanged: (val) {},
+                value: notificationSettingsProvider.fromLoadConnect,
+                onChanged: (val) {
+                  notificationSettingsProvider.fromLoadConnect = !notificationSettingsProvider.fromLoadConnect;
+                  notificationSettingsProvider.backToLoaded();
+                  notificationSettingsProvider.updateNotificationSettings();
+                },
               ),
             ),
           ],
