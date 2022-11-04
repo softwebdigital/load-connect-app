@@ -5,11 +5,15 @@ import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_button.dart';
 import 'package:load_connect/view/components/custom_textfield.dart';
+import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 
 class DeactivateAccountScreen extends HookWidget {
   DeactivateAccountScreen({Key? key}) : super(key: key);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +84,7 @@ class DeactivateAccountScreen extends HookWidget {
                     label: "Password",
                     validator: (val) {
                       if (val.isNull || val!.isEmpty) {
-                        return "Field is required";
+                        return "Password is required";
                       }
                       return null;
                     },
@@ -90,17 +94,19 @@ class DeactivateAccountScreen extends HookWidget {
                       },
                       icon: _getIcon(hidden.value),
                     ),
+                    controller: passwordController,
                   ),
                   SizeMargin.size(height: 24.h),
                   CustomRaisedButton(
                     text: "Deactivate Account",
                     isBusy: isBusy.value,
                     onPressed: () {
-                      isBusy.value = true;
-                      Future.delayed(const Duration(seconds: 3), () {
-                        isBusy.value = false;
-                        snackBar(context, "Update failed, try again");
-                      });
+                      // isBusy.value = true;
+                      // Future.delayed(const Duration(seconds: 3), () {
+                      //   isBusy.value = false;
+                      //   snackBar(context, "Update failed, try again");
+                      // });
+                      Provider.of<UserProfileProvider>(context, listen: false).deactivateAccount(passwordController.text);
                     },
                   ),
                 ],

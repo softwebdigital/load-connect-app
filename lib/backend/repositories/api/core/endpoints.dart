@@ -20,6 +20,10 @@ const changePasswordEndpoint = "${baseUrl}user/update-password";
 const updateProfileEndpoint = "${baseUrl}user/update-profile";
 const updateProfilePictureEndpoint = "${baseUrl}user/update-photo";
 const userNotificationSettingsEndpoint = "${baseUrl}user/notification-settings";
+const blockedUsersEndpoint = "${baseUrl}user/blocked-users";
+const uploadKYCEndpoint = "${baseUrl}user/kyc-verification";
+String blockUserEndpoint(String uid) => "${baseUrl}user/block/$uid";
+String unBlockUserEndpoint(String uid) => "${baseUrl}user/unblock/$uid";
 
 const createLoadEndpoint = "${baseUrl}loads";
 const getSenderLoadEndpoint = "${baseUrl}loads";

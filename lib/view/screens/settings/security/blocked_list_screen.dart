@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:load_connect/view/providers/blocked_user_provider.dart';
+import 'package:provider/provider.dart';
 
 class BlockedListScreen extends StatelessWidget {
   const BlockedListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<BlockedUserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -24,23 +27,41 @@ class BlockedListScreen extends StatelessWidget {
         ),
         title: const Text("Blocked List"),
       ),
-      body: ListView.separated(
+      body: (provider.isLoading) ? const Center(
+        child: CircularProgressIndicator(),
+    ) : (provider.isError) ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(provider.message, textAlign: TextAlign.center),
+          SizedBox(height: 10.h,),
+          TextButton(onPressed: () => provider.refresh(), child: const Text("Retry"))
+        ],
+      ) : (provider.blockedUsers.isEmpty) ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text("You have not blocked any user", textAlign: TextAlign.center),
+          SizedBox(height: 10.h,),
+          TextButton(onPressed: () => provider.refresh(), child: const Text("Refresh"))
+        ]
+      ): ListView.separated(
         padding: EdgeInsets.symmetric(
           vertical: 24.0.h,
         ),
-        itemCount: 3,
+        itemCount: provider.blockedUsers.length,
         itemBuilder: (_, index) {
+          final bU = provider.blockedUsers[index];
           return ListTile(
-            leading: const CircleAvatar(
+            leading: CircleAvatar(
               // child: Text("BR"),
-              backgroundImage: AssetImage("assets/images/icon.png"),
+              backgroundImage: NetworkImage(bU.blockeduser!.profilePhoto),
               radius: 24.0,
             ),
-            title: const Text(
-              'Chris Oyakhilome Oyakhilome',
+            title: Text(
+              '${bU.blockeduser!.firstName} ${bU.blockeduser!.lastName}',
             ),
             trailing: TextButton(
-              onPressed: () {},
+              onPressed: () => provider.unBlockUser(context, bU.id!),
               child: const Text(
                 "Unblock",
               ),

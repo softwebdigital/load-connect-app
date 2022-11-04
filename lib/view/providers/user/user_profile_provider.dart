@@ -48,10 +48,10 @@ class UserProfileProvider extends BaseProvider {
     initialize();
   }
 
-  void deactivateAccount() async {
+  void deactivateAccount(String password) async {
     try {
       ToastAlert.showLoadingAlert("");
-      final res = await Get.find<IUserService>().deactivateAccount();
+      final res = await Get.find<IUserService>().deactivateAccount(password);
       ToastAlert.closeAlert();
       if (res.status) {
         ToastAlert.showAlert("Account deactivated successfully");
