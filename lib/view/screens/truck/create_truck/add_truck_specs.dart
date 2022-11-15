@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:load_connect_driver/view/hooks/truck_hooks.dart';
-import '../../../../core/repository/create_truck_controller.dart';
+import 'package:load_connect_driver/view/providers/user/create_truck_provider.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
+
 import '../../../../shared/colors.dart';
-import '../../../../shared/routes.dart';
+import '../../../components/custom_appbar.dart';
 import '../../../components/custom_button.dart';
 import '../../../components/custom_textfield.dart';
 import '../../../utils/helper.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import '../../../components/custom_appbar.dart';
 
-class AddTruckSpecsScreen extends GetView<CreateTruckController> {
+class AddTruckSpecsScreen extends StatelessWidget {
   const AddTruckSpecsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final provider = Provider.of<CreateTruckProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(
         height: 12.0,
@@ -55,20 +56,27 @@ class AddTruckSpecsScreen extends GetView<CreateTruckController> {
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
         child: Column(
           children: [
-            const CustomTextFormField(
-              label: "Truck Max Lenght (meters)",
+            CustomTextFormField(
+              label: "Truck Max Length (meters)",
               keyboardType: TextInputType.number,
+              onSaved: (String? val) {
+                provider.setTruckLength = val!;
+              },
             ),
             SizeMargin.size(height: 20.0),
-            const CustomTextFormField(
+            CustomTextFormField(
               label: "Truck Max Weight (kilograms)",
               keyboardType: TextInputType.number,
+              onSaved: (String? val) {
+                provider.setTruckWeight = val!;
+              },
             ),
             SizeMargin.size(height: 335.0.h),
             CustomRaisedButton(
               text: "Continue",
               onPressed: () {
-                Get.toNamed(Routes.addTruckImages);
+                // Get.toNamed(Routes.addTruckImages);
+                provider.next();
               },
             ),
             SizeMargin.size(height: 24.0),

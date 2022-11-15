@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:load_connect_driver/backend/models/entities/full_profile_model.dart';
 import 'package:load_connect_driver/backend/models/entities/order_model.dart';
 import 'package:load_connect_driver/backend/models/entities/user_model.dart';
 import 'package:load_connect_driver/backend/services/i_user_service.dart';
@@ -12,6 +11,7 @@ class UserProfileProvider extends BaseProvider {
   late UserModel user;
   // FullProfileModel? profile;
   List<OrderModel> loadHistory = [];
+  bool loggedIn = false;
 
   set setUser(UserModel usr) {
     user = usr;
@@ -24,7 +24,8 @@ class UserProfileProvider extends BaseProvider {
       if (res.status) {
         user = UserModel.fromJson(res.data!.toJson());
         // profile = res.data!;
-        // loadHistory = profile!.user!.orders!;
+        // loadHistory = profile!.user!.orders!;rue;
+        loggedIn = true;
         backToLoaded();
       } else {
         ToastAlert.showErrorAlert(res.message);
@@ -46,18 +47,23 @@ class UserProfileProvider extends BaseProvider {
     initialize();
   }
 
-  void deactivateAccount() async {
+  void deactivateAccount(String password) async {
     try {
-      ToastAlert.showLoadingAlert("");
-      final res = await Get.find<IUserService>().deactivateAccount();
-      ToastAlert.closeAlert();
-      if (res.status) {
-        ToastAlert.showAlert("Account deactivated successfully");
-        Get.offAllNamed(Routes.home);
-        backToLoaded();
+      if (password.isEmpty) {
+        ToastAlert.showErrorAlert("Please provider your password");
       } else {
-        ToastAlert.showErrorAlert(res.message);
+        ToastAlert.showLoadingAlert("");
+        final res = await Get.find<IUserService>().deactivateAccount(password);
+        ToastAlert.closeAlert();
+        if (res.status) {
+          ToastAlert.showAlert("Account deactivated successfully");
+          Get.offAllNamed(Routes.home);
+          backToLoaded();
+        } else {
+          ToastAlert.showErrorAlert(res.message);
+        }
       }
+
     } catch (error) {
       ToastAlert.closeAlert();
       ToastAlert.showErrorAlert('Error: $error');

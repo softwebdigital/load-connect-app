@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:load_connect_driver/view/providers/user/change_password_provider.dart';
+import 'package:provider/provider.dart';
+
 import '../../../components/custom_button.dart';
 import '../../../components/custom_textfield.dart';
 import '../../../utils/helper.dart';
@@ -16,6 +19,8 @@ class UpdatePasswordScreen extends HookWidget {
     final hidden1 = useState(true);
     final hidden2 = useState(true);
     final hidden3 = useState(true);
+
+    final provider = Provider.of<ChangePasswordProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -59,6 +64,9 @@ class UpdatePasswordScreen extends HookWidget {
                       },
                       icon: _getIcon(hidden1.value),
                     ),
+                    onSaved: (v) {
+                      provider.setOldPassword = v!;
+                    },
                   ),
                   SizeMargin.size(height: 20.0.h),
                   CustomTextFormField(
@@ -76,6 +84,9 @@ class UpdatePasswordScreen extends HookWidget {
                       },
                       icon: _getIcon(hidden2.value),
                     ),
+                    onSaved: (v) {
+                      provider.setPassword = v!;
+                    },
                   ),
                   SizeMargin.size(height: 20.0.h),
                   CustomTextFormField(
@@ -93,17 +104,16 @@ class UpdatePasswordScreen extends HookWidget {
                       },
                       icon: _getIcon(hidden3.value),
                     ),
+                    onSaved: (v) {
+                      provider.setConfirmPassword = v!;
+                    },
                   ),
                   SizeMargin.size(height: 24.h),
                   CustomRaisedButton(
                     text: "Save Changes",
                     isBusy: isBusy.value,
                     onPressed: () {
-                      isBusy.value = true;
-                      Future.delayed(const Duration(seconds: 3), () {
-                        isBusy.value = false;
-                        snackBar(context, "Update failed, try again");
-                      });
+                      provider.changePassword(context);
                     },
                   ),
                 ],

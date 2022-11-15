@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:load_connect_driver/backend/services/core/i_local_storage.dart';
+import 'package:load_connect_driver/shared/constants.dart';
 import 'package:load_connect_driver/shared/routes.dart';
 import 'package:load_connect_driver/view/screens/settings/membership_plan/membership.dart';
 import 'package:load_connect_driver/view/screens/settings/security_screen.dart';
 import 'package:load_connect_driver/view/screens/settings/tools_screen.dart';
-import '../../../../shared/colors.dart';
-import '../../settings/edit_profile.dart';
 
-import '../../widgets/notification_icon.dart';
+import '../../../../shared/colors.dart';
 import '../../../utils/app_dialog.dart';
-import '../../../utils/helper.dart';
 import '../../../utils/custom_icons.dart';
+import '../../../utils/helper.dart';
 import '../../others/about_screen.dart';
+import '../../settings/edit_profile.dart';
+import '../../widgets/notification_icon.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({Key? key}) : super(key: key);
@@ -126,7 +128,10 @@ class SettingsTab extends StatelessWidget {
                 AppDialog.mainDialog(
                   title: "Log Out?",
                   content: "This would log you out",
-                  onTap: () {},
+                  onTap: () {
+                    Get.find<ILocalStorageService>().removeItem(userDataBox, userTokenKey);
+                    Get.offAllNamed(Routes.login);
+                  },
                   buttonColor: AppColor.error,
                   buttonText: "Yes, Logout",
                 );

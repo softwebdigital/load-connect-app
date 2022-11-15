@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
+import 'package:unicons/unicons.dart';
+
 import '../../shared/colors.dart';
 import '../../shared/routes.dart';
 // import '../utils/app_dialog.dart';
 import '../utils/helper.dart';
-import 'package:unicons/unicons.dart';
 
 class LoadDetailsCard extends StatelessWidget {
   const LoadDetailsCard({Key? key, this.isForCurrentDriver = true})

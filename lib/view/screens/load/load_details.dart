@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import 'package:unicons/unicons.dart';
+
 import '../../../shared/colors.dart';
 import '../../components/custom_appbar.dart';
 import '../../utils/custom_icons.dart';

@@ -3,6 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:load_connect_driver/shared/colors.dart';
 import 'package:load_connect_driver/shared/routes.dart';
+import 'package:load_connect_driver/view/providers/user/driver_truck_provider.dart';
+import 'package:load_connect_driver/view/screens/widgets/spacer_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/truck_details_card.dart';
 import '../../widgets/notification_icon.dart';
@@ -13,6 +16,7 @@ class MyTrucksTab extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _isSearching = useState(false);
+    final provider = Provider.of<DriverTruckProvider>(context);
     return NestedScrollView(
       // padding: const EdgeInsets.all(16.0),
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -80,16 +84,29 @@ class MyTrucksTab extends HookWidget {
                 )
         ];
       },
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            TruckDetailsCard(),
-            TruckDetailsCard(),
-            // SizeMargin.size(width: 14.0),
-          ],
-        ),
+      body: provider.isLoading ? const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ) : provider.isError ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(provider.message),
+          ColumnSpace(15),
+          TextButton(onPressed: () => provider.initialize(), child: const Text("Reload"))
+        ],
+      ) : provider.trucks.isEmpty ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("You do not have any truck yet"),
+          ColumnSpace(15),
+          TextButton(onPressed: () => provider.initialize(), child: const Text("Refresh"))
+        ],
+      ) : ListView.builder(
+        padding: const EdgeInsets.all(0),
+        itemBuilder: (context, index) {
+          final truck = provider.trucks[index];
+          return TruckDetailsCard(truck: truck,);
+        },
+        itemCount: provider.trucks.length,
       ),
     );
   }

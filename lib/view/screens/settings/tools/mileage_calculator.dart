@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:unicons/unicons.dart';
+
 import '../../../../shared/colors.dart';
 import '../../../components/custom_appbar.dart';
 import '../../../components/custom_button.dart';
 import '../../../components/custom_textfield.dart';
 import '../../../utils/helper.dart';
-import 'package:unicons/unicons.dart';
 
 class MileageCalculatorScreen extends StatelessWidget {
   const MileageCalculatorScreen({Key? key}) : super(key: key);

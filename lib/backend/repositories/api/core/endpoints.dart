@@ -18,6 +18,12 @@ const activateAccountEndpoint = "${baseUrl}user/activate";
 const deActivateAccountEndpoint = "${baseUrl}user/deactivate";
 const changePasswordEndpoint = "${baseUrl}user/update-password";
 const updateProfileEndpoint = "${baseUrl}user/update-profile";
+const updateProfilePictureEndpoint = "${baseUrl}user/update-photo";
+const userNotificationSettingsEndpoint = "${baseUrl}user/notification-settings";
+const blockedUsersEndpoint = "${baseUrl}user/blocked-users";
+const uploadKYCEndpoint = "${baseUrl}user/kyc-verification";
+String blockUserEndpoint(String uid) => "${baseUrl}user/block/$uid";
+String unBlockUserEndpoint(String uid) => "${baseUrl}user/unblock/$uid";
 
 const createLoadEndpoint = "${baseUrl}loads";
 const getSenderLoadEndpoint = "${baseUrl}loads";
@@ -25,3 +31,7 @@ const getSenderLoadEndpoint = "${baseUrl}loads";
 /// Utilities Endpoint
 const getVehicleTypesEndpoint = "${baseUrl}utils/vehicle_types";
 String getClosestVehicleEndpoint(String lat, String lng) => "${baseUrl}utils/available_trucks?latitude=3.456757&longitude=44.67458";
+
+const driverTruckEndpoint = "${baseUrl}trucks";
+const createTruckEndpoint = "${baseUrl}trucks";
+String getTruckDetailEndpoint(String id) => "${baseUrl}trucks/$id";

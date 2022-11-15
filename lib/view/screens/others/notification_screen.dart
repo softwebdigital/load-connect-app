@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect_driver/view/utils/app_dialog.dart';
+
 import '../../../shared/colors.dart';
-import '../../utils/helper.dart';
 import '../../components/custom_appbar.dart';
+import '../../utils/helper.dart';
 import '../settings/notification_setting_screen.dart';
 
 class NotificationScreen extends StatelessWidget {

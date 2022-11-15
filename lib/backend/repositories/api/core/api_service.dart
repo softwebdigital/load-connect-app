@@ -157,7 +157,7 @@ class ApiService {
     }
     if (error.response!.statusCode == 500) {
       return ApiResponse(
-        status: false, data: null, message: 'Internet connection error'
+        status: false, data: null, message: "Something went wrong"
       );
     }
     // print("========== Error Start ==========");
@@ -203,7 +203,7 @@ class TokenInterceptor extends Interceptor {
         //   final error = DioError(requestOptions: options, error: "Unauthenticated");
         //   super.onError(error, handler);
         // }
-        options.headers['Authorization'] = "$token";
+        options.headers['token'] = "$token";
       }
     }
     // return options;

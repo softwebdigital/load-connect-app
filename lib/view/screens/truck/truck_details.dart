@@ -1,11 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:load_connect_driver/backend/models/entities/driver_truck_model.dart';
+
 import '../../../shared/colors.dart';
 import '../../components/custom_appbar.dart';
 import '../../utils/helper.dart';
 
 class TruckDetailsScreen extends StatefulWidget {
-  const TruckDetailsScreen({Key? key}) : super(key: key);
+  const TruckDetailsScreen({
+    Key? key,
+    required this.truck
+  }) : super(key: key);
+
+  final DriverTruckModel truck;
 
   @override
   State<TruckDetailsScreen> createState() => _TruckDetailsScreenState();
@@ -50,26 +57,26 @@ class _TruckDetailsScreenState extends State<TruckDetailsScreen> {
                 children: [
                   _itemTile(
                     "Truck Name",
-                    "Mercedes benz actros",
+                    "${widget.truck.name}",
                   ),
                   _itemTile(
                     "Truck Weight",
-                    "523.2 Kilograms",
-                    "25 Pounds",
+                    "${widget.truck.maxWeight} Kilograms",
+                    "${widget.truck.maxWeight} Pounds",
                   ),
                   _itemTile(
                     "Estimated Distance Away",
-                    "23 Kilometers",
-                    "5 Miles",
+                    "${widget.truck.maxWeight} Kilometers",
+                    "${widget.truck.maxWeight} Miles",
                   ),
 
                   _itemTile(
                     "Truck Category",
-                    "Mini Truck",
+                    "${widget.truck.category}",
                   ),
                   _itemTile(
                     "Truck Capacity",
-                    "Full Truck Load",
+                    "${widget.truck.subCategory}",
                   ),
                   SizeMargin.size(height: 24.0),
 

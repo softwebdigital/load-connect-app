@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../shared/colors.dart';
 
+import '../../../shared/colors.dart';
 import 'custom_check_icon.dart';
 
 class CustomChip extends StatelessWidget {

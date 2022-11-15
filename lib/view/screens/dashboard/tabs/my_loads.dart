@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:load_connect_driver/view/screens/widgets/filter_load_bottom_sheet.dart';
 import 'package:load_connect_driver/view/screens/widgets/sort_load_bottom_sheet.dart';
+
 import '../../../components/load_details_card.dart';
 import '../../widgets/notification_icon.dart';
 

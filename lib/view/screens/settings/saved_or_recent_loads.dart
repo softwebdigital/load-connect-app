@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:load_connect_driver/view/components/custom_appbar.dart';
 import 'package:load_connect_driver/view/screens/widgets/filter_load_bottom_sheet.dart';
 import 'package:load_connect_driver/view/screens/widgets/sort_load_bottom_sheet.dart';
+
 import '../../components/load_details_card.dart';
 
 class SavedOrRecentLoadsScreen extends HookWidget {

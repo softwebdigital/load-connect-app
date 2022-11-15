@@ -59,10 +59,10 @@ class LoginProvider extends BaseProvider {
             //   "${Routes.}?user_id=${res.data!.user!.id}",
             // );
           } else {
-            print("UserToken: ${res.data!.token!}");
+            print("UserToken: ${res.data!.toJson()}");
             Get.find<ILocalStorageService>().setItem(userDataBox, userTokenKey, res.data!.token);
             Get.find<ILocalStorageService>().setItem(appDataBox, loggedInBeforeKey, true);
-            Provider.of<UserProfileProvider>(context, listen: false).setUser = res.data!.user!;
+            // Provider.of<UserProfileProvider>(context, listen: false).setUser = res.data!.user!;
             Provider.of<UserProfileProvider>(context, listen: false).initialize();
             ToastAlert.showAlert("Login successful");
             Get.offAllNamed(Routes.home);

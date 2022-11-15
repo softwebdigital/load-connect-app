@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load_connect_driver/backend/models/dtos/create_account_request.dart';
-import 'package:load_connect_driver/backend/models/dtos/generate_token_request.dart';
 import 'package:load_connect_driver/backend/services/core/i_local_storage.dart';
 import 'package:load_connect_driver/backend/services/i_auth_service.dart';
 import 'package:load_connect_driver/shared/constants.dart';

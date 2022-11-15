@@ -1,19 +1,26 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
 import '../../components/custom_button.dart';
 import '../../components/custom_textfield.dart';
+import '../../providers/user/updade_profile_provider.dart';
+import '../../providers/user/update_profile_picture_provider.dart';
+import '../../providers/user/user_profile_provider.dart';
 import '../../utils/helper.dart';
 
-class EditProfileScreen extends HookWidget {
+class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({Key? key}) : super(key: key);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final isBusy = useState(false);
+
+    final userProvider = Provider.of<UserProfileProvider>(context);
+    final user = userProvider.user;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -31,106 +38,133 @@ class EditProfileScreen extends HookWidget {
         ),
         title: const Text("Edit Business Profile"),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          vertical: 24.0.h,
-          horizontal: 16.0,
-        ),
-        child: Column(
-          children: [
-            const Center(
-              child: CircleAvatar(
-                // child: Text("BR"),
-                backgroundImage: AssetImage("assets/images/icon.png"),
-                radius: 48.0,
+      body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => UpdateProfileProvider(user),),
+            ChangeNotifierProvider(create: (context) => UpdateProfilePictureProvider(),),
+          ],
+          builder: (context, child) {
+            final updateProfileProvider = Provider.of<UpdateProfileProvider>(context);
+            final updateProfilePictureProvider = Provider.of<UpdateProfilePictureProvider>(context);
+
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                vertical: 24.0.h,
+                horizontal: 16.0,
               ),
-            ),
-            SizeMargin.size(height: 16.0.h),
-            TextButton(
-              onPressed: () {},
-              child: const Text("Upload picture"),
-            ),
-            const Divider(),
-            SizeMargin.size(height: 24.0.h),
-            Form(
-              key: _formKey,
               child: Column(
                 children: [
-                  CustomTextFormField(
-                    onSaved: (val) {},
-                    label: "First Name",
-                    initialValue: "",
-                    validator: (val) {
-                      if (val.isNull || val!.isEmpty) {
-                        return "Field is required";
-                      }
-                      return null;
-                    },
+                  Center(
+                    child: CircleAvatar(
+                      // child: Text("BR"),
+                      backgroundImage: user.profilePhoto == null
+                          ? const AssetImage("assets/images/icon.png")
+                          : CachedNetworkImageProvider(user.profilePhoto!) as ImageProvider,
+                      // backgroundImage: AssetImage("assets/images/icon.png"),
+                      radius: 48.0,
+                    ),
                   ),
-                  SizeMargin.size(height: 20.0.h),
-                  CustomTextFormField(
-                    label: "CAC Number (optional)",
-                    initialValue: "AS12345",
-                    validator: (val) {
-                      if (val.isNull || val!.isEmpty) {
-                        return "Field is required";
-                      }
-                      return null;
-                    },
+                  SizeMargin.size(height: 16.0.h),
+                  TextButton(
+                    onPressed: () => updateProfilePictureProvider.pickImage(context),
+                    child: const Text("Upload picture"),
                   ),
-                  SizeMargin.size(height: 20.0.h),
-                  CustomTextFormField(
-                    label: "Phone Number",
-                    initialValue: "John doe",
-                    validator: (val) {
-                      if (val.isNull || val!.isEmpty) {
-                        return "Field is required";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  ),
-                  SizeMargin.size(height: 20.0.h),
-                  CustomTextFormField(
-                    label: "Business Email",
-                    initialValue: "John doe",
-                    validator: (val) {
-                      if (val.isNull || val!.isEmpty) {
-                        return "Field is required";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizeMargin.size(height: 20.0.h),
-                  CustomTextFormField(
-                    label: "Address",
-                    initialValue: "John doe",
-                    validator: (val) {
-                      if (val.isNull || val!.isEmpty) {
-                        return "Field is required";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizeMargin.size(height: 24.h),
-                  CustomRaisedButton(
-                    text: "Save Changes",
-                    isBusy: isBusy.value,
-                    onPressed: () {
-                      isBusy.value = true;
-                      Future.delayed(const Duration(seconds: 3), () {
-                        isBusy.value = false;
-                        snackBar(context, "Update failed, try again");
-                      });
-                    },
-                  ),
+                  const Divider(),
+                  SizeMargin.size(height: 24.0.h),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        CustomTextFormField(
+                          onSaved: (val) => updateProfileProvider.firstName = val!,
+                          label: "First Name",
+                          initialValue: user.firstName,
+                          validator: (val) {
+                            if (val.isNull || val!.isEmpty) {
+                              return "Field is required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizeMargin.size(height: 20.0.h),
+                        CustomTextFormField(
+                          onSaved: (val) => updateProfileProvider.lastName = val!,
+                          label: "Last Name",
+                          initialValue: user.lastName,
+                          validator: (val) {
+                            if (val.isNull || val!.isEmpty) {
+                              return "Field is required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizeMargin.size(height: 20.0.h),
+                        CustomTextFormField(
+                          label: "Phone Number",
+                          initialValue: user.phone,
+                          readOnly: true,
+                          validator: (val) {
+                            if (val.isNull || val!.isEmpty) {
+                              return "Field is required";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        ),
+                        SizeMargin.size(height: 20.0.h),
+                        CustomTextFormField(
+                          label: "Email",
+                          initialValue: user.email,
+                          readOnly: true,
+                          validator: (val) {
+                            if (val.isNull || val!.isEmpty) {
+                              return "Field is required";
+                            }
+                            if (!GetUtils.isEmail(val)) {
+                              return "Enter a valid email";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        SizeMargin.size(height: 20.0.h),
+                        CustomTextFormField(
+                          label: "State of Residence",
+                          initialValue: user.stateOfResidence ?? "",
+                          onSaved: (val) => updateProfileProvider.state = val!,
+                          validator: (val) {
+                            if (val.isNull || val!.isEmpty) {
+                              return "Field is required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizeMargin.size(height: 20.0.h),
+                        CustomTextFormField(
+                          label: "Address",
+                          initialValue: user.residentialAddress ?? "",
+                          onSaved: (val) => updateProfileProvider.address = val!,
+                          validator: (val) {
+                            if (val.isNull || val!.isEmpty) {
+                              return "Field is required";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizeMargin.size(height: 24.h),
+                        CustomRaisedButton(
+                          text: "Save Changes",
+                          isBusy: false,
+                          onPressed: () => updateProfileProvider.updateProfile(context),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
+            );
+          }
       ),
     );
   }

@@ -1,19 +1,28 @@
 import 'package:get/get.dart';
-import 'package:load_connect_driver/core/repository/create_truck_controller.dart';
+import 'package:load_connect_driver/view/providers/user/create_truck_provider.dart';
+import 'package:load_connect_driver/view/screens/intro_screen.dart';
+import 'package:load_connect_driver/view/screens/truck/create_truck/create_truck_screen.dart';
+import 'package:provider/provider.dart';
+
 import '../core/repository/forgot_password_controller.dart';
 import '../shared/routes.dart';
 import '../view/all_screens.dart';
+import '../view/providers/user/change_password_provider.dart';
 
 class RoutePages {
   static String init() {
     // return Routes.home;
-    return Routes.login;
+    return Routes.intro;
   }
 
   static final List<GetPage> routes = [
     GetPage(
       name: Routes.login,
       page: () => const LoginScreen(),
+    ),
+    GetPage(
+      name: Routes.intro,
+      page: () => const IntroScreen(),
     ),
     GetPage(
       name: Routes.signup,
@@ -47,33 +56,36 @@ class RoutePages {
     ),
     GetPage(
       name: Routes.addTruckInfo,
-      page: () => const AddTruckInfoScreen(),
-      binding: BindingsBuilder(
-        () => Get.lazyPut(
-          () => CreateTruckController(),
-        ),
+      page: () => ChangeNotifierProvider(
+        child: const CreateTruckScreen(),
+        create: (context) => CreateTruckProvider(),
       ),
+      // binding: BindingsBuilder(
+      //   () => Get.lazyPut(
+      //     () => CreateTruckController(),
+      //   ),
+      // ),
     ),
-    GetPage(
-      name: Routes.addTruckSpecs,
-      page: () => const AddTruckSpecsScreen(),
-    ),
-    GetPage(
-      name: Routes.addTruckImages,
-      page: () => const AddTruckImagesScreen(),
-    ),
-    GetPage(
-      name: Routes.addTruckDocuments,
-      page: () => const AddTruckDocumentsScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.addTruckSpecs,
+    //   page: () => const AddTruckSpecsScreen(),
+    // ),
+    // GetPage(
+    //   name: Routes.addTruckImages,
+    //   page: () => const AddTruckImagesScreen(),
+    // ),
+    // GetPage(
+    //   name: Routes.addTruckDocuments,
+    //   page: () => const AddTruckDocumentsScreen(),
+    // ),
     GetPage(
       name: Routes.truckGoLive,
       page: () => const TruckGoLiveScreen(),
     ),
-    GetPage(
-      name: Routes.truckDetails,
-      page: () => const TruckDetailsScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.truckDetails,
+    //
+    // ),
     GetPage(
       name: Routes.savedOrRecentLoads,
       page: () => const SavedOrRecentLoadsScreen(),
@@ -88,7 +100,10 @@ class RoutePages {
     ),
     GetPage(
       name: Routes.updatePassword,
-      page: () => UpdatePasswordScreen(),
+      page: () => ChangeNotifierProvider(
+          child: UpdatePasswordScreen(),
+          create: (context) => ChangePasswordProvider()
+      ),
     ),
     GetPage(
       name: Routes.deactivateAccount,

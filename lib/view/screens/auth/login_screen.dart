@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect_driver/view/providers/auth/login_provider.dart';
 import 'package:provider/provider.dart';
+
 import '../../../shared/colors.dart';
 import '../../../shared/routes.dart';
 import '../../components/custom_button.dart';
@@ -34,14 +35,15 @@ class LoginScreen extends HookWidget {
                     width: 240.0.w,
                   ),
                   SizeMargin.size(height: 113.h),
-                  CustomTextField(
+                  CustomTextFormField(
                     label: 'Email Address',
-                    onChanged: (String val) {
+                    onSaved: (String? val) {
                       loginProvider.setEmail = val.toString();
                     },
+                    initialValue: loginProvider.email,
                   ),
                   SizeMargin.size(height: 24.h),
-                  CustomTextField(
+                  CustomTextFormField(
                     label: 'Password',
                     hideText: hideText.value,
                     suffixIcon: IconButton(
@@ -53,9 +55,10 @@ class LoginScreen extends HookWidget {
                         color: AppColor.black100,
                       ),
                     ),
-                    onChanged: (String val) {
+                    onSaved: (String? val) {
                       loginProvider.setPassword = val.toString();
                     },
+                    initialValue: loginProvider.password,
                   ),
                   SizeMargin.size(height: 8.h),
                   Align(
@@ -70,12 +73,9 @@ class LoginScreen extends HookWidget {
                   SizeMargin.size(height: 24.h),
                   CustomRaisedButton(
                     text: "Login",
-                    isBusy: isBusy.value,
+                    isBusy: false,
                     onPressed: () {
-                      if (isBusy.value == false) {
-                        loginProvider.login(context);
-                      }
-
+                      loginProvider.login(context);
                     },
                   ),
                   SizeMargin.size(height: 32.h),
@@ -105,31 +105,31 @@ class LoginScreen extends HookWidget {
                     ),
                   ),
                   SizeMargin.size(height: 12.h),
-                  RichText(
-                    text: TextSpan(
-                      text: "Just browsing?",
-                      children: [
-                        TextSpan(
-                          text: " Skip Login",
-                          style: const TextStyle(
-                            color: AppColor.darkGreen,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'CircularStd',
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              debugPrint("object");
-                              Get.offAllNamed(Routes.home);
-                            },
-                        ),
-                      ],
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: AppColor.black100,
-                        fontFamily: 'CircularStd',
-                      ),
-                    ),
-                  )
+                  // RichText(
+                  //   text: TextSpan(
+                  //     text: "Just browsing?",
+                  //     children: [
+                  //       TextSpan(
+                  //         text: " Skip Login",
+                  //         style: const TextStyle(
+                  //           color: AppColor.darkGreen,
+                  //           fontWeight: FontWeight.w600,
+                  //           fontFamily: 'CircularStd',
+                  //         ),
+                  //         recognizer: TapGestureRecognizer()
+                  //           ..onTap = () {
+                  //             debugPrint("object");
+                  //             Get.offAllNamed(Routes.home);
+                  //           },
+                  //       ),
+                  //     ],
+                  //     style: TextStyle(
+                  //       fontSize: 16.sp,
+                  //       color: AppColor.black100,
+                  //       fontFamily: 'CircularStd',
+                  //     ),
+                  //   ),
+                  // )
                 ],
               );
             },

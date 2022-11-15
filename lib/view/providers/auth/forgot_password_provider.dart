@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:load_connect_driver/backend/models/dtos/forgot_password_request.dart';
-import 'package:load_connect_driver/backend/services/core/i_local_storage.dart';
 import 'package:load_connect_driver/backend/services/i_auth_service.dart';
-import 'package:load_connect_driver/shared/constants.dart';
 import 'package:load_connect_driver/shared/routes.dart';
 import 'package:load_connect_driver/view/interaction/toast_alert.dart';
 import 'package:load_connect_driver/view/providers/base_provider.dart';

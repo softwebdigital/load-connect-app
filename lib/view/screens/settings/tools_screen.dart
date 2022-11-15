@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../shared/colors.dart';
+
 import './tools/mileage_calculator.dart';
 import './tools/rate_calculator.dart';
+import '../../../shared/colors.dart';
 
 class ToolsScreen extends StatelessWidget {
   const ToolsScreen({Key? key}) : super(key: key);

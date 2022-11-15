@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:load_connect_driver/backend/models/entities/driver_truck_model.dart';
 import 'package:load_connect_driver/shared/routes.dart';
+import 'package:load_connect_driver/view/all_screens.dart';
+
 import '../../shared/colors.dart';
 import '../utils/helper.dart';
 
 class TruckDetailsCard extends StatelessWidget {
-  const TruckDetailsCard({Key? key, this.isApproved = false}) : super(key: key);
-  final bool isApproved;
+  const TruckDetailsCard({
+    Key? key,
+    required this.truck
+  }) : super(key: key);
+
+  final DriverTruckModel truck;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.to(TruckDetailsScreen(
+          truck: truck,
+        ));
+      },
       child: Card(
         color: AppColor.white200,
         elevation: 0.5,
@@ -47,9 +58,9 @@ class TruckDetailsCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Ford F-150",
-                          style: TextStyle(
+                        Text(
+                          "${truck.name}",
+                          style: const TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w500,
                             color: AppColor.blackgrey,
@@ -68,7 +79,7 @@ class TruckDetailsCard extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: "SSD-283NV",
+                                text: "${truck.plateNumber}",
                                 style: TextStyle(
                                   color: AppColor.black100.withOpacity(.6),
                                   fontFamily: 'CircularStd',
@@ -104,7 +115,7 @@ class TruckDetailsCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (!isApproved) ...[
+            if (true) ...[
               SizeMargin.size(height: 16.0.h),
               Container(
                 padding: const EdgeInsets.all(5.0),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:unicons/unicons.dart';
+
+import './tabs/all_tabs.dart';
 import '../../../shared/colors.dart';
 import '../../utils/custom_icons.dart';
 import '../../utils/helper.dart';
-import 'package:unicons/unicons.dart';
-import './tabs/all_tabs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
