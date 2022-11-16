@@ -9,6 +9,7 @@ import 'package:load_connect_driver/backend/services/i_truck_service.dart';
 import 'package:load_connect_driver/view/interaction/toast_alert.dart';
 import 'package:load_connect_driver/view/providers/user/driver_truck_provider.dart';
 import 'package:provider/provider.dart';
+import '../../../backend/models/entities/driver_truck_model.dart';
 import '../base_provider.dart';
 
 class CreateTruckProvider extends BaseProvider {
@@ -24,6 +25,8 @@ class CreateTruckProvider extends BaseProvider {
 
   List<File> truckImages = [];
   List<File> truckDoc = [];
+
+  DriverTruckModel? truck;
 
   set setTruckWeight(String id) {
     truckWeight = id;
@@ -173,6 +176,17 @@ class CreateTruckProvider extends BaseProvider {
     } catch (error) {
       ToastAlert.closeAlert();
       ToastAlert.showAlert("Error: $error");
+    }
+  }
+
+  CreateTruckProvider([this.truck]) {
+    if (truck != null) {
+      truckName = truck!.name!;
+      truckWeight = truck!.maxWeight!;
+      truckLength = truck!.maxLength!;
+      truckSubcategory = truck!.subCategory!;
+      truckCategory = truck!.category!;
+      notifyListeners();
     }
   }
 
