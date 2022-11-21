@@ -6,6 +6,7 @@ import 'package:load_connect/view/screens/widgets/spacer_widget.dart';
 
 
 class ToastAlert {
+
   static showAlert(String message, {Function? onClick}) {
     BotToast.cleanAll();
     BotToast.showCustomNotification(
@@ -40,7 +41,6 @@ class ToastAlert {
     );
   }
 
-
   static showInfoAlert(String message, {Function? onClick}) {
     BotToast.cleanAll();
     BotToast.showCustomNotification(
@@ -74,7 +74,6 @@ class ToastAlert {
       duration: const Duration(seconds: 5),
     );
   }
-
 
   static showErrorAlert(String message) {
     BotToast.showCustomNotification(toastBuilder: (cancelFunc) {

@@ -165,14 +165,12 @@ class UserService implements IUserService {
           message: res.message,
           data: List.from(res.data['data']).map((e) => BlockedUserModel.fromJson(e)).toList()
         );
-      } else {
-        return ServiceResponse(
+      }
+      return ServiceResponse(
           status: res.status,
           message: res.message,
           data: null
-        );
-      }
-
+      );
     } catch (error) {
       return ServiceResponse(data: null, message: "Error $error", status: false);
     }
