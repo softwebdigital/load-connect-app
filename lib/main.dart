@@ -8,6 +8,7 @@ import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/shared/routes.dart';
 import 'package:load_connect/shared/styles.dart';
 import 'package:load_connect/view/providers/blocked_user_provider.dart';
+import 'package:load_connect/view/providers/truck_provider.dart';
 import 'package:load_connect/view/providers/user/load_provider.dart';
 import 'package:load_connect/view/providers/user/notification_settings_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
@@ -31,6 +32,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => LoadProvider()),
       ChangeNotifierProvider(create: (context) => NotificationSettingsProvider()),
       ChangeNotifierProvider(create: (context) => BlockedUserProvider()),
+      ChangeNotifierProvider(create: (context) => TruckProvider()),
     ]
   ));
 }

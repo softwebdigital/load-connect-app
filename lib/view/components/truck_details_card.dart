@@ -6,8 +6,15 @@ import 'package:load_connect/view/screens/truck/truck_details.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:unicons/unicons.dart';
 
+import '../../backend/models/entities/vehicle_model.dart';
+
 class TruckDetailsCard extends StatelessWidget {
-  const TruckDetailsCard({Key? key}) : super(key: key);
+  const TruckDetailsCard({
+    Key? key,
+    required this.truck
+  }) : super(key: key);
+
+  final VehicleModel truck;
 
   @override
   Widget build(BuildContext context) {
@@ -35,26 +42,26 @@ class TruckDetailsCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Mercedes benz actros",
-                        style: TextStyle(
+                      Text(
+                        "${truck.name}",
+                        style: const TextStyle(
                           // color: AppColor.lightgrey,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizeMargin.size(height: 4.0),
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           text: "Truck",
                           children: [
                             TextSpan(
-                              text: " | SSD-283NV",
-                              style: TextStyle(
+                              text: " | ${truck.plateNumber}",
+                              style: const TextStyle(
                                 color: AppColor.lightgrey,
                               ),
                             ),
                           ],
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Color(0XFF333333), fontSize: 12.0),
                         ),
                       ),
@@ -199,9 +206,9 @@ class TruckDetailsCard extends StatelessWidget {
                           ),
                           SizeMargin.size(height: 4.0.h),
                           RichText(
-                            text: const TextSpan(
-                              text: "523.3",
-                              children: [
+                            text: TextSpan(
+                              text: "${truck.maxWeight}",
+                              children: const [
                                 TextSpan(
                                   text: " Kg",
                                   style: TextStyle(
@@ -209,7 +216,7 @@ class TruckDetailsCard extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0XFF333333),
                               ),
                             ),

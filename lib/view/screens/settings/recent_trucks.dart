@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:load_connect/backend/models/entities/vehicle_model.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/truck_details_card.dart';
 import 'package:load_connect/view/screens/widgets/filter_trucks.dart';
@@ -42,7 +43,9 @@ class RecentTrucksScreen extends StatelessWidget {
         ),
         itemCount: 3,
         itemBuilder: (_, index) {
-          return const TruckDetailsCard();
+          return TruckDetailsCard(
+            truck: VehicleModel(),
+          );
         },
       ),
     );

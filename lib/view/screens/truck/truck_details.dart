@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
+import 'package:load_connect/view/providers/truck_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 import 'invite_truck_to_load.dart';
@@ -21,6 +23,7 @@ class _TruckDetailsScreenState extends State<TruckDetailsScreen> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<TruckProvider>();
     return Scaffold(
       appBar: CustomAppBar(
         title: const Text(
@@ -35,7 +38,7 @@ class _TruckDetailsScreenState extends State<TruckDetailsScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => provider.saveTruck("id"),
             icon: const Icon(
               Icons.favorite_outline_rounded,
             ),

@@ -4,11 +4,16 @@ import 'package:load_connect/backend/models/entities/order_model.dart';
 import 'package:load_connect/backend/models/entities/user_load.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
+import 'package:load_connect/view/providers/load_detail_provider.dart';
 import 'package:load_connect/view/utils/custom_icons_icons.dart';
 import 'package:load_connect/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:unicons/unicons.dart';
 import 'package:date_time_format/date_time_format.dart';
+
+import '../../../shared/routes.dart';
+import '../../utils/app_dialog.dart';
 
 class LoadDetailsScreen extends StatefulWidget {
   const LoadDetailsScreen({Key? key, required this.load}) : super(key: key);
@@ -27,328 +32,336 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
     final createdAt = DateTime.parse(widget.load.createdAt!);
     final pickupDate = DateTime.parse(widget.load.pickupDate!);
     final pickupDeadline = DateTime.parse(widget.load.pickupDeadlineDate!);
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: const Text(
-          "Load Details",
-          style: TextStyle(fontSize: 18.0),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.share,
+    return ChangeNotifierProvider(
+      create: (context) => LoadDetailProvider(widget.load.id!),
+      builder: (context, child) {
+        final provider = Provider.of<LoadDetailProvider>(context);
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: const Text(
+              "Load Details",
+              style: TextStyle(fontSize: 18.0),
             ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              UniconsLine.edit_alt,
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(
-                        CustomIcons.tracking,
-                        color: AppColor.lightgrey,
-                        size: 16.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          "Load Status",
-                          style: TextStyle(
-                            color: AppColor.lightgrey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _DeliveryProcesses(processes: getProcess(widget.load)),
-                ],
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.share,
+                ),
               ),
-            ),
-            // SizeMargin.size(height: 12.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(
-                        CustomIcons.box_1,
-                        color: AppColor.lightgrey,
-                        size: 16.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          "Load Details",
-                          style: TextStyle(
-                            color: AppColor.lightgrey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizeMargin.size(height: 4.0),
-                  _itemTile(
-                    "Load Type",
-                    "Full Truck Load",
-                  ),
-                  _itemTile(
-                    "Load Weight",
-                    "${widget.load.loadWeight} Kilograms",
-                    "25 Pounds",
-                  ),
-                  _itemTile(
-                    "Load Description",
-                    "${widget.load.description}",
-                  ),
-                  _itemTile(
-                    "Truck Category",
-                    "${widget.load.truckCategory}",
-                  ),
-                  /// [carousel should be here]
-
-
-                  if ((widget.load.loadimages ?? []).isNotEmpty)
-                    ...[
-                      SizeMargin.size(height: 24.0),
-                      const Text(
-                        "Load Images",
-                        style: TextStyle(
-                          color: AppColor.lightgrey,
-                        ),
-                      ),
-
-                      SizeMargin.size(height: 4.0),
-                      CarouselSlider(
-                        items: imageSliders(widget.load.loadimages ?? []),
-                        options: CarouselOptions(
-                          viewportFraction: 1.0,
-                          // enlargeCenterPage: true,
-                          height: 200,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                            });
-                          },
-                        ),
-                        carouselController: _controller,
-                      ),
-                      SizeMargin.size(height: 12.0),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  UniconsLine.edit_alt,
+                ),
+              )
+            ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _controller.previousPage();
-                            },
-                            child: const CircleAvatar(
-                              radius: 18.0,
-                              backgroundColor: AppColor.darkGreen,
-                              child: Icon(
-                                Icons.chevron_left,
-                                color: AppColor.white100,
-                                size: 30.0,
+                        children: const [
+                          Icon(
+                            CustomIcons.tracking,
+                            color: AppColor.lightgrey,
+                            size: 16.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 4.0),
+                            child: Text(
+                              "Load Status",
+                              style: TextStyle(
+                                color: AppColor.lightgrey,
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                      _DeliveryProcesses(
+                          processes: getProcess(widget.load)
+                      ),
+                    ],
+                  ),
+                ),
+                // SizeMargin.size(height: 12.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(
+                            CustomIcons.box_1,
+                            color: AppColor.lightgrey,
+                            size: 16.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 4.0),
+                            child: Text(
+                              "Load Details",
+                              style: TextStyle(
+                                color: AppColor.lightgrey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizeMargin.size(height: 4.0),
+                      _itemTile(
+                        "Load Type",
+                        "Full Truck Load",
+                      ),
+                      _itemTile(
+                        "Load Weight",
+                        "${widget.load.loadWeight} Kilograms",
+                        "25 Pounds",
+                      ),
+                      _itemTile(
+                        "Load Description",
+                        "${widget.load.description}",
+                      ),
+                      _itemTile(
+                        "Truck Category",
+                        "${widget.load.truckCategory}",
+                      ),
+                      /// [carousel should be here]
+
+
+                      if ((widget.load.loadimages ?? []).isNotEmpty)
+                        ...[
+                          SizeMargin.size(height: 24.0),
+                          const Text(
+                            "Load Images",
+                            style: TextStyle(
+                              color: AppColor.lightgrey,
+                            ),
+                          ),
+
+                          SizeMargin.size(height: 4.0),
+                          CarouselSlider(
+                            items: imageSliders(widget.load.loadimages ?? []),
+                            options: CarouselOptions(
+                              viewportFraction: 1.0,
+                              // enlargeCenterPage: true,
+                              height: 200,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
+                            ),
+                            carouselController: _controller,
+                          ),
+                          SizeMargin.size(height: 12.0),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: (widget.load.loadimages ?? []).map((entry) {
-                              return GestureDetector(
-                                onTap: () => _controller.animateToPage((widget.load.loadimages ?? []).indexOf(entry)),
-                                child: Container(
-                                  width: 10.0,
-                                  height: 10.0,
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 4.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: (Theme.of(context).brightness ==
-                                        Brightness.dark
-                                        ? Colors.white
-                                        : AppColor.darkGreen)
-                                        .withOpacity(
-                                      _current == (widget.load.loadimages ?? []).indexOf(entry) ? 0.9 : 0.2,
-                                    ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _controller.previousPage();
+                                },
+                                child: const CircleAvatar(
+                                  radius: 18.0,
+                                  backgroundColor: AppColor.darkGreen,
+                                  child: Icon(
+                                    Icons.chevron_left,
+                                    color: AppColor.white100,
+                                    size: 30.0,
                                   ),
                                 ),
-                              );
-                            }).toList(),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: (widget.load.loadimages ?? []).map((entry) {
+                                  return GestureDetector(
+                                    onTap: () => _controller.animateToPage((widget.load.loadimages ?? []).indexOf(entry)),
+                                    child: Container(
+                                      width: 10.0,
+                                      height: 10.0,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                            ? Colors.white
+                                            : AppColor.darkGreen)
+                                            .withOpacity(
+                                          _current == (widget.load.loadimages ?? []).indexOf(entry) ? 0.9 : 0.2,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _controller.nextPage();
+                                },
+                                child: const CircleAvatar(
+                                  radius: 18.0,
+                                  backgroundColor: AppColor.darkGreen,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    color: AppColor.white100,
+                                    size: 30.0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              _controller.nextPage();
-                            },
-                            child: const CircleAvatar(
-                              radius: 18.0,
-                              backgroundColor: AppColor.darkGreen,
-                              child: Icon(
-                                Icons.chevron_right,
-                                color: AppColor.white100,
-                                size: 30.0,
+                        ],
+
+                      /// [carousel should be here]
+                    ],
+                  ),
+                ),
+                SizeMargin.size(height: 16.0),
+                Container(
+                  color: AppColor.white200,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 16.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.person,
+                            color: AppColor.lightgrey,
+                            size: 20.0,
+                          ),
+                          SizeMargin.size(width: 4.0),
+                          const Text(
+                            "Receiver's Details",
+                            style: TextStyle(color: AppColor.lightgrey),
+                          ),
+                        ],
+                      ),
+                      SizeMargin.size(height: 16.0),
+                      const Text(
+                        "Receiver's name",
+                        style: TextStyle(
+                            color: AppColor.darkGreen,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      SizeMargin.size(height: 4.0),
+                      Text(
+                        "${widget.load.receiverName}",
+                        style: TextStyle(
+                            color: AppColor.blackgrey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      SizeMargin.size(height: 16.0),
+                      const Text(
+                        "Reciever's phone number",
+                        style: TextStyle(
+                            color: AppColor.darkGreen,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      SizeMargin.size(height: 4.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${widget.load.receiverPhone}",
+                            style: const TextStyle(
+                                color: AppColor.blackgrey,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizeMargin.size(width: 4.0),
+                          InkWell(
+                            child: Container(
+                              padding: const EdgeInsets.all(6.0),
+                              decoration: BoxDecoration(
+                                color: AppColor.white300,
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: const Icon(
+                                UniconsLine.phone,
+                                color: AppColor.darkGreen,
+                                size: 20.0,
                               ),
                             ),
                           ),
                         ],
                       ),
                     ],
-
-                  /// [carousel should be here]
-                ],
-              ),
-            ),
-            SizeMargin.size(height: 16.0),
-            Container(
-              color: AppColor.white200,
-              padding: const EdgeInsets.symmetric(
-                vertical: 20.0,
-                horizontal: 16.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+                  ),
+                ),
+                SizeMargin.size(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.person,
-                        color: AppColor.lightgrey,
-                        size: 20.0,
-                      ),
-                      SizeMargin.size(width: 4.0),
-                      const Text(
-                        "Receiver's Details",
-                        style: TextStyle(color: AppColor.lightgrey),
-                      ),
-                    ],
-                  ),
-                  SizeMargin.size(height: 16.0),
-                  const Text(
-                    "Receiver's name",
-                    style: TextStyle(
-                        color: AppColor.darkGreen,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizeMargin.size(height: 4.0),
-                  Text(
-                    "${widget.load.receiverName}",
-                    style: TextStyle(
-                        color: AppColor.blackgrey,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizeMargin.size(height: 16.0),
-                  const Text(
-                    "Reciever's phone number",
-                    style: TextStyle(
-                        color: AppColor.darkGreen,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizeMargin.size(height: 4.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${widget.load.receiverPhone}",
-                        style: const TextStyle(
-                            color: AppColor.blackgrey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizeMargin.size(width: 4.0),
-                      InkWell(
-                        child: Container(
-                          padding: const EdgeInsets.all(6.0),
-                          decoration: BoxDecoration(
-                            color: AppColor.white300,
-                            borderRadius: BorderRadius.circular(8.0),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.apps_rounded,
+                            color: AppColor.lightgrey,
                           ),
-                          child: const Icon(
-                            UniconsLine.phone,
-                            color: AppColor.darkGreen,
-                            size: 20.0,
+                          SizeMargin.size(width: 4.0),
+                          const Text(
+                            "Other Details",
+                            style: TextStyle(
+                              color: AppColor.lightgrey,
+                            ),
                           ),
-                        ),
+                        ],
+                      ),
+                      // SizeMargin.size(height: 20.0),
+                      _itemTile(
+                        "Estimated Distance",
+                        "23 Kilometers",
+                        "5 Miles",
+                      ),
+                      _itemTile(
+                        "Estimated Time Driving",
+                        "1 hour, 30 minutes",
+                      ),
+                      _itemTile(
+                        "Driver Truck Info",
+                        "No driver has accepted yet",
+                      ),
+                      _itemTile(
+                        "Pickup date",
+                        pickupDate.format('D, M j, H:i'),
+                      ),
+                      _itemTile(
+                        "Deadline for load pickup",
+                        pickupDeadline.format('D, M j, H:i'),
+                      ),
+                      _itemTile(
+                        "Date created",
+                        createdAt.format('D, M j, H:i'),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                SizeMargin.size(height: 20.0),
+              ],
             ),
-            SizeMargin.size(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.apps_rounded,
-                        color: AppColor.lightgrey,
-                      ),
-                      SizeMargin.size(width: 4.0),
-                      const Text(
-                        "Other Details",
-                        style: TextStyle(
-                          color: AppColor.lightgrey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // SizeMargin.size(height: 20.0),
-                  _itemTile(
-                    "Estimated Distance",
-                    "23 Kilometers",
-                    "5 Miles",
-                  ),
-                  _itemTile(
-                    "Estimated Time Driving",
-                    "1 hour, 30 minutes",
-                  ),
-                  _itemTile(
-                    "Driver Truck Info",
-                    "No driver has accepted yet",
-                  ),
-                  _itemTile(
-                    "Pickup date",
-                    pickupDate.format('D, M j, H:i'),
-                  ),
-                  _itemTile(
-                    "Deadline for load pickup",
-                    pickupDeadline.format('D, M j, H:i'),
-                  ),
-                  _itemTile(
-                    "Date created",
-                    createdAt.format('D, M j, H:i'),
-                  ),
-                ],
-              ),
-            ),
-            SizeMargin.size(height: 20.0),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -453,30 +466,107 @@ class _DeliveryProcesses extends StatelessWidget {
 
 getProcess(UserLoad load) {
   return [
-    const _DeliveryProcess(
+    _DeliveryProcess(
       "Load Request",
       "Driver",
       "No driver has accepted yet",
+        extraContent: Container(),
+        isCompleted: true
     ),
     _DeliveryProcess(
       "Negotiating",
       "Estimated Fee",
       "₦${load.loadValue}",
+      extraContent: Row(
+        children: [
+          const SizedBox(width: 29,),
+          InkWell(
+            onTap: () {
+              AppDialog.negotiateDialog(
+                content: "This would log you out",
+                onTap: () {
+                  // Get.offAllNamed(Routes.login);
+                },
+                buttonColor: AppColor.darkGreen,
+              );
+            },
+            child: Container(
+              height: 41, width: 41,
+              decoration: BoxDecoration(
+                color: const Color(0xFF8DDCA4).withOpacity(.20),
+                borderRadius: BorderRadius.circular(13)
+              ),
+              child: const Center(child: Icon(Icons.refresh, color: Color(0xFF007683),)),
+            ),
+          ),
+          const SizedBox(width: 24,),
+          InkWell(
+            onTap: () {
+              AppDialog.mainDialog(
+                title: "Accept the offered amount of ₦2,500?",
+                content: "You are accepting to pickup and deliver the load for ₦2,500. This can’t be changed later on",
+                onTap: () {
+                  // Get.offAllNamed(Routes.login);
+                },
+                buttonColor: AppColor.darkGreen,
+                buttonText: "Yes, Accept"
+              );
+            },
+            child: Container(
+              height: 41, width: 41,
+              decoration: BoxDecoration(
+                color: const Color(0xFF8DDCA4).withOpacity(.20),
+                borderRadius: BorderRadius.circular(13)
+              ),
+              child: const Center(child: Icon(Icons.check, color: Color(0xFF007683),)),
+            ),
+          ),
+          const SizedBox(width: 24,),
+          InkWell(
+            onTap: () {
+              AppDialog.mainDialog(
+                  title: "Decline the offered amount of ₦2,500?",
+                  content: "You would be declining the offered amount of ₦2,500 making yourself available to pick other waiting loads.",
+                  onTap: () {
+                    // Get.offAllNamed(Routes.login);
+                  },
+                  buttonColor: AppColor.error,
+                  buttonText: "Yes, Decline"
+              );
+            },
+            child: Container(
+              height: 41, width: 41,
+              decoration: BoxDecoration(
+                color: const Color(0xFF8DDCA4).withOpacity(.20),
+                borderRadius: BorderRadius.circular(13)
+              ),
+              child: const Center(child: Icon(Icons.close, color: Color(0xFFFF1E0E),)),
+            ),
+          ),
+        ],
+      ),
+      isCompleted: true
     ),
     _DeliveryProcess(
       "Ready for pickup",
       "Pickup Location",
       "${load.pickupLocation}",
+        extraContent: Container(),
+        isCompleted: true
     ),
     _DeliveryProcess(
       "Out for delivery",
       "Destination",
       "${load.destination}",
+        extraContent: Container(),
+        isCompleted: true
     ),
-    const _DeliveryProcess(
+    _DeliveryProcess(
       "Delivered",
       "",
       "",
+      extraContent: Container(),
+      isCompleted: true
     ),
   ];
 }
@@ -487,6 +577,11 @@ class _DeliveryProcess {
     this.title,
     this.type,
     this.content,
+  {
+    this.extraContent,
+    this.isCompleted = false
+  }
+
   );
 
   // const _DeliveryProcess.complete()
@@ -496,8 +591,8 @@ class _DeliveryProcess {
   final String title;
   final String type;
   final String content;
-
-  bool get isCompleted => type == 'Driver';
+  final Widget? extraContent;
+  final bool isCompleted;
 }
 
 class _LoadStatusCard extends StatelessWidget {
@@ -533,22 +628,36 @@ class _LoadStatusCard extends StatelessWidget {
           ),
           if (process.type.isNotEmpty) ...[
             SizeMargin.size(height: 24.0),
-            Text(
-              process.type,
-              style: const TextStyle(
-                color: AppColor.lightgrey,
-              ),
-            ),
-            SizeMargin.size(height: 4.0),
-            DefaultTextStyle(
-              style: const TextStyle(),
-              child: Text(
-                process.content,
-                style: const TextStyle(
-                  color: AppColor.black300,
-                  fontSize: 16.0,
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Text(
+                      process.type,
+                      style: const TextStyle(
+                        color: AppColor.lightgrey,
+                      ),
+                    ),
+                    SizeMargin.size(height: 4.0),
+                    DefaultTextStyle(
+                      style: const TextStyle(),
+                      child: Text(
+                        process.content,
+                        style: const TextStyle(
+                          color: AppColor.black300,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+                if (process.extraContent != null)
+                  ...[
+                    process.extraContent!
+                  ],
+              ],
             ),
           ]
         ],

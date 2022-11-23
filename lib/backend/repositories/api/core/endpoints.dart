@@ -31,3 +31,8 @@ const getSenderLoadEndpoint = "${baseUrl}loads";
 /// Utilities Endpoint
 const getVehicleTypesEndpoint = "${baseUrl}utils/vehicle_types";
 String getClosestVehicleEndpoint(String lat, String lng) => "${baseUrl}utils/available_trucks?latitude=3.456757&longitude=44.67458";
+
+
+///
+const getTruckEndpoint = "${baseUrl}trucks";
+String saveTruckEndpoint(String id) => "${baseUrl}trucks/save/$id";
