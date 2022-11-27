@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:load_connect/backend/models/entities/order_model.dart';
 import 'package:load_connect/backend/models/entities/user_load.dart';
 import 'package:load_connect/shared/colors.dart';
@@ -29,13 +30,17 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
-    final createdAt = DateTime.parse(widget.load.createdAt!);
-    final pickupDate = DateTime.parse(widget.load.pickupDate!);
-    final pickupDeadline = DateTime.parse(widget.load.pickupDeadlineDate!);
+
     return ChangeNotifierProvider(
-      create: (context) => LoadDetailProvider(widget.load.id!),
+      create: (context) => LoadDetailProvider(widget.load),
       builder: (context, child) {
         final provider = Provider.of<LoadDetailProvider>(context);
+        final load = provider.load;
+
+        final createdAt = DateTime.parse(load.createdAt!);
+        final pickupDate = DateTime.parse(load.pickupDate!);
+        final pickupDeadline = DateTime.parse(load.pickupDeadlineDate!);
+
         return Scaffold(
           appBar: CustomAppBar(
             title: const Text(
@@ -86,7 +91,7 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                         ],
                       ),
                       _DeliveryProcesses(
-                          processes: getProcess(widget.load)
+                          processes: getProcess(context, load)
                       ),
                     ],
                   ),
@@ -122,21 +127,21 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                       ),
                       _itemTile(
                         "Load Weight",
-                        "${widget.load.loadWeight} Kilograms",
+                        "${load.loadWeight} Kilograms",
                         "25 Pounds",
                       ),
                       _itemTile(
                         "Load Description",
-                        "${widget.load.description}",
+                        "${load.description}",
                       ),
                       _itemTile(
                         "Truck Category",
-                        "${widget.load.truckCategory}",
+                        "${load.truckCategory}",
                       ),
                       /// [carousel should be here]
 
 
-                      if ((widget.load.loadimages ?? []).isNotEmpty)
+                      if ((load.loadimages ?? []).isNotEmpty)
                         ...[
                           SizeMargin.size(height: 24.0),
                           const Text(
@@ -148,7 +153,7 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
 
                           SizeMargin.size(height: 4.0),
                           CarouselSlider(
-                            items: imageSliders(widget.load.loadimages ?? []),
+                            items: imageSliders(load.loadimages ?? []),
                             options: CarouselOptions(
                               viewportFraction: 1.0,
                               // enlargeCenterPage: true,
@@ -181,9 +186,9 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: (widget.load.loadimages ?? []).map((entry) {
+                                children: (load.loadimages ?? []).map((entry) {
                                   return GestureDetector(
-                                    onTap: () => _controller.animateToPage((widget.load.loadimages ?? []).indexOf(entry)),
+                                    onTap: () => _controller.animateToPage((load.loadimages ?? []).indexOf(entry)),
                                     child: Container(
                                       width: 10.0,
                                       height: 10.0,
@@ -196,7 +201,7 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                                             ? Colors.white
                                             : AppColor.darkGreen)
                                             .withOpacity(
-                                          _current == (widget.load.loadimages ?? []).indexOf(entry) ? 0.9 : 0.2,
+                                          _current == (load.loadimages ?? []).indexOf(entry) ? 0.9 : 0.2,
                                         ),
                                       ),
                                     ),
@@ -260,7 +265,7 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                       ),
                       SizeMargin.size(height: 4.0),
                       Text(
-                        "${widget.load.receiverName}",
+                        "${load.receiverName}",
                         style: TextStyle(
                             color: AppColor.blackgrey,
                             fontSize: 16.0,
@@ -279,7 +284,7 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "${widget.load.receiverPhone}",
+                            "${load.receiverPhone}",
                             style: const TextStyle(
                                 color: AppColor.blackgrey,
                                 fontSize: 16.0,
@@ -464,7 +469,7 @@ class _DeliveryProcesses extends StatelessWidget {
 }
 
 
-getProcess(UserLoad load) {
+getProcess(BuildContext context, UserLoad load) {
   return [
     _DeliveryProcess(
       "Load Request",
@@ -481,14 +486,18 @@ getProcess(UserLoad load) {
         children: [
           const SizedBox(width: 29,),
           InkWell(
-            onTap: () {
-              AppDialog.negotiateDialog(
+            onTap: () async {
+              final price = await AppDialog.negotiateDialog(
                 content: "This would log you out",
                 onTap: () {
                   // Get.offAllNamed(Routes.login);
                 },
                 buttonColor: AppColor.darkGreen,
               );
+
+              if (price != null) {
+                Provider.of<LoadDetailProvider>(context, listen: false).negotiateOffer(num.parse(price));
+              }
             },
             child: Container(
               height: 41, width: 41,
@@ -507,6 +516,8 @@ getProcess(UserLoad load) {
                 content: "You are accepting to pickup and deliver the load for ₦2,500. This can’t be changed later on",
                 onTap: () {
                   // Get.offAllNamed(Routes.login);
+                  Get.back();
+                  Provider.of<LoadDetailProvider>(context, listen: false).acceptOffer();
                 },
                 buttonColor: AppColor.darkGreen,
                 buttonText: "Yes, Accept"
@@ -525,13 +536,15 @@ getProcess(UserLoad load) {
           InkWell(
             onTap: () {
               AppDialog.mainDialog(
-                  title: "Decline the offered amount of ₦2,500?",
-                  content: "You would be declining the offered amount of ₦2,500 making yourself available to pick other waiting loads.",
-                  onTap: () {
-                    // Get.offAllNamed(Routes.login);
-                  },
-                  buttonColor: AppColor.error,
-                  buttonText: "Yes, Decline"
+                title: "Decline the offered amount of ₦2,500?",
+                content: "You would be declining the offered amount of ₦2,500 making yourself available to pick other waiting loads.",
+                onTap: () {
+                  // Get.offAllNamed(Routes.login);
+                  Get.back();
+                  Provider.of<LoadDetailProvider>(context, listen: false).declineOffer();
+                },
+                buttonColor: AppColor.error,
+                buttonText: "Yes, Decline"
               );
             },
             child: Container(

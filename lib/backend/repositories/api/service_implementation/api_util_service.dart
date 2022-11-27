@@ -20,7 +20,7 @@ class ApiUtilService implements IUtilService {
   @override
   Future<ServiceResponse<List<VehicleTypeModel>>> getVehicleTypes() async {
     try {
-      final res = await apiService.makeGetRequest(getVehicleTypesEndpoint, {
+      final res = await apiService.makeGetRequest(vehicleCategoriesEndpoint, {
         'Content-Type': 'application/json',
         "Accept": 'application/json'
       });

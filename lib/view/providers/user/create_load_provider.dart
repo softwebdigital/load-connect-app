@@ -126,7 +126,24 @@ class CreateLoadProvider extends BaseProvider {
     }
   }
 
-  void swapLocation() {}
+  void swapLocation() {
+    /// Swap Address
+    final tempAddress = pickupAddress;
+    pickupAddress = destinationAddress;
+    destinationAddress = tempAddress;
+
+    /// Swap latitude
+    final tempLat = pickupLat;
+    pickupLat = destinationLat;
+    destinationLat = tempLat;
+
+    /// Swap longitude
+    final tempLng = pickupLng;
+    pickupLng = destinationLng;
+    destinationLng = tempLng;
+
+    notifyListeners();
+  }
 
   void back() {
     if (currentScreen != selectLoadLocationScreen) {

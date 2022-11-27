@@ -84,8 +84,10 @@ class AppDialog {
         String? cancelText,
         GestureTapCallback? onTap
         // List<Widget>? actions,
-      }) {
-    Get.dialog(
+      }) async {
+    final controller = TextEditingController();
+    var price = "";
+    return await Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -121,9 +123,6 @@ class AppDialog {
 
             CustomTextField(
               value: "",
-              onChanged: (String value) {
-
-              },
               label: "Load value(₦)",
               keyboardType: TextInputType.number,
               inputFormatters: [
@@ -131,6 +130,10 @@ class AppDialog {
                   "^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$",
                 )
               ],
+              controller: controller,
+              onChanged: (val) {
+                price = val;
+              },
             )
           ],
         )
@@ -138,7 +141,9 @@ class AppDialog {
         actions: [
           CustomRaisedButton(
             text: "Send New Offer",
-            onPressed: onTap,
+            onPressed: () {
+              Get.back(result: price);
+            },
             backgroundColor: buttonColor ?? AppColor.darkGreen,
           ),
           Center(

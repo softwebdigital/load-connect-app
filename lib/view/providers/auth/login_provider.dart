@@ -54,12 +54,10 @@ class LoginProvider extends BaseProvider {
           if (res.message == 'unverified') {
             ToastAlert.showErrorAlert("Account not verified");
             await Get.find<IAuthService>().generateToken(GenerateTokenRequest(
-                userId: res.data!.user!.id,
-                type: 'register'
+              userId: res.data!.user!.id,
+              type: 'register'
             ));
-            Get.offNamed(
-              "${Routes.registrationOtp}?user_id=${res.data!.user!.id}",
-            );
+            Get.offNamed("${Routes.registrationOtp}?user_id=${res.data!.user!.id}",);
           } else {
             print("UserToken: ${res.data!.token!}");
             Get.find<ILocalStorageService>().setItem(userDataBox, userTokenKey, res.data!.token);
@@ -73,8 +71,8 @@ class LoginProvider extends BaseProvider {
           if (res.message.contains('unverified')) {
             ToastAlert.showErrorAlert("Account not verified");
             await Get.find<IAuthService>().generateToken(GenerateTokenRequest(
-                userId: res.data!.user!.id,
-                type: 'register'
+              userId: res.data!.user!.id,
+              type: 'register'
             ));
             Get.toNamed(
               "${Routes.registrationOtp}?user_id=${res.data!.user!.id}",

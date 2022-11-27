@@ -21,7 +21,9 @@ class TruckDetailsCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        Get.to(const TruckDetailsScreen());
+        Get.to(TruckDetailsScreen(
+          truck: truck,
+        ));
       },
       child: Card(
         color: AppColor.white200,
@@ -237,7 +239,7 @@ class TruckDetailsCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("John Doe"),
+                      Text(truck.user != null ? "${truck.user!.firstName} ${truck.user!.lastName}" : ""),
                       SizeMargin.size(height: 4.0.h),
                       _getStarRatings()
                     ],

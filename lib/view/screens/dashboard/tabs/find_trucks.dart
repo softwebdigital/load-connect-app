@@ -34,7 +34,7 @@ class FindTrucksTab extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () async {
-                  final _ = await _sortTrucks(context);
+                  final _ = await _sortTrucks(context, provider.sortTruck, provider.sortBy);
                   // print(result);
                 },
                 icon: const Icon(
@@ -69,35 +69,57 @@ class FindTrucksTab extends StatelessWidget {
               child: const Text("reload")
           )
         ],
-      ) : provider.trucks.isEmpty ? Column(
+      ) : provider.trucksToDisplay.isEmpty ? Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text("No available vehicle"),
           ColumnSpace(10),
           InkWell(
-              onTap: () => provider.initialize(),
+              onTap: () => provider.refresh(),
               child: const Text("reload")
           )
         ],
-      ) : ListView.builder(
-        itemCount: provider.trucks.length,
-        itemBuilder: (context, index) {
-          final truck = provider.trucks[index];
-          return TruckDetailsCard(
-            truck: truck,
-          );
+      ) : (provider.trucksToDisplay.isEmpty) ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("No available vehicle"),
+          ColumnSpace(10),
+          InkWell(
+            onTap: () => provider.refresh(),
+            child: const Text("reload")
+          )
+        ],
+      ) : RefreshIndicator(
+        onRefresh: () async {
+          provider.refresh();
         },
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 16.0,
+          ),
+          itemCount: provider.trucksToDisplay.length,
+          itemBuilder: (context, index) {
+            final truck = provider.trucksToDisplay[index];
+            return TruckDetailsCard(
+              truck: truck,
+            );
+          },
+        ),
       ),
     );
   }
 
-  Future<String?> _sortTrucks(BuildContext context) {
+  Future<String?> _sortTrucks(BuildContext context, onClick, SortTerm sortValue) {
     return showModalBottomSheet<String?>(
       isScrollControlled: true,
       context: context,
       builder: (_) => SortTruckBottomSheet(
         ctx: context,
+        onclick: onClick,
+        sortValue: sortValue,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:load_connect/backend/models/entities/vehicle_model.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/custom_button.dart';
@@ -12,7 +13,12 @@ import 'package:unicons/unicons.dart';
 import 'invite_truck_to_load.dart';
 
 class TruckDetailsScreen extends StatefulWidget {
-  const TruckDetailsScreen({Key? key}) : super(key: key);
+  const TruckDetailsScreen({
+    Key? key,
+    required this.truck
+  }) : super(key: key);
+
+  final VehicleModel truck;
 
   @override
   State<TruckDetailsScreen> createState() => _TruckDetailsScreenState();
@@ -38,13 +44,14 @@ class _TruckDetailsScreenState extends State<TruckDetailsScreen> {
             ),
           ),
           IconButton(
-            onPressed: () => provider.saveTruck("id"),
+            onPressed: () => provider.saveTruck(widget.truck.id!),
             icon: const Icon(
               Icons.favorite_outline_rounded,
             ),
           )
         ],
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Column(

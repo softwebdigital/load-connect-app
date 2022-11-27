@@ -1,3 +1,5 @@
+import 'package:load_connect/backend/models/entities/user_model.dart';
+
 /// id : "89547501-2015-42a3-a776-c76723507d11"
 /// user_id : "cebbc733-9310-4936-b18e-2c51a0e41860"
 /// name : "Staff Truck"
@@ -24,6 +26,7 @@ class VehicleModel {
       this.createdAt, 
       this.updatedAt, 
       this.status, 
+      this.user,
       this.truckDocuments,});
 
   VehicleModel.fromJson(dynamic json) {
@@ -44,6 +47,10 @@ class VehicleModel {
         truckDocuments?.add(TruckDocuments.fromJson(v));
       });
     }
+    if (json['user'] != null) {
+      user = UserModel.fromJson(json['user']);
+    }
+
   }
   String? id;
   String? userId;
@@ -56,6 +63,7 @@ class VehicleModel {
   String? createdAt;
   String? updatedAt;
   String? status;
+  UserModel? user;
   List<TruckDocuments>? truckDocuments;
 
   Map<String, dynamic> toJson() {
@@ -71,6 +79,10 @@ class VehicleModel {
     map['created_at'] = createdAt;
     map['updated_at'] = updatedAt;
     map['status'] = status;
+    if (user != null) {
+      map['user'] = user!.toJson();
+    }
+
     if (truckDocuments != null) {
       map['truck_documents'] = truckDocuments?.map((v) => v.toJson()).toList();
     }

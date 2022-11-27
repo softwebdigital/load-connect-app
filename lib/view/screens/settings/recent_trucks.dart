@@ -5,12 +5,17 @@ import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/components/truck_details_card.dart';
 import 'package:load_connect/view/screens/widgets/filter_trucks.dart';
 import 'package:load_connect/view/screens/widgets/sort_trucks.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user/recently_viewed_truck_provider.dart';
+import '../widgets/spacer_widget.dart';
 
 class RecentTrucksScreen extends StatelessWidget {
   const RecentTrucksScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final recentTruckProvider = Provider.of<RecentlyViewedTruckProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(
         title: const Text("Recent Trucks"),
@@ -36,17 +41,50 @@ class RecentTrucksScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.symmetric(
-          vertical: 20.0.h,
-          horizontal: 16.0.w,
-        ),
-        itemCount: 3,
-        itemBuilder: (_, index) {
-          return TruckDetailsCard(
-            truck: VehicleModel(),
-          );
+
+      body: (recentTruckProvider.isLoading) ? const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ) : (recentTruckProvider.isError) ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(recentTruckProvider.message),
+          const SizedBox(height: 10,),
+          TextButton(
+            child: const Text("Refresh"),
+            onPressed: () => recentTruckProvider.initialize(),
+          )
+        ],
+      ) :  (recentTruckProvider.trucks.isEmpty) ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Center(child: Text("No recently viewed vehicle")),
+          ColumnSpace(10),
+          Center(
+            child: InkWell(
+              onTap: () => recentTruckProvider.refresh(),
+              child: const Text("reload")
+            ),
+          )
+        ],
+      ) :  RefreshIndicator(
+        onRefresh: () async {
+          recentTruckProvider.refresh();
         },
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 16.0,
+          ),
+          itemCount: recentTruckProvider.trucks.length,
+          itemBuilder: (_, index) {
+            final truck = recentTruckProvider.trucks[index];
+            return TruckDetailsCard(
+              truck: truck,
+            );
+          },
+        ),
       ),
     );
   }
@@ -57,6 +95,8 @@ class RecentTrucksScreen extends StatelessWidget {
       context: context,
       builder: (_) => SortTruckBottomSheet(
         ctx: context,
+        onclick: (sT) {},
+        sortValue: SortTerm.Newest,
       ),
     );
   }

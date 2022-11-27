@@ -27,12 +27,19 @@ String unBlockUserEndpoint(String uid) => "${baseUrl}user/unblock/$uid";
 
 const createLoadEndpoint = "${baseUrl}loads";
 const getSenderLoadEndpoint = "${baseUrl}loads";
+String getLoadEndpoint(String loadId) => "${baseUrl}loads/$loadId";
+String negotiateOfferEndpoint(String loadId) => "${baseUrl}loads/negotiate-price/$loadId";
+String acceptOfferEndpoint(String loadId) => "${baseUrl}loads/offer-status/$loadId";
+String declineOfferEndpoint(String loadId) => "${baseUrl}loads/offer-status/$loadId";
 
 /// Utilities Endpoint
 const getVehicleTypesEndpoint = "${baseUrl}utils/vehicle_types";
+const vehicleCategoriesEndpoint = "${baseUrl}trucks/categories/list";
 String getClosestVehicleEndpoint(String lat, String lng) => "${baseUrl}utils/available_trucks?latitude=3.456757&longitude=44.67458";
 
 
 ///
-const getTruckEndpoint = "${baseUrl}trucks";
+const getTruckEndpoint = "${baseUrl}trucks/all";
+const getSavedTruckEndpoint = "${baseUrl}trucks/saved";
+const getRecentlyViewedTruckEndpoint = "${baseUrl}trucks/recent-viewed";
 String saveTruckEndpoint(String id) => "${baseUrl}trucks/save/$id";

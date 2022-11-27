@@ -32,6 +32,7 @@ class ApiTruckService implements ITruckService {
           data: null
       );
     } catch (error) {
+      // rethrow;
       return ServiceResponse(data: null, message: "Error $error", status: false);
     }
   }
@@ -48,6 +49,55 @@ class ApiTruckService implements ITruckService {
             status: res.status,
             message: res.message,
             data: res.message
+        );
+      }
+      return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: null
+      );
+    } catch (error) {
+      return ServiceResponse(data: null, message: "Error $error", status: false);
+    }
+  }
+
+  @override
+  Future<ServiceResponse<List<VehicleModel>>> getSavedVehicles() async {
+    try {
+      final res = await apiService.makeGetRequest(getSavedTruckEndpoint, {
+        ...requireTokenHeader
+      },);
+      print("Response: ${res.toJson()}");
+      if (res.status == true) {
+        return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: List.from(res.data['data']).map((e) => VehicleModel.fromJson(e['truck'])).toList()
+        );
+      }
+      return ServiceResponse(
+        status: res.status,
+        message: res.message,
+        data: null
+      );
+    } catch (error) {
+      rethrow;
+      return ServiceResponse(data: null, message: "Error $error", status: false);
+    }
+  }
+
+  @override
+  Future<ServiceResponse<List<VehicleModel>>> getRecentlyViewedVehicles() async {
+    try {
+      final res = await apiService.makeGetRequest(getRecentlyViewedTruckEndpoint, {
+        ...requireTokenHeader
+      },);
+      print("Response: ${res.toJson()}");
+      if (res.status == true) {
+        return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: List.from(res.data['data']).map((e) => VehicleModel.fromJson(e['truck'])).toList()
         );
       }
       return ServiceResponse(

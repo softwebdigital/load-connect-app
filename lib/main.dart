@@ -11,6 +11,8 @@ import 'package:load_connect/view/providers/blocked_user_provider.dart';
 import 'package:load_connect/view/providers/truck_provider.dart';
 import 'package:load_connect/view/providers/user/load_provider.dart';
 import 'package:load_connect/view/providers/user/notification_settings_provider.dart';
+import 'package:load_connect/view/providers/user/recently_viewed_truck_provider.dart';
+import 'package:load_connect/view/providers/user/saved_truck_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/providers/utilities/vehicle_type_provider.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +35,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => NotificationSettingsProvider()),
       ChangeNotifierProvider(create: (context) => BlockedUserProvider()),
       ChangeNotifierProvider(create: (context) => TruckProvider()),
+      ChangeNotifierProvider(create: (context) => SavedTruckProvider()),
+      ChangeNotifierProvider(create: (context) => RecentlyViewedTruckProvider()),
     ]
   ));
 }

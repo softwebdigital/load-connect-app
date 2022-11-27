@@ -53,4 +53,116 @@ class ApiLoadService implements ILoadService {
     }
   }
 
+  @override
+  Future<ServiceResponse<String>> acceptOffer(String loadId) async {
+    try {
+      final res = await apiService.makePutRequest(acceptOfferEndpoint(loadId), {
+        "offer_action": "accept"
+      }, {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: true,
+            message: res.message,
+            data: res.message
+        );
+      }
+      return ServiceResponse(
+        status: res.status,
+        message: res.message,
+        data: res.message
+      );
+    } catch (error) {
+      return ServiceResponse(
+          status: false,
+          data: null,
+          message: "Error occurred"
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<String>> declineOffer(String loadId) async {
+    try {
+      final res = await apiService.makePutRequest(declineOfferEndpoint(loadId), {
+        "offer_action": "reject"
+      }, {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: true,
+            message: res.message,
+            data: res.message
+        );
+      }
+      return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: res.message
+      );
+    } catch (error) {
+      return ServiceResponse(
+          status: false,
+          data: null,
+          message: "Error occurred"
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<String>> negotiateOffer(String loadId, num amount) async {
+    try {
+      final res = await apiService.makePutRequest(negotiateOfferEndpoint(loadId), {
+        "pricing_offer": amount
+      }, {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: true,
+            message: res.message,
+            data: res.message
+        );
+      }
+      return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: res.message
+      );
+    } catch (error) {
+      return ServiceResponse(
+          status: false,
+          data: null,
+          message: "Error occurred"
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<UserLoad>> getLoad(String loadId) async {
+    try {
+      final res = await apiService.makeGetRequest(getLoadEndpoint(loadId), {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      });
+      print("ApiRes: ${res.toJson()}");
+      return ServiceResponse(
+          status: true,
+          message: "Returned",
+          data: res.data == null ? null : UserLoad.fromJson(res.data['data'])
+      );
+    } catch (error) {
+      return ServiceResponse(
+          status: false,
+          data: null,
+          message: "Error occurred"
+      );
+    }
+  }
+
 }

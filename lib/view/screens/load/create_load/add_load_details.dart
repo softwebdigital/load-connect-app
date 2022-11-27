@@ -19,28 +19,28 @@ class AddLoadDetailsScreen extends StatelessWidget {
   // final TextEditingController _controller = TextEditingController();
 
 
-  List<VehicleTypeModel> truckCategories = [
-    VehicleTypeModel(
-      name: "Mini Truck",
-      icon: "assets/images/mini-truck.png", id: 1,
-      description: "For items smaller than a crate of drinks for example"
-    ),
-    VehicleTypeModel(
-      name: "Pickup Truck",
-      icon: "assets/images/delivery-truck.png", id: 2,
-      description: "For items smaller than a petrol generator for example"
-    ),
-    VehicleTypeModel(
-        name: "Normal Truck",
-        icon: "assets/images/truck.png", id: 3,
-        description: "For items smaller than a petrol generator for example"
-    ),
-    VehicleTypeModel(
-        name: "Large Truck",
-        icon: "assets/images/delivery-truck-2.png", id: 4,
-        description: "For items smaller than a petrol generator for example"
-    ),
-  ];
+  // List<VehicleTypeModel> truckCategories = [
+  //   VehicleTypeModel(
+  //     name: "Mini Truck",
+  //     icon: "assets/images/mini-truck.png", id: 1,
+  //     description: "For items smaller than a crate of drinks for example"
+  //   ),
+  //   VehicleTypeModel(
+  //     name: "Pickup Truck",
+  //     icon: "assets/images/delivery-truck.png", id: 2,
+  //     description: "For items smaller than a petrol generator for example"
+  //   ),
+  //   VehicleTypeModel(
+  //       name: "Normal Truck",
+  //       icon: "assets/images/truck.png", id: 3,
+  //       description: "For items smaller than a petrol generator for example"
+  //   ),
+  //   VehicleTypeModel(
+  //       name: "Large Truck",
+  //       icon: "assets/images/delivery-truck-2.png", id: 4,
+  //       description: "For items smaller than a petrol generator for example"
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -155,64 +155,64 @@ class AddLoadDetailsScreen extends StatelessWidget {
                           fontSize: 12.0, color: AppColor.lightgrey),
                     ),
                     // SizeMargin.size(height: 16.0),
-                    // ChangeNotifierProvider(
-                    //   create: (context) => VehicleTypeProvider(),
-                    //   builder: (context, child) {
-                    //     return Consumer<VehicleTypeProvider>(
-                    //       builder: (context, provider, child) {
-                    //         // provider.initialize();
-                    //         if (provider.isLoading) {
-                    //           return Text("Loading...");
-                    //         }
-                    //
-                    //         if (provider.isError) {
-                    //           return Text("${provider.message}");
-                    //         }
-                    //
-                    //         return Column(
-                    //           children: [
-                    //             ...truckCategories.map((truckCategory) => Padding(
-                    //               padding: const EdgeInsets.only(top: 16.0),
-                    //               child: CustomRadioButton<String>(
-                    //                 // leading: Image.asset(
-                    //                 //   truckCategory.icon!,
-                    //                 //   width: 30.0,
-                    //                 // ),
-                    //                 title: truckCategory.name!,
-                    //                 subtitle: "no description",
-                    //                 value: truckCategory.id!.toString(),
-                    //                 groupValue: createLoadProvider.vehicleTypeId,
-                    //                 onChanged: (val) {
-                    //                   createLoadProvider.setVehicleTypeId = val.toString();
-                    //                 },
-                    //               ),
-                    //             )).toList(),
-                    //           ],
-                    //         );
-                    //       },
-                    //     );
-                    //   },
-                    // ),
-                    Column(
-                      children: [
-                        ...truckCategories.map((truckCategory) => Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: CustomRadioButton<String>(
-                            leading: Image.asset(
-                              truckCategory.icon!,
-                              width: 30.0,
-                            ),
-                            title: truckCategory.name!,
-                            subtitle: truckCategory.description,
-                            value: truckCategory.name!.toString(),
-                            groupValue: createLoadProvider.vehicleTypeId,
-                            onChanged: (val) {
-                              createLoadProvider.setVehicleTypeId = val.toString();
-                            },
-                          ),
-                        )).toList(),
-                      ],
-                    )
+                    ChangeNotifierProvider(
+                      create: (context) => VehicleTypeProvider(),
+                      builder: (context, child) {
+                        return Consumer<VehicleTypeProvider>(
+                          builder: (context, provider, child) {
+                            // provider.initialize();
+                            if (provider.isLoading) {
+                              return Text("Loading...");
+                            }
+
+                            if (provider.isError) {
+                              return Text("${provider.message}");
+                            }
+
+                            return Column(
+                              children: [
+                                ...provider.vehicleTypes.map((truckCategory) => Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: CustomRadioButton<String>(
+                                    leading: Image.network(
+                                      truckCategory.avatar!,
+                                      width: 30.0,
+                                    ),
+                                    title: truckCategory.title!,
+                                    subtitle: truckCategory.description,
+                                    value: truckCategory.id!.toString(),
+                                    groupValue: createLoadProvider.vehicleTypeId,
+                                    onChanged: (val) {
+                                      createLoadProvider.setVehicleTypeId = val.toString();
+                                    },
+                                  ),
+                                )).toList(),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    // Column(
+                    //   children: [
+                    //     ...truckCategories.map((truckCategory) => Padding(
+                    //       padding: const EdgeInsets.only(top: 16.0),
+                    //       child: CustomRadioButton<String>(
+                    //         leading: Image.asset(
+                    //           truckCategory.icon!,
+                    //           width: 30.0,
+                    //         ),
+                    //         title: truckCategory.name!,
+                    //         subtitle: truckCategory.description,
+                    //         value: truckCategory.name!.toString(),
+                    //         groupValue: createLoadProvider.vehicleTypeId,
+                    //         onChanged: (val) {
+                    //           createLoadProvider.setVehicleTypeId = val.toString();
+                    //         },
+                    //       ),
+                    //     )).toList(),
+                    //   ],
+                    // )
                   ]),
             ),
             SizeMargin.size(height: 20.0),

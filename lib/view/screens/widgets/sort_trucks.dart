@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:load_connect/shared/colors.dart';
+import 'package:load_connect/view/providers/truck_provider.dart';
 import 'package:load_connect/view/utils/helper.dart';
 
 import 'custom_check_icon.dart';
 
 class SortTruckBottomSheet<T> extends HookWidget {
-  const SortTruckBottomSheet(
-      {Key? key, required this.ctx, this.sortValue = 'newest'})
-      : super(key: key);
-  final BuildContext ctx;
+  const SortTruckBottomSheet({
+    Key? key, required this.ctx,
+    this.sortValue = SortTerm.Newest,
+    required this.onclick
+  }) : super(key: key);
 
-  final String sortValue;
+  final BuildContext ctx;
+  final Function onclick;
+
+  final SortTerm sortValue;
   @override
   Widget build(BuildContext context) {
-    final sortTypeValue = useState(sortValue);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         vertical: 20.0,
@@ -46,23 +51,22 @@ class SortTruckBottomSheet<T> extends HookWidget {
             ListTile(
               contentPadding: const EdgeInsets.only(right: 16.0),
               onTap: () {
-                Navigator.pop(context, sortType['value']);
+                onclick(sortType['value'] as SortTerm);
+                Navigator.pop(context);
               },
               title: Text(
                 sortType['title']!,
                 style: TextStyle(
-                  color: sortType['value'] == sortTypeValue.value
+                  color: sortType['value'] == sortValue
                       ? AppColor.darkGreen
                       : AppColor.blackgrey,
-                  fontWeight: sortType['value'] == sortTypeValue.value
+                  fontWeight: sortType['value'] == sortValue
                       ? FontWeight.w700
                       : FontWeight.w400,
                 ),
               ),
-              trailing: sortType['value'] == sortTypeValue.value
-                  ? const CustomCheckIcon(
-                      // color: Colors.red,
-                      )
+              trailing: sortType['value'] == sortValue
+                  ? const CustomCheckIcon()
                   : null,
             )
         ],
@@ -70,22 +74,24 @@ class SortTruckBottomSheet<T> extends HookWidget {
     );
   }
 
-  final List<Map<String, String>> _sortTypes = const [
+  final List<Map<String, dynamic>> _sortTypes = const [
     {
       'title': "Newest First",
-      'value': 'newest',
+      'value': SortTerm.Newest,
     },
     {
       'title': "Date Delivered",
-      'value': 'delivered',
+      'value': SortTerm.DateDelivered,
     },
     {
       'title': "Load name A-Z",
-      'value': 'load-name',
+      'value': SortTerm.LoadAtoZ,
     },
     {
       'title': "Driver name A-Z",
-      'value': 'driver-name',
+      'value': SortTerm.DriverAtoZ,
     }
   ];
 }
+
+enum SortTerm {Newest, DateDelivered, LoadAtoZ, DriverAtoZ}
