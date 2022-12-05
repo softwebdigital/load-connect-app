@@ -82,7 +82,7 @@ class RegisterProvider extends BaseProvider {
           phone: _phoneNumber,
           lastName: _lastName,
           firstName: _firstName,
-          // userType: usertype
+          accountType: "user"
         ));
         ToastAlert.closeAlert();
         if (res.status == true) {

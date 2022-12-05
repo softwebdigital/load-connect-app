@@ -18,6 +18,7 @@ import 'package:load_connect/view/providers/utilities/vehicle_type_provider.dart
 import 'package:provider/provider.dart';
 
 import 'config/route_pages.dart';
+import 'view/providers/notification_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => TruckProvider()),
       ChangeNotifierProvider(create: (context) => SavedTruckProvider()),
       ChangeNotifierProvider(create: (context) => RecentlyViewedTruckProvider()),
+      ChangeNotifierProvider(create: (context) => NotificationProvider()),
     ]
   ));
 }

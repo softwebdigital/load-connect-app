@@ -303,7 +303,7 @@ class AddLoadDetailsScreen extends StatelessWidget {
 
   final List<Map<String, String>> _truckCapacities = const [
     {
-      'title': 'Heavy',
+      'title': 'Full',
       'subtitle': 'For items smaller than a crate of drinks for example',
       'value': 'heavy'
     },

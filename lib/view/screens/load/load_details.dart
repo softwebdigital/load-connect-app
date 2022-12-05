@@ -643,28 +643,30 @@ class _LoadStatusCard extends StatelessWidget {
             SizeMargin.size(height: 24.0),
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Text(
-                      process.type,
-                      style: const TextStyle(
-                        color: AppColor.lightgrey,
-                      ),
-                    ),
-                    SizeMargin.size(height: 4.0),
-                    DefaultTextStyle(
-                      style: const TextStyle(),
-                      child: Text(
-                        process.content,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        process.type,
                         style: const TextStyle(
-                          color: AppColor.black300,
-                          fontSize: 16.0,
+                          color: AppColor.lightgrey,
                         ),
                       ),
-                    ),
-                  ],
+                      SizeMargin.size(height: 4.0),
+                      DefaultTextStyle(
+                        style: const TextStyle(),
+                        child: Text(
+                          process.content,
+                          style: const TextStyle(
+                            color: AppColor.black300,
+                            fontSize: 16.0,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 if (process.extraContent != null)
                   ...[

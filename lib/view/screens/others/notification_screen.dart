@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect/shared/colors.dart';
 import 'package:load_connect/view/components/custom_appbar.dart';
+import 'package:load_connect/view/providers/notification_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/screens/settings/notification_setting_screen.dart';
 import 'package:load_connect/view/utils/helper.dart';
@@ -13,7 +14,7 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<UserProfileProvider>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: const Text("Notification"), actions: [
         IconButton(
@@ -34,13 +35,13 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
       ]),
-      body: profileProvider.isLoading ? Center(
+      body: notificationProvider.isLoading ? const Center(
         child: CircularProgressIndicator.adaptive()
-      ) : profileProvider.isLoaded ? ListView.builder(
-          itemCount: [].length,
+      ) : notificationProvider.isLoaded ? ListView.builder(
+          itemCount: notificationProvider.notifications.length,
           padding: EdgeInsets.symmetric(vertical: 20.0.h, horizontal: 16.0.w),
           itemBuilder: (_, index) {
-            final notification = [][index];
+            final notification = notificationProvider.notifications[index];
             return Container(
               margin: const EdgeInsets.only(bottom: 16.0),
               padding: const EdgeInsets.symmetric(
@@ -90,7 +91,7 @@ class NotificationScreen extends StatelessWidget {
                         ),
                         SizeMargin.size(height: 4.0),
                         Text(
-                          "5/01/2022",
+                          "${notification.createdAt}",
                           style: TextStyle(
                             color: AppColor.black300.withOpacity(0.5),
                             fontSize: 10.0,

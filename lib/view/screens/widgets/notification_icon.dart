@@ -25,7 +25,7 @@ class NotificationIconWidget extends StatelessWidget {
               size: 26.0.h,
             ),
           ),
-          profileProvider.isLoaded ? Positioned(
+          profileProvider.isLoaded ? const Positioned(
             top: 16.0,
             left: 16.0,
             child: CircleAvatar(

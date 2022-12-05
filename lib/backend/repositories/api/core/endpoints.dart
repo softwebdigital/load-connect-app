@@ -43,3 +43,6 @@ const getTruckEndpoint = "${baseUrl}trucks/all";
 const getSavedTruckEndpoint = "${baseUrl}trucks/saved";
 const getRecentlyViewedTruckEndpoint = "${baseUrl}trucks/recent-viewed";
 String saveTruckEndpoint(String id) => "${baseUrl}trucks/save/$id";
+
+/// Notification Endpoint
+const getAllNotificationsEndpoint = "${baseUrl}notifications";

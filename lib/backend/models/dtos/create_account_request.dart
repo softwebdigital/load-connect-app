@@ -12,7 +12,7 @@ class CreateAccountRequest {
       this.email, 
       this.phone,
       this.password, 
-      // this.userType,
+      this.accountType,
   });
 
   CreateAccountRequest.fromJson(dynamic json) {
@@ -21,14 +21,14 @@ class CreateAccountRequest {
     email = json['email'];
     phone = json['phone'];
     password = json['password'];
-    // userType = json['user_type'];
+    accountType = json['user_type'];
   }
   String? firstName;
   String? lastName;
   String? email;
   String? phone;
   String? password;
-  // String? userType;
+  String? accountType;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -37,7 +37,7 @@ class CreateAccountRequest {
     map['email'] = email;
     map['phone'] = phone;
     map['password'] = password;
-    // map['user_type'] = userType;
+    map['account_type'] = accountType;
     return map;
   }
 
