@@ -31,6 +31,7 @@ class NotificationProvider extends BaseProvider {
       ToastAlert.closeAlert();
       if (res.status == true) {
         ToastAlert.showAlert(res.message);
+        initialize();
       } else {
         ToastAlert.showErrorAlert(res.message);
       }
@@ -41,11 +42,12 @@ class NotificationProvider extends BaseProvider {
 
   void markNotificationAsRead(String id) async {
     try {
-      ToastAlert.showLoadingAlert("");
+      // ToastAlert.showLoadingAlert("");
       final res = await Get.find<INotificationService>().markNotificationAsRead(id);
-      ToastAlert.closeAlert();
+      // ToastAlert.closeAlert();
       if (res.status == true) {
-        ToastAlert.showAlert(res.message);
+        // ToastAlert.showAlert(res.message);
+        initialize();
       } else {
         ToastAlert.showErrorAlert(res.message);
       }
