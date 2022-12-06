@@ -13,9 +13,27 @@ class ApiNotificationService implements INotificationService {
   final apiService = ApiService();
 
   @override
-  Future<ServiceResponse<NotificationModel>> getNotification(String noteId) {
-    // TODO: implement getNotification
-    throw UnimplementedError();
+  Future<ServiceResponse<NotificationModel>> getNotification(String noteId) async {
+    try {
+      final res = await apiService.makeGetRequest(getNotificationEndpoint(noteId), {
+        ...requireTokenHeader
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: res.status,
+            message: res.message,
+            data: NotificationModel.fromJson(res.data['data'])
+        );
+      }
+
+      return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: null
+      );
+    } catch (error) {
+      return ServiceResponse(status: false, message: "Error: $error");
+    }
   }
 
   @override
@@ -43,15 +61,51 @@ class ApiNotificationService implements INotificationService {
   }
 
   @override
-  Future<ServiceResponse<String>> markAllNotificationAsRead() {
-    // TODO: implement markAllNotificationAsRead
-    throw UnimplementedError();
+  Future<ServiceResponse<String>> markAllNotificationAsRead() async {
+    try {
+      final res = await apiService.makePutRequest(markAllNotificationAsReadEndpoint, {}, {
+        ...requireTokenHeader
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: res.status,
+            message: res.message,
+            data: res.message
+        );
+      }
+
+      return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: null
+      );
+    } catch (error) {
+      return ServiceResponse(status: false, message: "Error: $error");
+    }
   }
 
   @override
-  Future<ServiceResponse<String>> markNotificationAsRead(String noteId) {
-    // TODO: implement markNotificationAsRead
-    throw UnimplementedError();
+  Future<ServiceResponse<String>> markNotificationAsRead(String noteId) async {
+    try {
+      final res = await apiService.makePutRequest(markNotificationAsReadEndpoint(noteId), {}, {
+        ...requireTokenHeader
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: res.status,
+            message: res.message,
+            data: res.message
+        );
+      }
+
+      return ServiceResponse(
+          status: res.status,
+          message: res.message,
+          data: null
+      );
+    } catch (error) {
+      return ServiceResponse(status: false, message: "Error: $error");
+    }
   }
 
 }

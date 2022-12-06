@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:load_connect_driver/view/utils/app_dialog.dart';
+import 'package:provider/provider.dart';
 
 import '../../../shared/colors.dart';
 import '../../components/custom_appbar.dart';
+import '../../providers/user/notification_provider.dart';
 import '../../utils/helper.dart';
 import '../settings/notification_setting_screen.dart';
+import '../widgets/spacer_widget.dart';
+
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final notificationProvider = Provider.of<NotificationProvider>(context);
     return Scaffold(
       appBar: CustomAppBar(title: const Text("Notification"), actions: [
         IconButton(
           onPressed: () async {
-            // final result = await _sortLoads(context);
-            // print(result);
+            notificationProvider.markAllNotificationAsRead();
           },
           icon: const Icon(
             Icons.mark_email_read_outlined,
@@ -33,23 +37,35 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
       ]),
-      body: ListView.builder(
-          itemCount: 3,
+      body: notificationProvider.isLoading ? const Center(
+          child: CircularProgressIndicator.adaptive()
+      ) : notificationProvider.isError ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(notificationProvider.message, textAlign: TextAlign.center,),
+          ColumnSpace(10),
+          TextButton(onPressed: () {
+            notificationProvider.initialize();
+          }, child: const Text('refresh'))
+        ],
+      ) : notificationProvider.isLoaded ? notificationProvider.notifications.isEmpty ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text("You do not have any notification yet", textAlign: TextAlign.center,),
+          ColumnSpace(10),
+          TextButton(onPressed: () {
+            notificationProvider.initialize();
+          }, child: const Text('refresh'))
+        ],
+      ) : ListView.builder(
+          itemCount: notificationProvider.notifications.length,
           padding: EdgeInsets.symmetric(vertical: 20.0.h, horizontal: 16.0.w),
           itemBuilder: (_, index) {
+            final notification = notificationProvider.notifications[index];
             return InkWell(
-              onTap: () {
-                AppDialog.mainDialog(
-                  title: "Notification Title",
-                  content:
-                      "Nunc ac tellus id nibh netus eros. Vivamus augue id vitae justo, dictum congue. Luctus amet dignissim lacinia lectus sed enim quis diam consectetur. Sapien et a, integer sit. Urna, mi interdum pretium sodales morbi quis. Habitant nulla libero bibendum neque. Mattis nunc iaculis quis quam blandit. Etiam ac mauris quam vitae amet, maecenas commodo. Vel, lorem tincidunt arcu, cursus sagittis. Lacus, habitant ornare viverra quis ultrices ipsum. Scelerisque sem suspendisse ipsum a elementum in.Montes, urna, dui elit non rhoncus, fusce viverra sit semper. Id turpis faucibus volutpat convallis in mauris at pharetra, praesent. Et gravida tellus felis faucibus ornare amet augue accumsan.",
-                  buttonText: "OK",
-                  cancelText: "Dismiss",
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                );
-              },
+              onTap: () => notificationProvider.markNotificationAsRead(notification.id!),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
                 padding: const EdgeInsets.symmetric(
@@ -82,24 +98,24 @@ class NotificationScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Notification Title",
-                            style: TextStyle(
+                          Text(
+                            notification.data!.title!,
+                            style: const TextStyle(
                               color: AppColor.deepGreen,
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
                             ),
                           ),
                           SizeMargin.size(height: 6.0),
-                          const Text(
-                            "Placerat odio nisl sit pharetra felis donec feugiat. Facilisis vel id suspendisse lorem sed proin vitae. Et in amet a nibh. Lorem amet.",
-                            style: TextStyle(
+                          Text(
+                            "${notification.data!.content}",
+                            style: const TextStyle(
                               color: AppColor.blackgrey,
                             ),
                           ),
                           SizeMargin.size(height: 4.0),
                           Text(
-                            "5/01/2022",
+                            "${notification.createdAt}",
                             style: TextStyle(
                               color: AppColor.black300.withOpacity(0.5),
                               fontSize: 10.0,
@@ -112,7 +128,8 @@ class NotificationScreen extends StatelessWidget {
                 ),
               ),
             );
-          }),
+          }
+      ) : Container(),
     );
   }
 }

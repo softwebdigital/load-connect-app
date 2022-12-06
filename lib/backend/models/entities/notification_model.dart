@@ -1,22 +1,22 @@
-/// id : "40af1b8f-72c4-4af8-9004-0b97dffea496"
-/// type : "App\\Notifications\\GeneralNotification"
+/// id : "a00c263d-7519-407f-9871-107f680f8291"
+/// type : "App\\Notifications\\OfferReceived"
 /// notifiable_type : "App\\Models\\User"
-/// notifiable_id : 4
-/// data : {"body":"Welcome to Load.The rest of welcome messages continue.","icon":"register","title":"Account Registration","is_admin":false}
+/// notifiable_id : "55e312f7-1a97-42c1-afb4-6415d6d64358"
+/// data : {"title":"You have received an offer from Miracle Gabriel","content":"You have been given an offer for your load....check"}
 /// read_at : null
-/// created_at : "2022-06-23T14:54:40.000000Z"
-/// updated_at : "2022-06-23T14:54:40.000000Z"
+/// created_at : "2022-12-01T14:00:41.000000Z"
+/// updated_at : "2022-12-01T14:00:41.000000Z"
 
 class NotificationModel {
   NotificationModel({
-      this.id, 
-      this.type, 
-      this.notifiableType, 
-      this.notifiableId, 
-      this.data, 
-      this.readAt, 
-      this.createdAt, 
-      this.updatedAt,});
+    this.id,
+    this.type,
+    this.notifiableType,
+    this.notifiableId,
+    this.data,
+    this.readAt,
+    this.createdAt,
+    this.updatedAt,});
 
   NotificationModel.fromJson(dynamic json) {
     id = json['id'];
@@ -31,7 +31,7 @@ class NotificationModel {
   String? id;
   String? type;
   String? notifiableType;
-  int? notifiableId;
+  String? notifiableId;
   Data? data;
   dynamic readAt;
   String? createdAt;
@@ -54,35 +54,25 @@ class NotificationModel {
 
 }
 
-/// body : "Welcome to Load.The rest of welcome messages continue."
-/// icon : "register"
-/// title : "Account Registration"
-/// is_admin : false
+/// title : "You have received an offer from Miracle Gabriel"
+/// content : "You have been given an offer for your load....check"
 
 class Data {
   Data({
-      this.body, 
-      this.icon, 
-      this.title, 
-      this.isAdmin,});
+    this.title,
+    this.content,});
 
   Data.fromJson(dynamic json) {
-    body = json['body'];
-    icon = json['icon'];
     title = json['title'];
-    isAdmin = json['is_admin'];
+    content = json['content'];
   }
-  String? body;
-  String? icon;
   String? title;
-  bool? isAdmin;
+  String? content;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['body'] = body;
-    map['icon'] = icon;
     map['title'] = title;
-    map['is_admin'] = isAdmin;
+    map['content'] = content;
     return map;
   }
 
