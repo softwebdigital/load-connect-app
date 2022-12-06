@@ -6,6 +6,7 @@ import 'package:load_connect/view/components/custom_appbar.dart';
 import 'package:load_connect/view/providers/notification_provider.dart';
 import 'package:load_connect/view/providers/user/user_profile_provider.dart';
 import 'package:load_connect/view/screens/settings/notification_setting_screen.dart';
+import 'package:load_connect/view/screens/widgets/spacer_widget.dart';
 import 'package:load_connect/view/utils/helper.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,27 @@ class NotificationScreen extends StatelessWidget {
       ]),
       body: notificationProvider.isLoading ? const Center(
         child: CircularProgressIndicator.adaptive()
-      ) : notificationProvider.isLoaded ? ListView.builder(
+      ) : notificationProvider.isError ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(notificationProvider.message, textAlign: TextAlign.center,),
+          ColumnSpace(10),
+          TextButton(onPressed: () {
+            notificationProvider.initialize();
+          }, child: const Text('refresh'))
+        ],
+      ) : notificationProvider.isLoaded ? notificationProvider.notifications.isEmpty ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text("You do not have any notification yet", textAlign: TextAlign.center,),
+            ColumnSpace(10),
+            TextButton(onPressed: () {
+              notificationProvider.initialize();
+            }, child: const Text('refresh'))
+          ],
+      ) : ListView.builder(
           itemCount: notificationProvider.notifications.length,
           padding: EdgeInsets.symmetric(vertical: 20.0.h, horizontal: 16.0.w),
           itemBuilder: (_, index) {
@@ -84,7 +105,7 @@ class NotificationScreen extends StatelessWidget {
                         ),
                         SizeMargin.size(height: 6.0),
                         Text(
-                          "${notification.data!.body}",
+                          "${notification.data!.content}",
                           style: const TextStyle(
                             color: AppColor.blackgrey,
                           ),

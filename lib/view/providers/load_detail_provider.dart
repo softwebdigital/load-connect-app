@@ -77,5 +77,10 @@ class LoadDetailProvider extends BaseProvider {
     }
   }
 
+  void refresh() {
+    backToLoading();
+    initialize();
+  }
+
   LoadDetailProvider(this.load);
 }
