@@ -20,8 +20,7 @@ class NotificationScreen extends StatelessWidget {
       appBar: CustomAppBar(title: const Text("Notification"), actions: [
         IconButton(
           onPressed: () async {
-            // final result = await _sortLoads(context);
-            // print(result);
+            notificationProvider.markAllNotificationAsRead();
           },
           icon: const Icon(
             Icons.mark_email_read_outlined,
@@ -63,65 +62,68 @@ class NotificationScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20.0.h, horizontal: 16.0.w),
           itemBuilder: (_, index) {
             final notification = notificationProvider.notifications[index];
-            return Container(
-              margin: const EdgeInsets.only(bottom: 16.0),
-              padding: const EdgeInsets.symmetric(
-                vertical: 12.0,
-                horizontal: 10.0,
-              ),
-              decoration: ShapeDecoration(
-                color: AppColor.white200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    10.0,
+            return InkWell(
+              onTap: () => notificationProvider.markNotificationAsRead(notification.id!),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 10.0,
+                ),
+                decoration: ShapeDecoration(
+                  color: AppColor.white200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10.0,
+                    ),
                   ),
                 ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CircleAvatar(
-                    radius: 10.0,
-                    backgroundColor: AppColor.deepGreen,
-                    child: Icon(
-                      Icons.check,
-                      color: AppColor.white100,
-                      size: 14.0,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CircleAvatar(
+                      radius: 10.0,
+                      backgroundColor: AppColor.deepGreen,
+                      child: Icon(
+                        Icons.check,
+                        color: AppColor.white100,
+                        size: 14.0,
+                      ),
                     ),
-                  ),
-                  SizeMargin.size(width: 6.0),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          notification.data!.title!,
-                          style: const TextStyle(
-                            color: AppColor.deepGreen,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
+                    SizeMargin.size(width: 6.0),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            notification.data!.title!,
+                            style: const TextStyle(
+                              color: AppColor.deepGreen,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                            ),
                           ),
-                        ),
-                        SizeMargin.size(height: 6.0),
-                        Text(
-                          "${notification.data!.content}",
-                          style: const TextStyle(
-                            color: AppColor.blackgrey,
+                          SizeMargin.size(height: 6.0),
+                          Text(
+                            "${notification.data!.content}",
+                            style: const TextStyle(
+                              color: AppColor.blackgrey,
+                            ),
                           ),
-                        ),
-                        SizeMargin.size(height: 4.0),
-                        Text(
-                          "${notification.createdAt}",
-                          style: TextStyle(
-                            color: AppColor.black300.withOpacity(0.5),
-                            fontSize: 10.0,
+                          SizeMargin.size(height: 4.0),
+                          Text(
+                            "${notification.createdAt}",
+                            style: TextStyle(
+                              color: AppColor.black300.withOpacity(0.5),
+                              fontSize: 10.0,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }

@@ -46,3 +46,6 @@ String saveTruckEndpoint(String id) => "${baseUrl}trucks/save/$id";
 
 /// Notification Endpoint
 const getAllNotificationsEndpoint = "${baseUrl}notifications";
+String getNotificationEndpoint(String id) => "${baseUrl}notifications/$id";
+String markNotificationAsReadEndpoint(String id) => "${baseUrl}notifications/$id/mark-as-read";
+const markAllNotificationAsReadEndpoint = "${baseUrl}notifications/mark-as-read";

@@ -1,7 +1,9 @@
 
 import 'package:get/get.dart';
 import 'package:load_connect/backend/models/entities/notification_model.dart';
+import 'package:load_connect/backend/repositories/api/service_implementation/api_notification_service.dart';
 import 'package:load_connect/backend/services/i_notification_service.dart';
+import 'package:load_connect/view/interaction/toast_alert.dart';
 import 'package:load_connect/view/providers/base_provider.dart';
 
 class NotificationProvider extends BaseProvider {
@@ -19,6 +21,36 @@ class NotificationProvider extends BaseProvider {
       }
     } catch (error) {
       backToError("Error: $error");
+    }
+  }
+
+  void markAllNotificationAsRead() async {
+    try {
+      ToastAlert.showLoadingAlert("");
+      final res = await Get.find<INotificationService>().markAllNotificationAsRead();
+      ToastAlert.closeAlert();
+      if (res.status == true) {
+        ToastAlert.showAlert(res.message);
+      } else {
+        ToastAlert.showErrorAlert(res.message);
+      }
+    } catch (error) {
+      ToastAlert.showErrorAlert("Error: $error");
+    }
+  }
+
+  void markNotificationAsRead(String id) async {
+    try {
+      ToastAlert.showLoadingAlert("");
+      final res = await Get.find<INotificationService>().markNotificationAsRead(id);
+      ToastAlert.closeAlert();
+      if (res.status == true) {
+        ToastAlert.showAlert(res.message);
+      } else {
+        ToastAlert.showErrorAlert(res.message);
+      }
+    } catch (error) {
+      ToastAlert.showErrorAlert("Error: $error");
     }
   }
 
