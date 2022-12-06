@@ -1,15 +1,31 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:load_connect_driver/backend/models/entities/order_model.dart';
+import 'package:load_connect_driver/backend/models/entities/user_load.dart';
+import 'package:load_connect_driver/shared/colors.dart';
+import 'package:load_connect_driver/shared/constants.dart';
+import 'package:load_connect_driver/view/components/custom_appbar.dart';
+import 'package:load_connect_driver/view/providers/load_detail_provider.dart';
+import 'package:load_connect_driver/view/utils/helper.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:unicons/unicons.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 import '../../../shared/colors.dart';
+import '../../../shared/constants.dart';
+import '../../../shared/routes.dart';
 import '../../components/custom_appbar.dart';
+import '../../providers/load_detail_provider.dart';
+import '../../utils/app_dialog.dart';
 import '../../utils/custom_icons.dart';
 import '../../utils/helper.dart';
 
 class LoadDetailsScreen extends StatefulWidget {
-  const LoadDetailsScreen({Key? key}) : super(key: key);
+  const LoadDetailsScreen({Key? key, required this.load}) : super(key: key);
+
+  final UserLoad load;
 
   @override
   State<LoadDetailsScreen> createState() => _LoadDetailsScreenState();
@@ -20,323 +36,348 @@ class _LoadDetailsScreenState extends State<LoadDetailsScreen> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: const Text(
-          "Load Details",
-          style: TextStyle(fontSize: 18.0),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.share,
+
+    return ChangeNotifierProvider(
+      create: (context) => LoadDetailProvider(widget.load),
+      builder: (context, child) {
+        final provider = Provider.of<LoadDetailProvider>(context);
+        final load = provider.load;
+
+        final createdAt = DateTime.parse(load.createdAt!);
+        final pickupDate = DateTime.parse(load.pickupDate!);
+        final pickupDeadline = DateTime.parse(load.pickupDeadlineDate!);
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: const Text(
+              "Load Details",
+              style: TextStyle(fontSize: 18.0),
             ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              UniconsLine.heart,
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(
-                        CustomIcons.tracking,
-                        color: AppColor.lightgrey,
-                        size: 16.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          "Load Status",
-                          style: TextStyle(
-                            color: AppColor.lightgrey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _DeliveryProcesses(processes: processes),
-                ],
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.share,
+                ),
               ),
-            ),
-            // SizeMargin.size(height: 12.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  UniconsLine.edit_alt,
+                ),
+              )
+            ],
+          ),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              provider.refresh();
+            },
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: const [
-                      Icon(
-                        CustomIcons.box_1,
-                        color: AppColor.lightgrey,
-                        size: 16.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          "Load Details",
-                          style: TextStyle(
-                            color: AppColor.lightgrey,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizeMargin.size(height: 4.0),
-                  _itemTile(
-                    "Load Type",
-                    "Full Truck Load",
-                  ),
-                  _itemTile(
-                    "Load Weight",
-                    "523.2 Kilograms",
-                    "25 Pounds",
-                  ),
-                  _itemTile(
-                    "Load Description",
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet eros, morbi nisl, viverra eget amet, enim pellentesque feugiat.",
-                  ),
-                  _itemTile(
-                    "Truck Category",
-                    "Mini Truck",
-                  ),
-                  SizeMargin.size(height: 24.0),
-
-                  /// [carousel should be here]
-
-                  const Text(
-                    "Load Images",
-                    style: TextStyle(
-                      color: AppColor.lightgrey,
-                    ),
-                  ),
-
-                  SizeMargin.size(height: 4.0),
-                  CarouselSlider(
-                    items: imageSliders,
-                    options: CarouselOptions(
-                      viewportFraction: 1.0,
-                      // enlargeCenterPage: true,
-                      height: 200,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                    ),
-                    carouselController: _controller,
-                  ),
-
-                  SizeMargin.size(height: 12.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _controller.previousPage();
-                        },
-                        child: const CircleAvatar(
-                          radius: 18.0,
-                          backgroundColor: AppColor.darkGreen,
-                          child: Icon(
-                            Icons.chevron_left,
-                            color: AppColor.white100,
-                            size: 30.0,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imgList.asMap().entries.map((entry) {
-                          return GestureDetector(
-                            onTap: () => _controller.animateToPage(entry.key),
-                            child: Container(
-                              width: 10.0,
-                              height: 10.0,
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: (Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : AppColor.darkGreen)
-                                    .withOpacity(
-                                  _current == entry.key ? 0.9 : 0.2,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(
+                              CustomIcons.tracking,
+                              color: AppColor.lightgrey,
+                              size: 16.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 4.0),
+                              child: Text(
+                                "Load Status",
+                                style: TextStyle(
+                                  color: AppColor.lightgrey,
                                 ),
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _controller.nextPage();
-                        },
-                        child: const CircleAvatar(
-                          radius: 18.0,
-                          backgroundColor: AppColor.darkGreen,
-                          child: Icon(
-                            Icons.chevron_right,
-                            color: AppColor.white100,
-                            size: 30.0,
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
+                        _DeliveryProcesses(
+                            processes: getProcess(context, load)
+                        ),
+                      ],
+                    ),
                   ),
+                  // SizeMargin.size(height: 12.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(
+                              CustomIcons.box_1,
+                              color: AppColor.lightgrey,
+                              size: 16.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 4.0),
+                              child: Text(
+                                "Load Details",
+                                style: TextStyle(
+                                  color: AppColor.lightgrey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizeMargin.size(height: 4.0),
+                        _itemTile(
+                          "Load Type",
+                          "Full Truck Load",
+                        ),
+                        _itemTile(
+                          "Load Weight",
+                          "${load.loadWeight} Kilograms",
+                          "25 Pounds",
+                        ),
+                        _itemTile(
+                          "Load Description",
+                          "${load.description}",
+                        ),
+                        _itemTile(
+                          "Truck Category",
+                          "${load.truckCategory}",
+                        ),
+                        /// [carousel should be here]
 
-                  /// [carousel should be here]
-                ],
-              ),
-            ),
-            SizeMargin.size(height: 16.0),
-            Container(
-              color: AppColor.white200,
-              padding: const EdgeInsets.symmetric(
-                vertical: 20.0,
-                horizontal: 16.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.person,
-                        color: AppColor.lightgrey,
-                        size: 20.0,
-                      ),
-                      SizeMargin.size(width: 4.0),
-                      const Text(
-                        "Receiver's Details",
-                        style: TextStyle(color: AppColor.lightgrey),
-                      ),
-                    ],
+
+                        if ((load.loadimages ?? []).isNotEmpty)
+                          ...[
+                            SizeMargin.size(height: 24.0),
+                            const Text(
+                              "Load Images",
+                              style: TextStyle(
+                                color: AppColor.lightgrey,
+                              ),
+                            ),
+
+                            SizeMargin.size(height: 4.0),
+                            CarouselSlider(
+                              items: imageSliders(load.loadimages ?? []),
+                              options: CarouselOptions(
+                                viewportFraction: 1.0,
+                                // enlargeCenterPage: true,
+                                height: 200,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _current = index;
+                                  });
+                                },
+                              ),
+                              carouselController: _controller,
+                            ),
+                            SizeMargin.size(height: 12.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _controller.previousPage();
+                                  },
+                                  child: const CircleAvatar(
+                                    radius: 18.0,
+                                    backgroundColor: AppColor.darkGreen,
+                                    child: Icon(
+                                      Icons.chevron_left,
+                                      color: AppColor.white100,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: (load.loadimages ?? []).map((entry) {
+                                    return GestureDetector(
+                                      onTap: () => _controller.animateToPage((load.loadimages ?? []).indexOf(entry)),
+                                      child: Container(
+                                        width: 10.0,
+                                        height: 10.0,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: (Theme.of(context).brightness ==
+                                              Brightness.dark
+                                              ? Colors.white
+                                              : AppColor.darkGreen)
+                                              .withOpacity(
+                                            _current == (load.loadimages ?? []).indexOf(entry) ? 0.9 : 0.2,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _controller.nextPage();
+                                  },
+                                  child: const CircleAvatar(
+                                    radius: 18.0,
+                                    backgroundColor: AppColor.darkGreen,
+                                    child: Icon(
+                                      Icons.chevron_right,
+                                      color: AppColor.white100,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+
+                        /// [carousel should be here]
+                      ],
+                    ),
                   ),
                   SizeMargin.size(height: 16.0),
-                  const Text(
-                    "Receiver's name",
-                    style: TextStyle(
-                        color: AppColor.lightgrey,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizeMargin.size(height: 4.0),
-                  const Text(
-                    "Jessica Jones",
-                    style: TextStyle(
-                        color: AppColor.blackgrey,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500),
+                  Container(
+                    color: AppColor.white200,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 16.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.person,
+                              color: AppColor.lightgrey,
+                              size: 20.0,
+                            ),
+                            SizeMargin.size(width: 4.0),
+                            const Text(
+                              "Receiver's Details",
+                              style: TextStyle(color: AppColor.lightgrey),
+                            ),
+                          ],
+                        ),
+                        SizeMargin.size(height: 16.0),
+                        const Text(
+                          "Receiver's name",
+                          style: TextStyle(
+                              color: AppColor.darkGreen,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizeMargin.size(height: 4.0),
+                        Text(
+                          "${load.receiverName}",
+                          style: TextStyle(
+                              color: AppColor.blackgrey,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizeMargin.size(height: 16.0),
+                        const Text(
+                          "Reciever's phone number",
+                          style: TextStyle(
+                              color: AppColor.darkGreen,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizeMargin.size(height: 4.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${load.receiverPhone}",
+                              style: const TextStyle(
+                                  color: AppColor.blackgrey,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizeMargin.size(width: 4.0),
+                            InkWell(
+                              child: Container(
+                                padding: const EdgeInsets.all(6.0),
+                                decoration: BoxDecoration(
+                                  color: AppColor.white300,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: const Icon(
+                                  UniconsLine.phone,
+                                  color: AppColor.darkGreen,
+                                  size: 20.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   SizeMargin.size(height: 16.0),
-                  const Text(
-                    "Reciever's phone number",
-                    style: TextStyle(
-                        color: AppColor.lightgrey,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizeMargin.size(height: 2.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "01234567890",
-                        style: TextStyle(
-                            color: AppColor.blackgrey,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizeMargin.size(width: 4.0),
-                      InkWell(
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            color: AppColor.white300,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: const Icon(
-                            UniconsLine.phone,
-                            color: AppColor.darkGreen,
-                            size: 20.0,
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.apps_rounded,
+                              color: AppColor.lightgrey,
+                            ),
+                            SizeMargin.size(width: 4.0),
+                            const Text(
+                              "Other Details",
+                              style: TextStyle(
+                                color: AppColor.lightgrey,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        // SizeMargin.size(height: 20.0),
+                        _itemTile(
+                          "Estimated Distance",
+                          "23 Kilometers",
+                          "5 Miles",
+                        ),
+                        _itemTile(
+                          "Estimated Time Driving",
+                          "1 hour, 30 minutes",
+                        ),
+                        _itemTile(
+                          "Driver Truck Info",
+                          "No driver has accepted yet",
+                        ),
+                        _itemTile(
+                          "Pickup date",
+                          pickupDate.format('D, M j, H:i'),
+                        ),
+                        _itemTile(
+                          "Deadline for load pickup",
+                          pickupDeadline.format('D, M j, H:i'),
+                        ),
+                        _itemTile(
+                          "Date created",
+                          createdAt.format('D, M j, H:i'),
+                        ),
+                      ],
+                    ),
                   ),
+                  SizeMargin.size(height: 20.0),
                 ],
               ),
             ),
-            SizeMargin.size(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.apps_rounded,
-                        color: AppColor.lightgrey,
-                      ),
-                      SizeMargin.size(width: 4.0),
-                      const Text(
-                        "Other Details",
-                        style: TextStyle(
-                          color: AppColor.lightgrey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // SizeMargin.size(height: 20.0),
-                  _itemTile(
-                    "Estimated Distance",
-                    "23 Kilometers",
-                    "5 Miles",
-                  ),
-                  _itemTile(
-                    "Estimated Time Driving",
-                    "1 hour, 30 minutes",
-                  ),
-
-                  _itemTile(
-                    "Pickup date",
-                    "January 25, 2022",
-                  ),
-                  _itemTile(
-                    "Deadline for load pickup",
-                    "12/11/2021",
-                  ),
-                  _itemTile(
-                    "Date created",
-                    "08/11/2021",
-                  ),
-                ],
-              ),
-            ),
-            SizeMargin.size(height: 20.0),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -413,16 +454,12 @@ class _DeliveryProcesses extends StatelessWidget {
           indicatorBuilder: (_, index) {
             if (processes[index].isCompleted) {
               return const DotIndicator(
-                color: AppColor.green,
-                child: DotIndicator(
-                  color: AppColor.white100,
-                  size: 12.0,
-                  child: Icon(
-                    Icons.check,
-                    color: AppColor.green,
-                    size: 10.0,
-                  ),
-                ),
+                color: Color(0xff5FBB97),
+                // child: Icon(
+                //   Icons.check,
+                //   color: Colors.white,
+                //   size: 12.0,
+                // ),
               );
             } else {
               return const DotIndicator(
@@ -442,40 +479,134 @@ class _DeliveryProcesses extends StatelessWidget {
   }
 }
 
-final processes = [
-  const _DeliveryProcess(
-    "Load Request",
-    "",
-    "",
-  ),
-  const _DeliveryProcess(
-    "Negotiating",
-    "Estimated Fee",
-    "₦2,500.00",
-  ),
-  const _DeliveryProcess(
-    "Ready for pickup",
-    "Pickup Location",
-    "Commercial Ave Sabo yaba, Lagos",
-  ),
-  const _DeliveryProcess(
-    "Out for delivery",
-    "Destination",
-    "Admirity Way, Lekki phase 1, Lagos",
-  ),
-  const _DeliveryProcess(
-    "Delivered",
-    "",
-    "",
-  ),
-];
+
+getProcess(BuildContext context, UserLoad load) {
+  return [
+    _DeliveryProcess(
+        "Load Request",
+        "Driver",
+        "No driver has accepted yet",
+        extraContent: Container(),
+        isCompleted: loadStatusMap[load.status!]! > 0
+    ),
+    _DeliveryProcess(
+        "Negotiating",
+        "Estimated Fee",
+        "₦${load.loadValue}",
+        extraContent: Row(
+          children: [
+            const SizedBox(width: 29,),
+            InkWell(
+              onTap: () async {
+                final price = await AppDialog.negotiateDialog(
+                  content: "This would log you out",
+                  onTap: () {
+                    // Get.offAllNamed(Routes.login);
+                  },
+                  buttonColor: AppColor.darkGreen,
+                );
+
+                if (price != null) {
+                  Provider.of<LoadDetailProvider>(context, listen: false).negotiateOffer(num.parse(price));
+                }
+              },
+              child: Container(
+                height: 41, width: 41,
+                decoration: BoxDecoration(
+                    color: const Color(0xFF8DDCA4).withOpacity(.20),
+                    borderRadius: BorderRadius.circular(13)
+                ),
+                child: const Center(child: Icon(Icons.refresh, color: Color(0xFF007683),)),
+              ),
+            ),
+            const SizedBox(width: 24,),
+            InkWell(
+              onTap: () {
+                AppDialog.mainDialog(
+                    title: "Accept the offered amount of ₦2,500?",
+                    content: "You are accepting to pickup and deliver the load for ₦2,500. This can’t be changed later on",
+                    onTap: () {
+                      // Get.offAllNamed(Routes.login);
+                      Get.back();
+                      Provider.of<LoadDetailProvider>(context, listen: false).acceptOffer();
+                    },
+                    buttonColor: AppColor.darkGreen,
+                    buttonText: "Yes, Accept"
+                );
+              },
+              child: Container(
+                height: 41, width: 41,
+                decoration: BoxDecoration(
+                    color: const Color(0xFF8DDCA4).withOpacity(.20),
+                    borderRadius: BorderRadius.circular(13)
+                ),
+                child: const Center(child: Icon(Icons.check, color: Color(0xFF007683),)),
+              ),
+            ),
+            const SizedBox(width: 24,),
+            InkWell(
+              onTap: () {
+                AppDialog.mainDialog(
+                    title: "Decline the offered amount of ₦2,500?",
+                    content: "You would be declining the offered amount of ₦2,500 making yourself available to pick other waiting loads.",
+                    onTap: () {
+                      // Get.offAllNamed(Routes.login);
+                      Get.back();
+                      Provider.of<LoadDetailProvider>(context, listen: false).declineOffer();
+                    },
+                    buttonColor: AppColor.error,
+                    buttonText: "Yes, Decline"
+                );
+              },
+              child: Container(
+                height: 41, width: 41,
+                decoration: BoxDecoration(
+                    color: const Color(0xFF8DDCA4).withOpacity(.20),
+                    borderRadius: BorderRadius.circular(13)
+                ),
+                child: const Center(child: Icon(Icons.close, color: Color(0xFFFF1E0E),)),
+              ),
+            ),
+          ],
+        ),
+        isCompleted: loadStatusMap[load.status!]! > 2
+    ),
+    _DeliveryProcess(
+        "Ready for pickup",
+        "Pickup Location",
+        "${load.pickupLocation}",
+        extraContent: Container(),
+        isCompleted: loadStatusMap[load.status!]! > 3
+    ),
+    _DeliveryProcess(
+        "Out for delivery",
+        "Destination",
+        "${load.destination}",
+        extraContent: Container(),
+        isCompleted: loadStatusMap[load.status!]! > 4
+    ),
+    _DeliveryProcess(
+        "Delivered",
+        "",
+        "",
+        extraContent: Container(),
+        isCompleted: loadStatusMap[load.status!]! == 5
+    ),
+  ];
+}
+// final
 
 class _DeliveryProcess {
   const _DeliveryProcess(
-    this.title,
-    this.type,
-    this.content,
-  );
+      this.title,
+      this.type,
+      this.content,
+      {
+        this.extraContent,
+        this.isCompleted = false
+      }
+
+      );
 
   // const _DeliveryProcess.complete()
   //     : name = 'Done',
@@ -484,8 +615,8 @@ class _DeliveryProcess {
   final String title;
   final String type;
   final String content;
-
-  bool get isCompleted => type == 'Driver';
+  final Widget? extraContent;
+  final bool isCompleted;
 }
 
 class _LoadStatusCard extends StatelessWidget {
@@ -515,105 +646,46 @@ class _LoadStatusCard extends StatelessWidget {
                   ? AppColor.primaryColor
                   : AppColor.black300.withOpacity(0.5),
               fontWeight:
-                  process.isCompleted ? FontWeight.w700 : FontWeight.w400,
+              process.isCompleted ? FontWeight.w700 : FontWeight.w400,
               fontSize: 16.0,
             ),
           ),
-          if (process.type.isNotEmpty && process.title != "Load Request") ...[
+          if (process.type.isNotEmpty) ...[
             SizeMargin.size(height: 24.0),
-            Text(
-              process.type,
-              style: const TextStyle(
-                color: AppColor.lightgrey,
-              ),
-            ),
-            SizeMargin.size(height: 4.0),
-            DefaultTextStyle(
-              style: const TextStyle(),
-              child: Text(
-                process.content,
-                style: const TextStyle(
-                  color: AppColor.black300,
-                  fontSize: 16.0,
-                ),
-              ),
-            ),
-          ],
-          if (process.title == "Load Request") ...[
-            SizeMargin.size(height: 16.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                const Text(
-                  "Sender",
-                  style: TextStyle(
-                    color: AppColor.lightgrey,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        process.type,
+                        style: const TextStyle(
+                          color: AppColor.lightgrey,
+                        ),
+                      ),
+                      SizeMargin.size(height: 4.0),
+                      DefaultTextStyle(
+                        style: const TextStyle(),
+                        child: Text(
+                          process.content,
+                          style: const TextStyle(
+                            color: AppColor.black300,
+                            fontSize: 16.0,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizeMargin.size(height: 4.0),
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CircleAvatar(
-                      radius: 16.0,
-                      child: Icon(
-                        Icons.person,
-                        size: 20.0,
-                        color: AppColor.white100,
-                      ),
-                    ),
-                    SizeMargin.size(width: 4.0),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            "John Doe",
-                            style: TextStyle(
-                              color: AppColor.blackgrey,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          // _getStarRatings()
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    // SizeMargin.size(height: 4.0),
-                    InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(141, 220, 164, 0.2),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: const Icon(
-                          UniconsLine.envelope,
-                          color: AppColor.darkGreen,
-                          size: 20.0,
-                        ),
-                      ),
-                    ),
-                    SizeMargin.size(width: 16.0),
-                    InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(141, 220, 164, 0.2),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: const Icon(
-                          UniconsLine.phone,
-                          color: AppColor.darkGreen,
-                          size: 20.0,
-                        ),
-                      ),
-                    ),
+                if (process.extraContent != null)
+                  ...[
+                    process.extraContent!
                   ],
-                ),
               ],
             ),
-          ],
+          ]
         ],
       ),
     );
@@ -626,16 +698,16 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
-final List<Widget> imageSliders = imgList
+List<Widget> imageSliders(List<Loadimages> images) => images
     .map((item) => Container(
-          margin: const EdgeInsets.all(5.0),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            child: Stack(
-              children: <Widget>[
-                Image.network(item, fit: BoxFit.cover, width: 1000.0),
-              ],
-            ),
-          ),
-        ))
+  margin: const EdgeInsets.all(5.0),
+  child: ClipRRect(
+    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+    child: Stack(
+      children: <Widget>[
+        Image.network(item.url ?? imgList[0], fit: BoxFit.cover, width: 1000.0),
+      ],
+    ),
+  ),
+))
     .toList();

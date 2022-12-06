@@ -50,10 +50,10 @@ class RoutePages {
       name: Routes.home,
       page: () => const HomeScreen(),
     ),
-    GetPage(
-      name: Routes.loadDetails,
-      page: () => const LoadDetailsScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.loadDetails,
+    //   page: () => const LoadDetailsScreen(),
+    // ),
     GetPage(
       name: Routes.addTruckInfo,
       page: () => ChangeNotifierProvider(

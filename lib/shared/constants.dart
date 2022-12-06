@@ -15,3 +15,12 @@ const loggedInBeforeKey = 'logged-in-before-key';
 const requireTokenHeader = {
   "requireToken": true
 };
+
+
+Map<String, int> loadStatusMap = {
+  "created": 1,
+  "negotiating": 2,
+  "ready_for_pickup": 3,
+  "out_for_delivery": 4,
+  "delivered": 5
+};
