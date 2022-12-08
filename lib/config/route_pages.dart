@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:load_connect_driver/view/providers/auth/register_provider.dart';
 import 'package:load_connect_driver/view/providers/user/create_truck_provider.dart';
 import 'package:load_connect_driver/view/screens/intro_screen.dart';
 import 'package:load_connect_driver/view/screens/truck/create_truck/create_truck_screen.dart';
@@ -26,7 +27,10 @@ class RoutePages {
     ),
     GetPage(
       name: Routes.signup,
-      page: () => const SignupScreen(),
+      page: () => ChangeNotifierProvider(
+        create: (context) => RegisterProvider(),
+        child: const SignupScreen(),
+      ),
     ),
     GetPage(
       name: Routes.forgotPassword,
@@ -90,10 +94,10 @@ class RoutePages {
       name: Routes.savedOrRecentLoads,
       page: () => const SavedOrRecentLoadsScreen(),
     ),
-    GetPage(
-      name: Routes.kyc,
-      page: () => const KycScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.kyc,
+    //   page: () => const KycScreen(),
+    // ),
     GetPage(
       name: Routes.blockedList,
       page: () => const BlockedListScreen(),

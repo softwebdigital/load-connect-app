@@ -5,9 +5,8 @@ import 'package:load_connect_driver/view/providers/base_provider.dart';
 
 import '../../../backend/models/entities/user_load.dart';
 import '../../../backend/services/i_load_service.dart';
-import '../../../shared/routes.dart';
 
-class MyLoadProvider extends BaseProvider {
+class SavedLoadProvider extends BaseProvider {
   List<UserLoad> loads = [];
 
 
@@ -22,16 +21,15 @@ class MyLoadProvider extends BaseProvider {
       }
     } catch (error) {
       backToError("Error: $error");
-      Get.offAllNamed(Routes.login);
     }
   }
-
 
   void refresh() {
     backToLoading();
     initialize();
   }
-  MyLoadProvider() {
+
+  SavedLoadProvider() {
     initialize();
   }
 }

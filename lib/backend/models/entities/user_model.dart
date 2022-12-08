@@ -62,9 +62,9 @@ class UserModel {
   String? email;
   String? phone;
   dynamic profilePhoto;
-  num? otp;
-  num? accountVerified;
-  num? accountDeactivated;
+  dynamic otp;
+  bool? accountVerified;
+  bool? accountDeactivated;
   dynamic accountType;
   dynamic businessName;
   dynamic cacNumber;

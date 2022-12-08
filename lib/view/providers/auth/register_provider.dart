@@ -8,6 +8,9 @@ import 'package:load_connect_driver/shared/routes.dart';
 import 'package:load_connect_driver/view/interaction/toast_alert.dart';
 import 'package:load_connect_driver/view/providers/base_provider.dart';
 
+import '../../screens/auth/login_screen.dart';
+import '../../screens/settings/security/kyc_screen.dart';
+
 class RegisterProvider extends BaseProvider {
 
   String _email = '';
@@ -16,6 +19,8 @@ class RegisterProvider extends BaseProvider {
   String _firstName = '';
   String _lastName = '';
   String _phoneNumber = '';
+  String _businessName = '';
+  String _cacNumber = '';
 
   bool _passwordIsVisible = false;
   bool _confirmPasswordIsVisible = false;
@@ -25,6 +30,8 @@ class RegisterProvider extends BaseProvider {
   String get firstName => _firstName;
   String get lastName => _lastName;
   String get phoneNumber => _phoneNumber;
+  String get businessName => _businessName;
+  String get cacNumber => _cacNumber;
 
   bool get passwordIsVisible => _passwordIsVisible;
   bool get confirmPasswordIsVisible => _confirmPasswordIsVisible;
@@ -60,8 +67,15 @@ class RegisterProvider extends BaseProvider {
     _lastName = value;
     notifyListeners();
   }
-
+  set setBusinessName(String value) {
+    _businessName = value;
+    notifyListeners();
+  }
   set setPhoneNumber(String value) {
+    _phoneNumber = value;
+    notifyListeners();
+  }
+  set cacNumber(String value) {
     _phoneNumber = value;
     notifyListeners();
   }
@@ -79,7 +93,7 @@ class RegisterProvider extends BaseProvider {
           phone: _phoneNumber,
           lastName: _lastName,
           firstName: _firstName,
-          // userType: usertype
+          userType: "business"
         ));
         ToastAlert.closeAlert();
         if (res.status == true) {
@@ -92,18 +106,16 @@ class RegisterProvider extends BaseProvider {
           // await Get.find<IAuthService>().generateToken(generateTokenRequest);
 
           ToastAlert.showAlert("Registration successful");
-          Get.toNamed(
-            "${Routes.kyc}?user_id=${res.data!.id}&type=register&email=$email&name=$firstName",
+          // Get.toNamed(
+          //   "${Routes.kyc}?user_id=${res.data!.id}&type=register&email=$email&name=$firstName",
+          // );
+          Get.to(KycScreen(
+            onDone: () {
+              Get.off(const LoginScreen());
+            }, email: email, userId: res.data!.id!)
           );
         } else {
-          if (res.message.contains('unverified')) {
-            ToastAlert.showErrorAlert("Account not verified");
-            Get.toNamed(
-              "${Routes.kyc}?user_id=${res.data!.id}",
-            );
-          } else {
-            ToastAlert.showErrorAlert(res.message);
-          }
+          ToastAlert.showErrorAlert(res.message);
         }
       }
     } catch (error) {

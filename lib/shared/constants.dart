@@ -16,6 +16,7 @@ const requireTokenHeader = {
   "requireToken": true
 };
 
+const pendingLoadStatus = 'pending';
 
 Map<String, int> loadStatusMap = {
   "created": 1,

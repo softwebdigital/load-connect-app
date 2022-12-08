@@ -11,7 +11,16 @@ import '../../../components/custom_button.dart';
 import '../../../utils/helper.dart';
 
 class KycScreen extends HookWidget {
-  const KycScreen({Key? key}) : super(key: key);
+  const KycScreen({
+    Key? key,
+    required this.onDone,
+    required this.email,
+    required this.userId
+  }) : super(key: key);
+
+  final Function onDone;
+  final String email;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +133,7 @@ class KycScreen extends HookWidget {
                   isDisabled: provider.kycType.isEmpty,
                   isBusy: false,
                   onPressed: () {
-                    provider.uploadKycDoc(context);
+                    provider.uploadKycDoc(context, onDone);
                   },
                 ),
               ],

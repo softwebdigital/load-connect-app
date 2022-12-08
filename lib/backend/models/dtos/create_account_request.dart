@@ -8,27 +8,33 @@
 class CreateAccountRequest {
   CreateAccountRequest({
       this.firstName, 
-      this.lastName, 
+      this.businessName,
+      this.cacNumber,
+      this.lastName,
       this.email, 
       this.phone,
       this.password, 
-      // this.userType,
+      this.userType,
   });
 
   CreateAccountRequest.fromJson(dynamic json) {
     firstName = json['first_name'];
+    businessName = json['business_name'];
+    cacNumber = json['cac_number'];
     lastName = json['last_name'];
     email = json['email'];
     phone = json['phone'];
     password = json['password'];
-    // userType = json['user_type'];
+    userType = json['accountType'];
   }
   String? firstName;
   String? lastName;
   String? email;
   String? phone;
   String? password;
-  // String? userType;
+  String? userType;
+  String? businessName;
+  String? cacNumber;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -37,7 +43,9 @@ class CreateAccountRequest {
     map['email'] = email;
     map['phone'] = phone;
     map['password'] = password;
-    // map['user_type'] = userType;
+    map['account_type'] = userType;
+    map['business_name'] = businessName;
+    map['cac_number'] = cacNumber;
     return map;
   }
 

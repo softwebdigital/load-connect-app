@@ -1,4 +1,4 @@
-import 'package:dio/src/form_data.dart';
+import 'package:dio/dio.dart';
 import 'package:load_connect_driver/backend/models/core/api_response.dart';
 import 'package:load_connect_driver/backend/models/core/service_response.dart';
 import 'package:load_connect_driver/backend/models/dtos/create_account_request.dart';
@@ -43,7 +43,7 @@ class ApiAuthService implements IAuthService {
       }
 
     } catch (error) {
-      // rethrow;
+      rethrow;
       return ServiceResponse(
         data: null,
         message: "Error: $error",

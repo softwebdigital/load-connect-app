@@ -6,19 +6,23 @@ import 'package:load_connect_driver/backend/models/entities/user_model.dart';
 class LoginResponse {
   LoginResponse({
       this.token, 
+      this.isDriverConfirmed,
       this.user,});
 
   LoginResponse.fromJson(dynamic json) {
     print("ToJson ::: $json");
     token = json['token'];
+    isDriverConfirmed = json['is_driver_confirmed'];
     user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
   }
   String? token;
+  bool? isDriverConfirmed;
   UserModel? user;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['token'] = token;
+    map['is_driver_confirmed'] = isDriverConfirmed;
     if (user != null) {
       map['user'] = user?.toJson();
     }

@@ -32,8 +32,8 @@ class UserProfileProvider extends BaseProvider {
         Get.offAllNamed(Routes.login);
       }
     } catch (error) {
-      ToastAlert.showErrorAlert('Error: $error');
-      // Get.offAllNamed(Routes.login);
+      // ToastAlert.showErrorAlert('Error: $error');
+      Get.offAllNamed(Routes.login);
       rethrow;
     }
   }

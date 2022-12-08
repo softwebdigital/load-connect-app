@@ -6,6 +6,7 @@ import 'package:load_connect_driver/backend/services/core/i_local_storage.dart';
 import 'package:load_connect_driver/backend/services/i_auth_service.dart';
 import 'package:load_connect_driver/shared/constants.dart';
 import 'package:load_connect_driver/shared/routes.dart';
+import 'package:load_connect_driver/view/all_screens.dart';
 import 'package:load_connect_driver/view/interaction/toast_alert.dart';
 import 'package:load_connect_driver/view/providers/base_provider.dart';
 import 'package:load_connect_driver/view/providers/user/user_profile_provider.dart';
@@ -48,38 +49,28 @@ class LoginProvider extends BaseProvider {
             email: _email, password: _password
         ));
         ToastAlert.closeAlert();
+        // print(res.message);
         if (res.status == true) {
-          if (res.message == 'unverified') {
-            ToastAlert.showErrorAlert("Account not verified");
-            await Get.find<IAuthService>().generateToken(GenerateTokenRequest(
-                userId: res.data!.user!.id,
-                type: 'register'
-            ));
-            // Get.offNamed(
-            //   "${Routes.}?user_id=${res.data!.user!.id}",
-            // );
-          } else {
-            print("UserToken: ${res.data!.toJson()}");
-            Get.find<ILocalStorageService>().setItem(userDataBox, userTokenKey, res.data!.token);
-            Get.find<ILocalStorageService>().setItem(appDataBox, loggedInBeforeKey, true);
+
+          Get.find<ILocalStorageService>().setItem(userDataBox, userTokenKey, res.data!.token);
+          Get.find<ILocalStorageService>().setItem(appDataBox, loggedInBeforeKey, true);
+
+          if (res.data!.isDriverConfirmed! == true) {
+            // print("UserToken: ${res.data!.toJson()}");
             // Provider.of<UserProfileProvider>(context, listen: false).setUser = res.data!.user!;
             Provider.of<UserProfileProvider>(context, listen: false).initialize();
             ToastAlert.showAlert("Login successful");
             Get.offAllNamed(Routes.home);
-          }
-        } else {
-          if (res.message.contains('unverified')) {
-            ToastAlert.showErrorAlert("Account not verified");
-            await Get.find<IAuthService>().generateToken(GenerateTokenRequest(
-                userId: res.data!.user!.id,
-                type: 'register'
-            ));
-            // Get.toNamed(
-            //   "${Routes.registrationOtp}?user_id=${res.data!.user!.id}",
-            // );
           } else {
-            ToastAlert.showErrorAlert(res.message);
+            Get.to(KycScreen(
+              onDone: () {
+                Get.off(const LoginScreen());
+              }, email: email, userId: res.data!.user!.id!)
+            );
           }
+
+        } else {
+          ToastAlert.showErrorAlert("Error: ${res.message}");
         }
       }
     } catch (error) {

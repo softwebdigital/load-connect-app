@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:load_connect_driver/view/providers/user/blocked_user_provider.dart';
 import 'package:load_connect_driver/view/providers/user/driver_truck_provider.dart';
+import 'package:load_connect_driver/view/providers/user/my_load_provider.dart';
+import 'package:load_connect_driver/view/providers/user/new_load_provider.dart';
 import 'package:load_connect_driver/view/providers/user/notification_settings_provider.dart';
 import 'package:load_connect_driver/view/providers/user/user_profile_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,7 @@ import './shared/colors.dart';
 import './shared/styles.dart';
 import 'config/locator.dart';
 import 'config/route_pages.dart';
+import 'view/providers/user/saved_load_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +29,9 @@ void main() async {
       ChangeNotifierProvider(create: (context) => DriverTruckProvider()),
       ChangeNotifierProvider(create: (context) => NotificationSettingsProvider()),
       ChangeNotifierProvider(create: (context) => BlockedUserProvider()),
+      ChangeNotifierProvider(create: (context) => NewLoadProvider()),
+      ChangeNotifierProvider(create: (context) => MyLoadProvider()),
+      ChangeNotifierProvider(create: (context) => SavedLoadProvider()),
     ],
     child: const MyApp(),
   ));

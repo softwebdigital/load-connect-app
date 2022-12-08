@@ -16,7 +16,7 @@ class UploadKYCProvider extends BaseProvider {
   File? kycDoc;
 
 
-  void uploadKycDoc(BuildContext context) async {
+  void uploadKycDoc(BuildContext context, Function onDone) async {
     try {
       if (kycType.isEmpty) {
         ToastAlert.showErrorAlert("Please select a document type");
@@ -31,6 +31,7 @@ class UploadKYCProvider extends BaseProvider {
         ToastAlert.closeAlert();
         if (res.status == true) {
           ToastAlert.showAlert(res.message);
+          onDone();
         } else {
           ToastAlert.showErrorAlert("Error: ${res.message}");
         }

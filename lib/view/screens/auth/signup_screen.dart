@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:load_connect_driver/view/all_screens.dart';
+import 'package:load_connect_driver/view/providers/auth/register_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../shared/colors.dart';
 // import 'package:flutter_hooks/screen)ur.dart';
@@ -10,13 +13,13 @@ import '../../components/custom_button.dart';
 import '../../components/custom_textfield.dart';
 import '../../utils/helper.dart';
 
-class SignupScreen extends HookWidget {
+class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isBusy = useState(false);
-    final hideText = useState(true);
+
+    final provider = Provider.of<RegisterProvider>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -40,48 +43,83 @@ class SignupScreen extends HookWidget {
         padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
-            const CustomTextField(
+            CustomTextFormField(
+              label: 'First Name',
+              onSaved: (name) {
+                provider.setFirstName = name!;
+              },
+            ),
+            SizeMargin.size(height: 24.h),
+
+            CustomTextFormField(
+              label: 'Last Name',
+              onSaved: (name) {
+                provider.setLastName = name!;
+              },
+            ),
+            SizeMargin.size(height: 24.h),
+
+            CustomTextFormField(
               label: 'Business Name',
+              onSaved: (name) {
+                provider.setBusinessName = name!;
+              },
             ),
             SizeMargin.size(height: 24.h),
-            const CustomTextField(
+            CustomTextFormField(
               label: 'CAC Number (optional)',
+              onSaved: (name) {
+                provider.cacNumber = name!;
+              },
             ),
             SizeMargin.size(height: 24.h),
-            const CustomTextField(
+            CustomTextFormField(
               label: 'Phone Number',
+              onSaved: (name) {
+                provider.setPhoneNumber = name!;
+              },
+              keyboardType: TextInputType.number,
             ),
             SizeMargin.size(height: 24.h),
-            const CustomTextField(
+            CustomTextFormField(
               label: 'Business Email',
+              onSaved: (name) {
+                provider.setEmail = name!;
+              },
             ),
             SizeMargin.size(height: 24.h),
-            CustomTextField(
+            CustomTextFormField(
               label: 'Password',
-              hideText: hideText.value,
+              hideText: !provider.passwordIsVisible,
+              onSaved: (name) {
+                provider.setPassword = name!;
+              },
               suffixIcon: IconButton(
                 onPressed: () {
-                  hideText.value = !hideText.value;
+                  provider.togglePasswordVisibility();
                 },
                 icon: Icon(
-                  hideText.value ? Icons.visibility : Icons.visibility_off,
+                  !provider.passwordIsVisible ? Icons.visibility : Icons.visibility_off,
                   color: AppColor.black100,
                 ),
               ),
             ),
             SizeMargin.size(height: 24.h),
-            CustomTextField(
+            CustomTextFormField(
               label: 'Re-enter Password',
-              hideText: hideText.value,
+              hideText: !provider.confirmPasswordIsVisible,
               suffixIcon: IconButton(
                 onPressed: () {
-                  hideText.value = !hideText.value;
+                  provider.toggleConfirmPasswordVisibility();
                 },
                 icon: Icon(
-                  hideText.value ? Icons.visibility : Icons.visibility_off,
+                  !provider.confirmPasswordIsVisible ? Icons.visibility : Icons.visibility_off,
                   color: AppColor.black100,
                 ),
               ),
+              onSaved: (name) {
+                provider.setConfirmPassword = name!;
+              },
             ),
             SizeMargin.size(height: 12.h),
             RichText(
@@ -128,13 +166,8 @@ class SignupScreen extends HookWidget {
             SizeMargin.size(height: 24.h),
             CustomRaisedButton(
               text: "Sign Up",
-              isBusy: isBusy.value,
-              onPressed: () {
-                isBusy.value = true;
-                Future.delayed(const Duration(seconds: 3), () {
-                  isBusy.value = false;
-                });
-              },
+              isBusy: false,
+              onPressed: () => provider.register(context, 'driver'),
             ),
             SizeMargin.size(height: 32.h),
             RichText(
@@ -150,7 +183,7 @@ class SignupScreen extends HookWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Get.back();
+                        Get.offAll(const LoginScreen());
                       },
                   ),
                 ],

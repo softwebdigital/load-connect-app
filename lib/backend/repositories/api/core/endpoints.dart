@@ -26,7 +26,9 @@ String blockUserEndpoint(String uid) => "${baseUrl}user/block/$uid";
 String unBlockUserEndpoint(String uid) => "${baseUrl}user/unblock/$uid";
 
 const createLoadEndpoint = "${baseUrl}loads";
-const getSenderLoadEndpoint = "${baseUrl}loads";
+const getSenderLoadsEndpoint = "${baseUrl}loads";
+const getDriverLoadsEndpoint = "${baseUrl}loads/driver-loads";
+const getNewLoadsEndpoint = "${baseUrl}loads/unassigned-loads";
 String getLoadEndpoint(String loadId) => "${baseUrl}loads/$loadId";
 String negotiateOfferEndpoint(String loadId) => "${baseUrl}loads/negotiate-price/$loadId";
 String acceptOfferEndpoint(String loadId) => "${baseUrl}loads/offer-status/$loadId";

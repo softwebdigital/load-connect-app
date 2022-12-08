@@ -34,7 +34,7 @@ class ApiLoadService implements ILoadService {
   @override
   Future<ServiceResponse<List<UserLoad>>> getUserLoads() async {
     try {
-      final res = await apiService.makeGetRequest(getSenderLoadEndpoint, {
+      final res = await apiService.makeGetRequest(getSenderLoadsEndpoint, {
         'Content-Type': 'application/json',
         "Accept": 'application/json'
       });
@@ -124,21 +124,21 @@ class ApiLoadService implements ILoadService {
       });
       if (res.status == true) {
         return ServiceResponse(
-            status: true,
-            message: res.message,
-            data: res.message
+          status: true,
+          message: res.message,
+          data: res.message
         );
       }
       return ServiceResponse(
-          status: res.status,
-          message: res.message,
-          data: res.message
+        status: res.status,
+        message: res.message,
+        data: res.message
       );
     } catch (error) {
       return ServiceResponse(
-          status: false,
-          data: null,
-          message: "Error occurred"
+        status: false,
+        data: null,
+        message: "Error occurred"
       );
     }
   }
@@ -161,6 +161,63 @@ class ApiLoadService implements ILoadService {
           status: false,
           data: null,
           message: "Error occurred"
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<List<UserLoad>>> getDriverLoads() async {
+    try {
+      final res = await apiService.makeGetRequest(getDriverLoadsEndpoint, {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: true,
+            message: "Returned",
+            data: res.data == null ? null : List.from(res.data['data']).map((e) => UserLoad.fromJson(e)).toList()
+        );
+      }
+      return ServiceResponse(
+          status: false,
+          message: res.message,
+          data: null
+      );
+    } catch (error) {
+      return ServiceResponse(
+          status: false,
+          data: null,
+          message: "Error occurred"
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<List<UserLoad>>> getNewLoads() async {
+    try {
+      final res = await apiService.makeGetRequest(getNewLoadsEndpoint, {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      });
+      print("ApiRes: ${res.toJson()}");
+      if (res.status == true) {
+        return ServiceResponse(
+          status: true,
+          message: "Returned",
+          data: res.data == null ? null : List.from(res.data['data']).map((e) => UserLoad.fromJson(e)).toList()
+        );
+      }
+      return ServiceResponse(
+        status: false,
+        message: res.message,
+        data: null
+      );
+    } catch (error) {
+      return ServiceResponse(
+        status: false,
+        data: null,
+        message: "Error occurred"
       );
     }
   }

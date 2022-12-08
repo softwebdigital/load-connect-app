@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:load_connect_driver/view/providers/user/my_load_provider.dart';
 import 'package:load_connect_driver/view/screens/widgets/filter_load_bottom_sheet.dart';
 import 'package:load_connect_driver/view/screens/widgets/sort_load_bottom_sheet.dart';
+import 'package:load_connect_driver/view/screens/widgets/spacer_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/load_details_card.dart';
 import '../../widgets/notification_icon.dart';
@@ -11,6 +14,7 @@ class MyLoadsTab extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MyLoadProvider>(context);
     final sortValue = useState("newest");
     // final loadStatus = useState("created");
     return NestedScrollView(
@@ -46,12 +50,28 @@ class MyLoadsTab extends HookWidget {
           ),
         ];
       },
-      body: ListView.builder(
-        itemCount: 3,
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (_, index) {
-          return const LoadDetailsCard();
+      body: provider.isLoading ? const Center(
+        child: CircularProgressIndicator.adaptive()
+      ) : provider.isError ? Column(
+        children: [
+          Text(provider.message),
+          ColumnSpace(10),
+          TextButton(onPressed: () => provider.initialize(), child: const Text("Refresh"))
+        ],
+      ) : RefreshIndicator(
+        onRefresh: () async {
+          provider.initialize();
         },
+        child: ListView.builder(
+          itemCount: provider.loads.length,
+          padding: const EdgeInsets.all(16.0),
+          itemBuilder: (_, index) {
+            final load = provider.loads[index];
+            return LoadDetailsCard(
+              load: load,
+            );
+          },
+        ),
       ),
     );
   }
