@@ -49,3 +49,8 @@ const getAllNotificationsEndpoint = "${baseUrl}notifications";
 String getNotificationEndpoint(String id) => "${baseUrl}notifications/$id";
 String markNotificationAsReadEndpoint(String id) => "${baseUrl}notifications/$id/mark-as-read";
 const markAllNotificationAsReadEndpoint = "${baseUrl}notifications/mark-as-read";
+
+/// Messaging Endpoints
+String getChatMessagesEndpoint(String userId) => "${baseUrl}messages/user/$userId";
+const getChatListEndpoint = "${baseUrl}messages/users";
+const sendMessageEndpoint = "${baseUrl}messages";

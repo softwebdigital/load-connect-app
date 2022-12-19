@@ -1,24 +1,40 @@
 
 import 'package:get/get.dart';
+import 'package:load_connect/backend/models/entities/chat_model.dart';
+import 'package:load_connect/backend/services/i_messaging_service.dart';
 import 'package:load_connect/backend/services/i_user_service.dart';
 import 'package:load_connect/view/providers/base_provider.dart';
 
 class ChatProvider extends BaseProvider {
 
-  List chats = [];
+  List<ChatModel> chats = [];
+  bool isSearching = false;
+
+  void toggleSearch() {
+    isSearching = !isSearching;
+    notifyListeners();
+  }
 
   void initialize() async {
     try {
-      await Future.delayed(const Duration(seconds: 10));
-      // final res = await Get.find<IUserService>().getChats90
-      chats = List.generate(10, (index) => "Last Message 0").toList();
-      backToLoaded();
+      final res = await Get.find<IMessagingService>().getChat();
+      if (res.status == true) {
+        chats = res.data!;
+        backToLoaded();
+      } else {
+        backToError(res.message);
+      }
     } catch (error) {
       backToError("Error: $error");
     }
   }
 
   ChatProvider() {
+    initialize();
+  }
+
+  void reload() async {
+    backToLoading();
     initialize();
   }
 
