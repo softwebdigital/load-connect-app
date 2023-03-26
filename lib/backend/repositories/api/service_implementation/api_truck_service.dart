@@ -3,6 +3,8 @@
 import 'package:dio/src/form_data.dart';
 import 'package:load_connect_driver/backend/models/core/service_response.dart';
 import 'package:load_connect_driver/backend/models/entities/driver_truck_model.dart';
+import 'package:load_connect_driver/backend/models/entities/truck_category_model.dart';
+import 'package:load_connect_driver/backend/models/entities/truck_type_model.dart';
 import 'package:load_connect_driver/backend/repositories/api/core/endpoints.dart';
 import 'package:load_connect_driver/backend/services/i_truck_service.dart';
 import 'package:load_connect_driver/shared/constants.dart';
@@ -73,6 +75,54 @@ class ApiTruckService implements ITruckService {
         return ServiceResponse(
           status: true,
           data: DriverTruckModel.fromJson(res.data['data'])
+        );
+      }
+      return ServiceResponse(
+          message: "Error: ${res.message}"
+      );
+    } catch (error) {
+      return ServiceResponse(
+          message: "Error: $error",
+          status: false,
+          data: null
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<List<TruckTypeModel>>> getTruckTypes() async {
+    try {
+      final res = await apiService.makeGetRequest(getTruckTypeEndpoint, {
+        ...requireTokenHeader
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+          status: true,
+          data: List.from(res.data['data']).map((e) => TruckTypeModel.fromJson(e)).toList()
+        );
+      }
+      return ServiceResponse(
+        message: "Error: ${res.message}"
+      );
+    } catch (error) {
+      return ServiceResponse(
+        message: "Error: $error",
+        status: false,
+        data: null
+      );
+    }
+  }
+
+  @override
+  Future<ServiceResponse<List<TruckCategoryModel>>> getTruckCategories() async {
+    try {
+      final res = await apiService.makeGetRequest(getTruckCategoryEndpoint, {
+        ...requireTokenHeader
+      });
+      if (res.status == true) {
+        return ServiceResponse(
+            status: true,
+            data: List.from(res.data['data']).map((e) => TruckCategoryModel.fromJson(e)).toList()
         );
       }
       return ServiceResponse(

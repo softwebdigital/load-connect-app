@@ -156,8 +156,9 @@ class CreateTruckProvider extends BaseProvider {
         final request = dio.FormData.fromMap({
           'name': truckName,
           'plate_number': truckPlateNumber,
-          'category': truckCategory,
+          'truck_category_id': truckCategory,
           'sub_category': truckSubcategory,
+          'truck_type_id': truckSubcategory,
           'max_length': truckLength,
           'max_weight': truckWeight,
           'truck_images[]': truckImages.map((e) => dio.MultipartFile.fromFileSync(e.path)).toList(),
@@ -168,6 +169,7 @@ class CreateTruckProvider extends BaseProvider {
         if (res.status == true) {
           Provider.of<DriverTruckProvider>(context, listen: false).initialize();
           ToastAlert.showAlert("Truck created successfully");
+          Get.back();
         } else {
           ToastAlert.showErrorAlert(res.message);
         }

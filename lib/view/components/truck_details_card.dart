@@ -18,6 +18,7 @@ class TruckDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final truckImages = truck.truckDocuments!.where((element) => element.type == 'image').toList();
     return GestureDetector(
       onTap: () {
         Get.to(TruckDetailsScreen(
@@ -27,7 +28,7 @@ class TruckDetailsCard extends StatelessWidget {
       child: Card(
         color: AppColor.white200,
         elevation: 0.5,
-        margin: EdgeInsets.only(bottom: 30.0.h),
+        margin: EdgeInsets.only(bottom: 30.0.h, left: 16.w, right: 16.w),
         shadowColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -37,15 +38,15 @@ class TruckDetailsCard extends StatelessWidget {
           children: [
             Container(
               height: 300.h,
-              decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(
+              decoration: ShapeDecoration(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.0),
                     topRight: Radius.circular(10.0),
                   ),
                 ),
                 image: DecorationImage(
-                  image: AssetImage("assets/images/truck.png"),
+                  image: NetworkImage(truckImages.first.url!),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -69,7 +70,7 @@ class TruckDetailsCard extends StatelessWidget {
                         SizeMargin.size(height: 6.0),
                         RichText(
                           text: TextSpan(
-                            text: "Pick-up Truck",
+                            text: "${truck.truckCategory!.title}",
                             children: [
                               TextSpan(
                                 text: " | ",

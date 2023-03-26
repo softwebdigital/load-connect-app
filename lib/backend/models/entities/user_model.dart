@@ -44,8 +44,8 @@ class UserModel {
     phone = json['phone'];
     profilePhoto = json['profile_photo'];
     otp = json['otp'];
-    accountVerified = json['account_verified'];
-    accountDeactivated = json['account_deactivated'];
+    accountVerified = json['account_verified'] != 0;
+    accountDeactivated = json['account_deactivated'] != 0;
     accountType = json['account_type'];
     businessName = json['business_name'];
     cacNumber = json['cac_number'];

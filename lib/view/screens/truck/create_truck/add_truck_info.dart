@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:load_connect_driver/view/providers/user/create_truck_provider.dart';
+import 'package:load_connect_driver/view/providers/utilities/truck_categories_provider.dart';
+import 'package:load_connect_driver/view/providers/utilities/truck_type_provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -63,6 +65,7 @@ class AddTruckInfoScreen extends StatelessWidget {
               onSaved: (String? val) {
                 provider.setTruckName = val!;
               },
+              initialValue: provider.truckName,
             ),
             SizeMargin.size(height: 20.0),
             CustomTextFormField(
@@ -70,6 +73,7 @@ class AddTruckInfoScreen extends StatelessWidget {
               onSaved: (String? val) {
                 provider.setTruckPlateNumber = val!;
               },
+              initialValue: provider.truckPlateNumber,
             ),
             SizeMargin.size(height: 20.0),
             Container(
@@ -84,7 +88,7 @@ class AddTruckInfoScreen extends StatelessWidget {
                 ),
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Text(
                       "Truck Category",
@@ -92,20 +96,44 @@ class AddTruckInfoScreen extends StatelessWidget {
                           fontSize: 12.0, color: AppColor.lightgrey),
                     ),
                     // SizeMargin.size(height: 16.0),
-                    ..._truckCategories
-                        .map((truckCategory) => Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: CustomRadioButton<String>(
-                        title: truckCategory['title']!,
-                        value: truckCategory['value']!,
-                        groupValue: provider.truckCategory,
-                        onChanged: (val) {
-                          provider.setTruckCategory =
-                              val ?? 'mini-truck';
-                        },
-                      ),
-                    ))
-                        .toList(),
+                    ChangeNotifierProvider(
+                      create: (context) => TruckCategoriesProvider(),
+                      builder: (context, child) {
+                        return Consumer<TruckCategoriesProvider>(
+                          builder: (context, tcP, child) {
+                            // provider.initialize();
+                            if (tcP.isLoading) {
+                              return const Text("Loading...");
+                            }
+
+                            if (tcP.isError) {
+                              return Text(provider.message);
+                            }
+
+                            return Column(
+                              children: [
+                                ...tcP.truckCategories.map((truckCategory) => Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: CustomRadioButton<String>(
+                                    leading: Image.network(
+                                      "${truckCategory.avatar}",
+                                      width: 30.0,
+                                    ),
+                                    title: truckCategory.title!,
+                                    subtitle: truckCategory.description,
+                                    value: truckCategory.id!.toString(),
+                                    groupValue: provider.truckCategory,
+                                    onChanged: (val) {
+                                      provider.setTruckCategory = val.toString();
+                                    },
+                                  ),
+                                )).toList(),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ]),
             ),
             SizeMargin.size(height: 20.0),
@@ -121,28 +149,47 @@ class AddTruckInfoScreen extends StatelessWidget {
                 ),
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Text(
-                      "Truck Sub-category",
-                      style: TextStyle(
-                          fontSize: 12.0, color: AppColor.lightgrey),
+                      "Truck Type",
+                      style: TextStyle(fontSize: 12.0, color: AppColor.lightgrey),
                     ),
                     // SizeMargin.size(height: 16.0),
-                    ..._truckSubCategories
-                        .map((truckCapacity) => Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: CustomRadioButton<String>(
-                        title: truckCapacity['title']!,
-                        value: truckCapacity['value']!,
-                        groupValue: provider.truckSubcategory,
-                        onChanged: (val) {
-                          provider.setTruckSubCategory =
-                              val ?? 'heavy';
-                        },
-                      ),
-                    ))
-                        .toList(),
+                    ChangeNotifierProvider(
+                      create: (context) => TruckTypeProvider(),
+                      builder: (context, child) {
+                        return Consumer<TruckTypeProvider>(
+                          builder: (context, tcP, child) {
+                            // provider.initialize();
+                            if (tcP.isLoading) {
+                              return const Text("Loading...");
+                            }
+
+                            if (tcP.isError) {
+                              return Text(provider.message);
+                            }
+
+                            return Column(
+                              children: [
+                                ...tcP.truckTypes.map((truckCategory) => Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: CustomRadioButton<String>(
+                                    title: truckCategory.title!,
+                                    subtitle: truckCategory.title!,
+                                    value: truckCategory.id!.toString(),
+                                    groupValue: provider.truckSubcategory,
+                                    onChanged: (val) {
+                                      provider.setTruckSubCategory = val.toString();
+                                    },
+                                  ),
+                                )).toList(),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ]),
             ),
             SizeMargin.size(height: 24.0),

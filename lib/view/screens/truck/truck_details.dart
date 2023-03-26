@@ -72,11 +72,11 @@ class _TruckDetailsScreenState extends State<TruckDetailsScreen> {
 
                   _itemTile(
                     "Truck Category",
-                    "${widget.truck.category}",
+                    "${widget.truck.truckCategory!.title}",
                   ),
                   _itemTile(
                     "Truck Capacity",
-                    "${widget.truck.subCategory}",
+                    "${widget.truck.truckType!.title}",
                   ),
                   SizeMargin.size(height: 24.0),
 
@@ -91,7 +91,7 @@ class _TruckDetailsScreenState extends State<TruckDetailsScreen> {
 
                   SizeMargin.size(height: 4.0),
                   CarouselSlider(
-                    items: _imageSliders,
+                    items: _imageSliders(widget.truck.truckDocuments!.where((element) => element.type == 'image').toList()),
                     options: CarouselOptions(
                       viewportFraction: 1.0,
                       // enlargeCenterPage: true,
@@ -253,14 +253,14 @@ final List<String> _imgList = [
   'https://images.unsplash.com/photo-1611083203153-1f0f49fcf093?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
   'https://images.unsplash.com/photo-1568392388563-e7b357fa41d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
 ];
-final List<Widget> _imageSliders = _imgList
+List<Widget> _imageSliders(List<TruckDocuments> imgL) => imgL
     .map((item) => Container(
           margin: const EdgeInsets.all(5.0),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             child: Stack(
               children: <Widget>[
-                Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                Image.network(item.url!, fit: BoxFit.cover, width: 1000.0),
               ],
             ),
           ),

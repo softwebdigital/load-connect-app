@@ -144,15 +144,21 @@ class ApiService {
   }
 
   ApiResponse _handleError(DioError error) {
-    print(error.response);
+    // print(error.response);
     if (error.response == null) {
       return ApiResponse(
         status: false, data: null, message: 'Internet connection error'
       );
     }
     if (error.response!.statusCode == 422) {
+      final errors = error.response!.data['errors'] as Map;
+      String err = "";
+      for (var element in errors.values) {
+        final e = List.from(element).join("\n");
+        err += e;
+      }
       return ApiResponse(
-        status: false, data: null, message: error.response!.data['message']
+        status: false, data: null, message: err
       );
     }
     if (error.response!.statusCode == 500) {

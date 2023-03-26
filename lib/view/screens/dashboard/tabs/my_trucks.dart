@@ -56,6 +56,7 @@ class MyTrucksTab extends HookWidget {
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                     ),
+                    onChanged: (String param) => provider.searchTruck(param),
                   ),
                 )
               : SliverAppBar(
@@ -100,13 +101,18 @@ class MyTrucksTab extends HookWidget {
           ColumnSpace(15),
           TextButton(onPressed: () => provider.initialize(), child: const Text("Refresh"))
         ],
-      ) : ListView.builder(
-        padding: const EdgeInsets.all(0),
-        itemBuilder: (context, index) {
-          final truck = provider.trucks[index];
-          return TruckDetailsCard(truck: truck,);
+      ) : RefreshIndicator(
+        onRefresh: () async {
+          provider.refresh();
         },
-        itemCount: provider.trucks.length,
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          itemBuilder: (context, index) {
+            final truck = provider.trucksToDisplay[index];
+            return TruckDetailsCard(truck: truck,);
+          },
+          itemCount: provider.trucksToDisplay.length,
+        ),
       ),
     );
   }

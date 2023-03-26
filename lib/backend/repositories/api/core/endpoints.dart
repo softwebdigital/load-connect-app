@@ -35,11 +35,13 @@ String acceptOfferEndpoint(String loadId) => "${baseUrl}loads/offer-status/$load
 String declineOfferEndpoint(String loadId) => "${baseUrl}loads/offer-status/$loadId";
 
 /// Utilities Endpoint
-const getVehicleTypesEndpoint = "${baseUrl}utils/vehicle_types";
-String getClosestVehicleEndpoint(String lat, String lng) => "${baseUrl}utils/available_trucks?latitude=3.456757&longitude=44.67458";
+// const getVehicleTypesEndpoint = "${baseUrl}utils/vehicle_types";
+// String getClosestVehicleEndpoint(String lat, String lng) => "${baseUrl}utils/available_trucks?latitude=3.456757&longitude=44.67458";
 
 const driverTruckEndpoint = "${baseUrl}trucks";
 const createTruckEndpoint = "${baseUrl}trucks";
+const getTruckTypeEndpoint = "${baseUrl}trucks/types/list";
+const getTruckCategoryEndpoint = "${baseUrl}trucks/categories/list";
 String getTruckDetailEndpoint(String id) => "${baseUrl}trucks/$id";
 
 /// Notification Endpoint
@@ -48,3 +50,7 @@ String getNotificationEndpoint(String id) => "${baseUrl}notifications/$id";
 String markNotificationAsReadEndpoint(String id) => "${baseUrl}notifications/$id/mark-as-read";
 const markAllNotificationAsReadEndpoint = "${baseUrl}notifications/mark-as-read";
 
+/// Messaging Endpoints
+String getChatMessagesEndpoint(String userId) => "${baseUrl}messages/user/$userId";
+const getChatListEndpoint = "${baseUrl}messages/users";
+const sendMessageEndpoint = "${baseUrl}messages";

@@ -62,6 +62,7 @@ class AddTruckSpecsScreen extends StatelessWidget {
               onSaved: (String? val) {
                 provider.setTruckLength = val!;
               },
+              initialValue: provider.truckLength,
             ),
             SizeMargin.size(height: 20.0),
             CustomTextFormField(
@@ -70,6 +71,7 @@ class AddTruckSpecsScreen extends StatelessWidget {
               onSaved: (String? val) {
                 provider.setTruckWeight = val!;
               },
+              initialValue: provider.truckWeight,
             ),
             SizeMargin.size(height: 335.0.h),
             CustomRaisedButton(

@@ -19,48 +19,50 @@ class ApiUtilService implements IUtilService {
 
   @override
   Future<ServiceResponse<List<VehicleTypeModel>>> getVehicleTypes() async {
-    try {
-      final res = await apiService.makeGetRequest(getVehicleTypesEndpoint, {
-        'Content-Type': 'application/json',
-        "Accept": 'application/json'
-      });
-      print("ApiRes: ${res.toJson()}");
-      return ServiceResponse(
-        status: true,
-        message: "Returned",
-        data: res.data == null ? null : List.from(res.data['data']).map((e) => VehicleTypeModel.fromJson(e)).toList()
-      );
-    } catch (error) {
-      return ServiceResponse(
-        status: false,
-        data: null,
-        message: "Error occurred"
-      );
-    }
+    throw UnimplementedError();
+    // try {
+    //   final res = await apiService.makeGetRequest(getVehicleTypesEndpoint, {
+    //     'Content-Type': 'application/json',
+    //     "Accept": 'application/json'
+    //   });
+    //   print("ApiRes: ${res.toJson()}");
+    //   return ServiceResponse(
+    //     status: true,
+    //     message: "Returned",
+    //     data: res.data == null ? null : List.from(res.data['data']).map((e) => VehicleTypeModel.fromJson(e)).toList()
+    //   );
+    // } catch (error) {
+    //   return ServiceResponse(
+    //     status: false,
+    //     data: null,
+    //     message: "Error occurred"
+    //   );
+    // }
   }
 
   @override
   Future<ServiceResponse<ClosestVehicleResponse>> getClosestAvailableTruck(String lat, String lng) async {
-    try {
-      final res = await apiService.makeGetRequest(getClosestVehicleEndpoint('lat', 'lng'), {
-        'Content-Type': 'application/json',
-        "Accept": 'application/json'
-      });
-      // print("ApiRes: ${res.toJson()}");
-      return ServiceResponse(
-        status: true,
-        message: "Returned",
-        data: ClosestVehicleResponse.fromJson(res.toJson())
-      );
-    } catch (error) {
-      print("ReturnedFromCatch");
-      // rethrow;
-      return ServiceResponse(
-        status: false,
-        data: null,
-        message: "Error occurred"
-      );
-    }
+    throw UnimplementedError();
+    // try {
+    //   final res = await apiService.makeGetRequest(getClosestVehicleEndpoint('lat', 'lng'), {
+    //     'Content-Type': 'application/json',
+    //     "Accept": 'application/json'
+    //   });
+    //   // print("ApiRes: ${res.toJson()}");
+    //   return ServiceResponse(
+    //     status: true,
+    //     message: "Returned",
+    //     data: ClosestVehicleResponse.fromJson(res.toJson())
+    //   );
+    // } catch (error) {
+    //   print("ReturnedFromCatch");
+    //   // rethrow;
+    //   return ServiceResponse(
+    //     status: false,
+    //     data: null,
+    //     message: "Error occurred"
+    //   );
+    // }
   }
 
 }
